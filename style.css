@@ -8043,6 +8043,10 @@ button.intro-cover.intro-play.playing {
   color: #f5f5f7;
 }
 
+.member-modal-card.is-dev .member-modal-name i {
+  font-size: 13px;
+}
+
 .member-modal-card.is-dev .member-modal-role {
   color: #8a8a9a;
   font-size: 12px;
