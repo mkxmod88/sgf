@@ -1,5 +1,5 @@
 // ================= SPLASHSCREEN — Premium Smooth Entry & Exit =================
-;(function () {
+; (function () {
   const splash = document.getElementById('splash')
   if (!splash) return
   const bar = document.getElementById('splashBar')
@@ -22,14 +22,14 @@
   const DURATION = seen ? 1650 : 2650
   const MIN_DISPLAY = seen ? 1200 : 1900
 
-  function setProgress (p) {
+  function setProgress(p) {
     const v = Math.max(0, Math.min(100, p))
     if (bar) bar.style.width = v + '%'
     if (barGlow) barGlow.style.width = v + '%'
     if (pctEl) pctEl.textContent = Math.round(v) + '%'
   }
 
-  function hideSplash (immediate) {
+  function hideSplash(immediate) {
     if (dismissed) return
     dismissed = true
     if (rafId) cancelAnimationFrame(rafId)
@@ -78,11 +78,11 @@
   }
 
   // progress lerp smooth dengan easing
-  function easeOutExpo (t) {
+  function easeOutExpo(t) {
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
   }
 
-  function tick (ts) {
+  function tick(ts) {
     if (dismissed) return
     if (!start) start = ts
     const elapsed = ts - start
@@ -120,7 +120,7 @@
   }
 
   // skip interaksi — super smooth immediate exit
-  function onSkip (e) {
+  function onSkip(e) {
     e.preventDefault()
     e.stopPropagation()
     hideSplash(true)
@@ -176,7 +176,7 @@ const members = [
     handle: '@Syahrul',
     role: 'leader',
     label: 'LEADER',
-    avatar: 'https://editor-miring-squad.netlify.app/assets/images/profile.jpg',
+    avatar: 'assets/img/SGF_PROFILE_III.jpeg',
     bio: 'Percaya pada proses yang pelan tapi pasti. Menikmati tiap langkah, tidak terburu-buru, dan selalu berusaha jadi lebih baik dari kemarin.',
     roleDesc: 'Leader',
     location: 'Bogor, Indonesia',
@@ -191,26 +191,26 @@ const members = [
     handle: '@Indriannor',
     role: 'leader',
     label: 'LEADER',
-    avatar: 'https://editor-miring-squad.netlify.app/assets/images/profile.jpg',
+    avatar: 'assets/img/SGF_PROFILE.jpeg',
     bio: 'Hidup sederhana, hati tetap tenang. Banyak bersyukur, sedikit mengeluh, dan selalu mencari makna di hal-hal kecil.',
     roleDesc: 'Leader',
     location: 'Jakarta, Indonesia',
     stats: { lirik: 71, project: 29 },
     verified: false,
-    socials: { instagram: 'https://instagram.com/driannoor'}
+    socials: { instagram: 'https://instagram.com/driannoor' }
   },
   {
     name: 'Irgi Design',
     handle: '@Irgi',
     role: 'co_lead',
     label: 'CO LEADER',
-    avatar: 'https://editor-miring-squad.netlify.app/assets/images/profile.jpg',
+    avatar: 'assets/img/SGF_PROFILE_IV.jpeg',
     bio: 'Berusaha jadi versi terbaik dari diri sendiri, bukan saingan orang lain. Pelan-pelan tapi pasti terus melangkah.',
     roleDesc: 'Co Leader',
-    location: 'Jakarta, Indonesia',
+    location: 'Bandung, Indonesia',
     stats: { lirik: 38, project: 22 },
     verified: false,
-    socials: { instagram: 'https:/instagram.com/irgistwn._'}
+    socials: { instagram: 'https:/instagram.com/irgistwn._' }
   },
   {
     name: 'Andreas',
@@ -223,32 +223,32 @@ const members = [
     location: 'Jakarta, Indonesia',
     stats: { lirik: 38, project: 22 },
     verified: true,
-    socials: { instagram: 'https://instagram.com/andreasoktrap'}
+    socials: { instagram: 'https://instagram.com/andreasoktrap' }
   },
   {
     name: 'Dani perfect',
     handle: '@Daniperfect',
     role: 'co_lead',
     label: 'CO LEADER',
-    avatar: 'https://editor-miring-squad.netlify.app/assets/images/profile.jpg',
+    avatar: 'assets/img/SGF_PROFILE_II.jpeg',
     bio: 'Hidup itu belajar terus. Gagal itu wajar, yang penting tetap bangkit dan terus berjalan dengan hati yang baik.',
     roleDesc: 'Co Leader',
-    location: 'Jakarta, Indonesia',
+    location: 'Jawa Tengah, Indonesia',
     stats: { lirik: 38, project: 22 },
     verified: false,
-    socials: { instagram: 'https://instagram.com/mr_londd26'}
+    socials: { instagram: 'https://instagram.com/mr_londd26' }
   },
   {
     name: 'Marchell Kevandra',
     handle: '@Chell',
     role: 'dev',
     label: 'DEVELOPER',
-    avatar: 'assets/img/SGF_II.png',
+    avatar: 'assets/img/avatarx.png',
     slides: [
-      'assets/img/SGF_II.png',
-      'assets/img/vx1.png',
-      'assets/img/vx6.png',
-      'assets/img/vx7.png'
+      'assets/img/avatarx.png',
+      'assets/img/SGF_PROFILE_V.jpg',
+      'assets/img/SGF_PROFILE_VI.jpeg',
+      'assets/img/SGF_PROFILE_VIIi.jpeg'
     ],
     bio: 'Hidup sederhana saja, banyak belajar, banyak bersyukur, dan berusaha berguna. Tidak mengejar sempurna, cukup jadi versi yang lebih baik dari kemarin.',
     roleDesc: 'Developer',
@@ -266,28 +266,24 @@ const members = [
   }
 ]
 
-function cardHTML (m) {
+function cardHTML(m) {
   const idx = members.indexOf(m)
   const isDev = m.role === 'dev'
   return `
-    <div class="m-list-item ${m.role}${
-    isDev ? ' dev-premium' : ''
-  }" data-member-idx="${idx}" role="button" tabindex="0" aria-label="Lihat profil ${
-    m.name
-  }">
-      <div class="m-list-avatar"><img src="${m.avatar}" alt="${
-    m.name
-  }" loading="lazy"></div>
+    <div class="m-list-item ${m.role}${isDev ? ' dev-premium' : ''
+    }" data-member-idx="${idx}" role="button" tabindex="0" aria-label="Lihat profil ${m.name
+    }">
+      <div class="m-list-avatar"><img src="${m.avatar}" alt="${m.name
+    }" loading="lazy"></div>
       <div class="m-list-info">
-        <b class="m-list-name">${m.name} ${
-    m.verified ? '<i class="ri-verified-badge-fill" title="Verified"></i>' : ''
-  }</b>
+        <b class="m-list-name">${m.name} ${m.verified ? '<i class="ri-verified-badge-fill" title="Verified"></i>' : ''
+    }</b>
         <span class="m-list-handle">${m.handle}</span>
       </div>
       <span class="m-list-status ${m.role}">${m.label}</span>
     </div>`
 }
-function skeletonMembersHTML (n = 4) {
+function skeletonMembersHTML(n = 4) {
   return Array.from({ length: n })
     .map(
       () => `
@@ -299,7 +295,7 @@ function skeletonMembersHTML (n = 4) {
     )
     .join('')
 }
-function skeletonKaryaHTML (n = 2) {
+function skeletonKaryaHTML(n = 2) {
   return Array.from({ length: n })
     .map(
       () => `
@@ -307,7 +303,7 @@ function skeletonKaryaHTML (n = 2) {
     )
     .join('')
 }
-function renderTo (gridEl, list) {
+function renderTo(gridEl, list) {
   if (!gridEl) return
   // skeleton dulu biar tidak blank
   gridEl.innerHTML = skeletonMembersHTML(Math.min(4, list.length || 4))
@@ -385,10 +381,10 @@ if (heroRight && logoScene) {
     curY = 0
   let ticking = false
   let isHover = false
-  function lerp (a, b, t) {
+  function lerp(a, b, t) {
     return a + (b - a) * t
   }
-  function tick () {
+  function tick() {
     curX = lerp(curX, targetX, 0.08)
     curY = lerp(curY, targetY, 0.08)
 
@@ -471,9 +467,8 @@ if (heroRight && logoScene) {
         if (isHover) return
         const rx = Math.max(-10, Math.min(10, e.beta / 6))
         const ry = Math.max(-12, Math.min(12, e.gamma / 5))
-        logoScene.style.transform = `translateZ(0) rotateX(${
-          -rx * 0.6
-        }deg) rotateY(${ry * 0.6}deg)`
+        logoScene.style.transform = `translateZ(0) rotateX(${-rx * 0.6
+          }deg) rotateY(${ry * 0.6}deg)`
       },
       true
     )
@@ -580,7 +575,7 @@ const SGF_THEMES = {
   }
 }
 const THEME_KEY = 'sgf_theme_local_v2'
-function applyThemeVars (o) {
+function applyThemeVars(o) {
   const r = document.documentElement
   if (!o) return
   r.style.setProperty('--bg', o.bg)
@@ -601,15 +596,15 @@ function applyThemeVars (o) {
   const splashEl = document.getElementById('splash')
   if (splashEl) splashEl.style.background = o.bg
 }
-function saveTheme (id, custom) {
+function saveTheme(id, custom) {
   try {
     localStorage.setItem(
       THEME_KEY,
       JSON.stringify({ id, custom: custom || null, ts: Date.now() })
     )
-  } catch (e) {}
+  } catch (e) { }
 }
-function loadTheme () {
+function loadTheme() {
   try {
     const raw = localStorage.getItem(THEME_KEY)
     if (!raw) return
@@ -623,10 +618,10 @@ function loadTheme () {
     if (theme) applyThemeVars(theme)
     // mark active later in UI
     window._sgfSavedTheme = data
-  } catch (e) {}
+  } catch (e) { }
 }
 loadTheme()
-function setupSetting (root) {
+function setupSetting(root) {
   if (!root) return
   const grid = root.querySelector('#themeGrid')
   const p1 = root.querySelector('#customPrimary')
@@ -643,8 +638,8 @@ function setupSetting (root) {
   let saved = null
   try {
     saved = JSON.parse(localStorage.getItem(THEME_KEY) || 'null')
-  } catch (e) {}
-  function markActive (id) {
+  } catch (e) { }
+  function markActive(id) {
     cards.forEach(c =>
       c.classList.toggle('active', c.dataset.theme === id && !saved?.custom)
     )
@@ -655,7 +650,7 @@ function setupSetting (root) {
   if (saved?.id) markActive(saved.id)
   else if (!saved) markActive('default')
   // sync custom inputs with current vars
-  function syncInputs () {
+  function syncInputs() {
     const cs = getComputedStyle(document.documentElement)
     const curP = cs.getPropertyValue('--primary').trim() || '#e93dff'
     const curP2 = cs.getPropertyValue('--primary-2').trim() || '#8b5cf6'
@@ -684,10 +679,10 @@ function setupSetting (root) {
       // haptic
       try {
         if (navigator.vibrate) navigator.vibrate(12)
-      } catch (_) {}
+      } catch (_) { }
     })
   })
-  function hexLive (e) {
+  function hexLive(e) {
     const input = e.target
     const hexEl = input.nextElementSibling
     if (hexEl) hexEl.textContent = input.value
@@ -717,14 +712,14 @@ function setupSetting (root) {
           .padStart(2, '0')
       custom.surface = `#${l(r)}${l(g)}${l(b)}`
       custom.surface2 = `#${l(r + 8)}${l(g + 8)}${l(b + 8)}`
-    } catch (e) {}
+    } catch (e) { }
     applyThemeVars(custom)
     saveTheme('custom', custom)
     saved = { id: 'custom', custom }
     cards.forEach(c => c.classList.remove('active'))
     try {
       if (navigator.vibrate) navigator.vibrate(18)
-    } catch (_) {}
+    } catch (_) { }
   })
   resetBtn?.addEventListener('click', () => {
     localStorage.removeItem(THEME_KEY)
@@ -735,11 +730,11 @@ function setupSetting (root) {
     syncInputs()
     try {
       if (navigator.vibrate) navigator.vibrate(10)
-    } catch (_) {}
+    } catch (_) { }
   })
 }
 
-function renderSheetIcon (iconValue, title) {
+function renderSheetIcon(iconValue, title) {
   if (!iconValue) return ''
   const isImage =
     iconValue.includes('/') ||
@@ -748,9 +743,8 @@ function renderSheetIcon (iconValue, title) {
     iconValue.includes('.jpg') ||
     iconValue.includes('.jpeg')
   if (isImage) {
-    return `<img src="${iconValue}" alt="${
-      title || 'SGF Logo'
-    }" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
+    return `<img src="${iconValue}" alt="${title || 'SGF Logo'
+      }" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
   }
   return `<i class="${iconValue}"></i>`
 }
@@ -759,7 +753,7 @@ let sheetActiveFilter = 'all'
 let sheetSearchQuery = ''
 
 let sheetStack = []
-function updateSheetTransform () {
+function updateSheetTransform() {
   if (!sheetViews) return
   const views = sheetViews.querySelectorAll('.sheet-view')
   views.forEach((v, i) => {
@@ -770,12 +764,12 @@ function updateSheetTransform () {
   if (sheetBack)
     sheetBack.style.display = sheetStack.length > 1 ? 'grid' : 'none'
 }
-function clearSheetStack () {
+function clearSheetStack() {
   sheetStack = []
   if (sheetViews) sheetViews.innerHTML = ''
   updateSheetTransform()
 }
-function closeSheet (opts = { toHome: true }) {
+function closeSheet(opts = { toHome: true }) {
   if (!sheet) return
   const toHome = typeof opts === 'boolean' ? opts : opts?.toHome !== false
   sheet.classList.remove('open')
@@ -799,7 +793,7 @@ function closeSheet (opts = { toHome: true }) {
   }
 }
 
-function openSheet (target) {
+function openSheet(target) {
   if (target === '#home') {
     closeSheet()
     document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })
@@ -860,7 +854,7 @@ function openSheet (target) {
     const searchInput =
       activeBody.querySelector('#sheetSearchMember') ||
       document.getElementById('sheetSearchMember')
-    function applySheetFilter () {
+    function applySheetFilter() {
       const q = (searchInput?.value || '').toLowerCase().trim()
       let filtered = members.filter(m => {
         const matchRole =
@@ -950,7 +944,7 @@ function openSheet (target) {
   if (sheetViews) sheetViews.scrollTop = 0
 }
 
-function setActive (target) {
+function setActive(target) {
   allNavLinks.forEach(a =>
     a.classList.toggle('active', a.getAttribute('href') === target)
   )
@@ -1020,31 +1014,33 @@ sheetBack?.addEventListener('click', () => {
     closeSheet()
   }
 })
-sheetOverlay?.addEventListener('click', closeSheet)
-sheetCloseBtn?.addEventListener('click', closeSheet)
-sheetDismiss?.addEventListener('click', closeSheet)
+// Bottom sheet hanya boleh ditutup via tombol X (icon close) — overlay click & swipe drag dimatikan agar scroll atas/bawah tidak menutup
+if (sheetOverlay) {
+  sheetOverlay.style.cursor = 'default'
+  // overlay tetap tampil sebagai backdrop tapi tidak menutup sheet saat diklik
+  sheetOverlay.addEventListener('click', e => {
+    e.preventDefault()
+    e.stopPropagation()
+  })
+}
+sheetCloseBtn?.addEventListener('click', e => {
+  e.preventDefault()
+  closeSheet()
+})
+sheetDismiss?.addEventListener('click', e => {
+  e.preventDefault()
+  closeSheet()
+})
 
-let startY = 0
-sheet?.addEventListener(
-  'touchstart',
-  e => {
-    startY = e.touches[0].clientY
-  },
-  { passive: true }
-)
-sheet?.addEventListener(
-  'touchmove',
-  e => {
-    const dy = e.touches[0].clientY - startY
-    if (dy > 80) closeSheet()
-  },
-  { passive: true }
-)
+// swipe/drag-to-close dimatikan — scroll di dalam sheet tidak akan menutup
+// (sebelumnya ada listener touchstart/touchmove dy>80 => closeSheet, sekarang sengaja dihapus)
+
 window.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (document.getElementById('memberModal')?.classList.contains('open'))
       return
-    closeSheet()
+    // Escape tidak lagi menutup bottom-sheet, hanya tombol X yang boleh
+    return
   }
   if (
     e.key === '/' &&
@@ -1066,7 +1062,7 @@ document.querySelectorAll('.fab').forEach(f => {
   })
 })
 
-function fmt (t) {
+function fmt(t) {
   if (isNaN(t)) return '00:00'
   const m = Math.floor(t / 60)
     .toString()
@@ -1076,7 +1072,7 @@ function fmt (t) {
     .padStart(2, '0')
   return `${m}:${s}`
 }
-function setupVid (root = document) {
+function setupVid(root = document) {
   root.querySelectorAll('[data-video]').forEach(box => {
     if (box.dataset.vidInit) return
     box.dataset.vidInit = '1'
@@ -1089,7 +1085,7 @@ function setupVid (root = document) {
     const fill = box.querySelector('.vid-progress-fill')
     const timeEl = box.querySelector('.vid-time')
     if (!video) return
-    function syncPlay () {
+    function syncPlay() {
       const isPlaying = !video.paused
       box.classList.toggle('playing', isPlaying)
       if (btnPlay)
@@ -1103,7 +1099,7 @@ function setupVid (root = document) {
         btnCenter.classList.toggle('hidden', isPlaying)
       }
     }
-    function syncTime () {
+    function syncTime() {
       const cur = fmt(video.currentTime)
       const dur = fmt(video.duration || 0)
       if (timeEl) timeEl.textContent = `${cur} / ${dur}`
@@ -1208,7 +1204,7 @@ document.addEventListener('click', e => {
   audios.forEach(a => {
     if (a !== audio) a.pause()
   })
-  function showWave (title) {
+  function showWave(title) {
     if (!wave) return
     const txt = wave.querySelector('#waveText')
     if (txt) txt.textContent = title
@@ -1221,7 +1217,7 @@ document.addEventListener('click', e => {
     const view = wave.closest('.sheet-view')
     if (view) view.scrollTo({ top: view.scrollHeight, behavior: 'smooth' })
   }
-  function hideWave () {
+  function hideWave() {
     if (!wave) return
     wave.classList.remove('show')
     wave.classList.add('hiding')
@@ -1246,7 +1242,7 @@ document.addEventListener('click', e => {
         ?.querySelector('.intro-main b')
         ?.textContent?.trim() || 'Lagu'
     showWave(title)
-    audio.play().catch(() => {})
+    audio.play().catch(() => { })
     btn.classList.add('playing')
     btn.innerHTML = '<i class="ri-pause-fill"></i>'
     audio.onended = () => {
@@ -1271,7 +1267,7 @@ closeSheet = (function (orig) {
       try {
         aud.pause()
         aud.currentTime = 0
-      } catch (e) {}
+      } catch (e) { }
     })
     document.querySelectorAll('.intro-play.playing').forEach(b => {
       b.classList.remove('playing')
@@ -1301,12 +1297,12 @@ const mmStats = document.getElementById('memberModalStats')
 const mmSocials = document.getElementById('memberModalSocials')
 let modalSlideTimer = null
 
-function openMemberModal (m) {
+function openMemberModal(m) {
   if (!memberModal || !m) return
   const isDev = m.role === 'dev'
   const socials = m.socials || {}
 
-  function handleText (key) {
+  function handleText(key) {
     const url = socials[key]
     if (url && url !== '#' && url.includes('/')) {
       const seg = url.replace(/\/$/, '').split('/').pop()
@@ -1316,12 +1312,12 @@ function openMemberModal (m) {
   }
   const followCfg = isDev
     ? [
-        { key: 'instagram', icon: 'ri-instagram-line' },
-        { key: 'github', icon: 'ri-github-line' }
-      ]
+      { key: 'instagram', icon: 'ri-instagram-line' },
+      { key: 'github', icon: 'ri-github-line' }
+    ]
     : [
-        { key: 'instagram', icon: 'ri-instagram-line' }
-      ]
+      { key: 'instagram', icon: 'ri-instagram-line' }
+    ]
 
   let followList = followCfg.filter(
     c => socials[c.key] && socials[c.key] !== '#'
@@ -1345,10 +1341,8 @@ function openMemberModal (m) {
         slides
           .map(
             (src, i) =>
-              `<img src="${src}" alt="${m.name} ${i + 1}" class="${
-                i === 0 ? 'active' : ''
-              }" loading="${
-                i === 0 ? 'eager' : 'lazy'
+              `<img src="${src}" alt="${m.name} ${i + 1}" class="${i === 0 ? 'active' : ''
+              }" loading="${i === 0 ? 'eager' : 'lazy'
               }" onerror="this.style.display='none'">`
           )
           .join('') +
@@ -1390,11 +1384,10 @@ function openMemberModal (m) {
       'member-modal-badge ' + m.role + (isDev ? ' is-dev-badge' : '')
   }
   if (mmName)
-    mmName.innerHTML = `${m.name} ${
-      m.verified
-        ? '<i class="ri-verified-badge-fill" title="Verified"></i>'
-        : ''
-    }`
+    mmName.innerHTML = `${m.name} ${m.verified
+      ? '<i class="ri-verified-badge-fill" title="Verified"></i>'
+      : ''
+      }`
   if (mmRole) mmRole.textContent = m.roleDesc || m.bio || ''
   if (mmBio) {
     if (m.bio && m.bio !== m.roleDesc) {
@@ -1422,13 +1415,10 @@ function openMemberModal (m) {
             ? user
             : user
           : m.handle.replace('@', '') || c.key
-        return `<a href="${
-          has ? url : '#'
-        }" target="_blank" rel="noopener" class="${
-          has ? '' : 'disabled'
-        }" aria-label="${c.key} ${m.name}"><i class="${
-          c.icon
-        }"></i><span>${display}</span></a>`
+        return `<a href="${has ? url : '#'
+          }" target="_blank" rel="noopener" class="${has ? '' : 'disabled'
+          }" aria-label="${c.key} ${m.name}"><i class="${c.icon
+          }"></i><span>${display}</span></a>`
       })
       .join('')
   }
@@ -1455,8 +1445,7 @@ function openMemberModal (m) {
     devStackEl.innerHTML = m.stack
       .map(
         s =>
-          `<div class="dev-stack-pill"><i class="${
-            iconMap[s] || 'ri-palette-line'
+          `<div class="dev-stack-pill"><i class="${iconMap[s] || 'ri-palette-line'
           }"></i><span>${s.trim()}</span></div>`
       )
       .join('')
@@ -1470,7 +1459,7 @@ function openMemberModal (m) {
   memberModal.setAttribute('aria-hidden', 'false')
   document.body.style.overflow = 'hidden'
 }
-function closeMemberModal () {
+function closeMemberModal() {
   if (!memberModal) return
   memberModal.classList.remove('open')
   memberModal.setAttribute('aria-hidden', 'true')
@@ -1506,59 +1495,59 @@ window.addEventListener('keydown', e => {
     closeMemberModal()
   }
 })
-;(function () {
-  const el = document.getElementById('deviceType')
-  const cursor = document.getElementById('deviceCursor')
-  if (!el) return
-  const full = 'SGF REVOLUTION'
-  let i = 0
-  function type () {
-    if (i < full.length) {
-      el.textContent += full[i++]
-      setTimeout(type, 95)
+  ; (function () {
+    const el = document.getElementById('deviceType')
+    const cursor = document.getElementById('deviceCursor')
+    if (!el) return
+    const full = 'SGF REVOLUTION'
+    let i = 0
+    function type() {
+      if (i < full.length) {
+        el.textContent += full[i++]
+        setTimeout(type, 95)
+      }
     }
-  }
-  setTimeout(type, 500)
-})()
-;(function () {
-  const wrap = document.getElementById('logoCoreInner')
-  if (!wrap) return
-  const imgs = wrap.querySelectorAll('.logo-img')
-  if (imgs.length < 2) return
+    setTimeout(type, 500)
+  })()
+  ; (function () {
+    const wrap = document.getElementById('logoCoreInner')
+    if (!wrap) return
+    const imgs = wrap.querySelectorAll('.logo-img')
+    if (imgs.length < 2) return
 
-  imgs.forEach(img => {
-    const p = new Image()
-    p.src = img.src
-  })
-  let idx = 0
-  let timer = null
-  function swap () {
-    const prev = idx
-    idx = (idx + 1) % imgs.length
-    imgs[prev].classList.remove('active')
-    imgs[idx].classList.add('active')
-  }
-  function start () {
-    if (timer) clearInterval(timer)
-    timer = setInterval(swap, 2800)
-  }
-  function stop () {
-    if (timer) clearInterval(timer)
-    timer = null
-  }
-  start()
+    imgs.forEach(img => {
+      const p = new Image()
+      p.src = img.src
+    })
+    let idx = 0
+    let timer = null
+    function swap() {
+      const prev = idx
+      idx = (idx + 1) % imgs.length
+      imgs[prev].classList.remove('active')
+      imgs[idx].classList.add('active')
+    }
+    function start() {
+      if (timer) clearInterval(timer)
+      timer = setInterval(swap, 2800)
+    }
+    function stop() {
+      if (timer) clearInterval(timer)
+      timer = null
+    }
+    start()
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stop()
-    else start()
-  })
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop()
+      else start()
+    })
 
-  wrap.closest('.logo-scene')?.addEventListener('mouseenter', stop)
-  wrap.closest('.logo-scene')?.addEventListener('mouseleave', start)
-})()
+    wrap.closest('.logo-scene')?.addEventListener('mouseenter', stop)
+    wrap.closest('.logo-scene')?.addEventListener('mouseleave', start)
+  })()
 
 let aboutBannerTimer = null
-function initAboutBanner (root = document) {
+function initAboutBanner(root = document) {
   const banner =
     root.querySelector?.('#aboutBanner') ||
     document.getElementById('aboutBanner')
@@ -1678,7 +1667,7 @@ const inspectLock = document.getElementById('inspectLock')
 const customMenu = document.getElementById('customMenu')
 let inspectToastTimer = null
 let inspectHits = []
-function showInspectToast () {
+function showInspectToast() {
   if (!inspectToast) return
   const now = Date.now()
   inspectHits.push(now)
@@ -1704,7 +1693,7 @@ if (inspectToastClose) {
     clearTimeout(inspectToastTimer)
   })
 }
-function hideCustomMenu () {
+function hideCustomMenu() {
   if (customMenu) customMenu.classList.remove('show')
 }
 document.addEventListener('click', hideCustomMenu)
@@ -1712,7 +1701,7 @@ if (customMenu) {
   customMenu
     .querySelector('[data-action="copy-link"]')
     .addEventListener('click', () => {
-      navigator.clipboard.writeText(location.href).catch(() => {})
+      navigator.clipboard.writeText(location.href).catch(() => { })
       hideCustomMenu()
       showInspectToast()
     })
@@ -1757,7 +1746,7 @@ setInterval(() => {
     document.querySelectorAll('video, audio').forEach(m => {
       try {
         m.pause()
-      } catch (e) {}
+      } catch (e) { }
     })
     showInspectToast()
   } else if (!opened && isLocked) {
@@ -1782,7 +1771,7 @@ document.addEventListener('copy', e => {
         sel + ' — © SGF Revolution by Marchell Kevandra ' + location.href
       )
       e.preventDefault()
-    } catch (err) {}
+    } catch (err) { }
   }
 })
 setInterval(() => {
@@ -1796,11 +1785,11 @@ setInterval(() => {
 // PWA register
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () =>
-    navigator.serviceWorker.register('./sw.js').catch(() => {})
+    navigator.serviceWorker.register('./sw.js').catch(() => { })
   )
 }
 // Lazy + blur placeholder
-;(function () {
+; (function () {
   const imgs = document.querySelectorAll('img[loading="lazy"]')
   imgs.forEach(img => {
     if (img.complete) return
@@ -1832,188 +1821,188 @@ if ('serviceWorker' in navigator) {
   imgs.forEach(i => io.observe(i))
 })()
 
-// Logo-pack preview dengan tombol download di atas image
-;(function () {
-  const modal = document.getElementById('logoPreview')
-  const img = document.getElementById('logoPreviewImg')
-  const dl = document.getElementById('logoPreviewDl')
-  const overlay = document.getElementById('logoPreviewOverlay')
-  const closeBtn = document.getElementById('logoPreviewClose')
-  if (!modal || !img || !dl) return
-  function open (src) {
-    img.src = src
-    img.alt = src.split('/').pop()
-    dl.href = src
-    dl.setAttribute('download', src.split('/').pop())
-    modal.classList.add('open')
-    modal.setAttribute('aria-hidden', 'false')
-    document.body.style.overflow = 'hidden'
-  }
-  function close () {
-    modal.classList.remove('open')
-    modal.setAttribute('aria-hidden', 'true')
-    if (
-      !document.getElementById('memberModal')?.classList.contains('open') &&
-      !document.getElementById('bottomSheet')?.classList.contains('open')
-    ) {
-      document.body.style.overflow = ''
+  // Logo-pack preview dengan tombol download di atas image
+  ; (function () {
+    const modal = document.getElementById('logoPreview')
+    const img = document.getElementById('logoPreviewImg')
+    const dl = document.getElementById('logoPreviewDl')
+    const overlay = document.getElementById('logoPreviewOverlay')
+    const closeBtn = document.getElementById('logoPreviewClose')
+    if (!modal || !img || !dl) return
+    function open(src) {
+      img.src = src
+      img.alt = src.split('/').pop()
+      dl.href = src
+      dl.setAttribute('download', src.split('/').pop())
+      modal.classList.add('open')
+      modal.setAttribute('aria-hidden', 'false')
+      document.body.style.overflow = 'hidden'
     }
-  }
-  document.querySelectorAll('.bento-item[data-preview]').forEach(btn => {
-    btn.addEventListener('click', () => open(btn.dataset.preview))
-  })
-  overlay?.addEventListener('click', close)
-  closeBtn?.addEventListener('click', close)
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) close()
-  })
-})()
+    function close() {
+      modal.classList.remove('open')
+      modal.setAttribute('aria-hidden', 'true')
+      if (
+        !document.getElementById('memberModal')?.classList.contains('open') &&
+        !document.getElementById('bottomSheet')?.classList.contains('open')
+      ) {
+        document.body.style.overflow = ''
+      }
+    }
+    document.querySelectorAll('.bento-item[data-preview]').forEach(btn => {
+      btn.addEventListener('click', () => open(btn.dataset.preview))
+    })
+    overlay?.addEventListener('click', close)
+    closeBtn?.addEventListener('click', close)
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) close()
+    })
+  })()
 
-// Toast download
-;(function () {
-  const toast = document.getElementById('dlToast')
-  const msg = document.getElementById('dlToastMsg')
-  const closeBtn = document.getElementById('dlToastClose')
-  let t
-  function show (name) {
-    if (!toast || !msg) return
-    msg.textContent = name + ' • menyiapkan file...'
-    toast.classList.add('show')
-    toast.setAttribute('aria-hidden', 'false')
-    clearTimeout(t)
-    t = setTimeout(hide, 2600)
-    setTimeout(() => {
-      if (toast.classList.contains('show'))
-        msg.textContent = name + ' • download dimulai ✓'
-    }, 900)
-  }
-  function hide () {
-    if (!toast) return
-    toast.classList.remove('show')
-    toast.setAttribute('aria-hidden', 'true')
-  }
-  closeBtn?.addEventListener('click', hide)
-  document.addEventListener('click', e => {
-    const a = e.target.closest('a[download], button[data-preview]')
-    // untuk link download asli
-    const dlLink = e.target.closest('a[download]')
-    if (dlLink) {
-      const href = dlLink.getAttribute('href') || ''
-      const name = href.split('/').pop() || 'File'
+  // Toast download
+  ; (function () {
+    const toast = document.getElementById('dlToast')
+    const msg = document.getElementById('dlToastMsg')
+    const closeBtn = document.getElementById('dlToastClose')
+    let t
+    function show(name) {
+      if (!toast || !msg) return
+      msg.textContent = name + ' • menyiapkan file...'
+      toast.classList.add('show')
+      toast.setAttribute('aria-hidden', 'false')
+      clearTimeout(t)
+      t = setTimeout(hide, 2600)
+      setTimeout(() => {
+        if (toast.classList.contains('show'))
+          msg.textContent = name + ' • download dimulai ✓'
+      }, 900)
+    }
+    function hide() {
+      if (!toast) return
+      toast.classList.remove('show')
+      toast.setAttribute('aria-hidden', 'true')
+    }
+    closeBtn?.addEventListener('click', hide)
+    document.addEventListener('click', e => {
+      const a = e.target.closest('a[download], button[data-preview]')
+      // untuk link download asli
+      const dlLink = e.target.closest('a[download]')
+      if (dlLink) {
+        const href = dlLink.getAttribute('href') || ''
+        const name = href.split('/').pop() || 'File'
+        show(name)
+      }
+    })
+    // juga untuk preview download
+    document.getElementById('logoPreviewDl')?.addEventListener('click', e => {
+      const name =
+        e.currentTarget.getAttribute('href')?.split('/').pop() || 'File'
       show(name)
-    }
-  })
-  // juga untuk preview download
-  document.getElementById('logoPreviewDl')?.addEventListener('click', e => {
-    const name =
-      e.currentTarget.getAttribute('href')?.split('/').pop() || 'File'
-    show(name)
-  })
-  document.getElementById('introPreviewDl')?.addEventListener('click', e => {
-    const name =
-      e.currentTarget.getAttribute('href')?.split('/').pop() || 'File'
-    show(name)
-  })
-  window.showDlToast = show
-})()
+    })
+    document.getElementById('introPreviewDl')?.addEventListener('click', e => {
+      const name =
+        e.currentTarget.getAttribute('href')?.split('/').pop() || 'File'
+      show(name)
+    })
+    window.showDlToast = show
+  })()
 
-// Intro video preview — custom controls (play, progress, time, mute, fullscreen) + download icon-only
-;(function () {
-  const modal = document.getElementById('introPreview')
-  const wrap = document.getElementById('introPreviewWrap')
-  const video = document.getElementById('introPreviewVideo')
-  const dl = document.getElementById('introPreviewDl')
-  const overlay = document.getElementById('introPreviewOverlay')
-  const closeBtn = document.getElementById('introPreviewClose')
-  const titleEl = document.getElementById('introPreviewTitle')
-  const subEl = document.getElementById('introPreviewSub')
-  const centerBtn = document.getElementById('introPreviewCenter')
-  const playBtn = document.getElementById('ipcPlay')
-  const seek = document.getElementById('ipcSeek')
-  const fill = document.getElementById('ipcFill')
-  const timeEl = document.getElementById('ipcTime')
-  const muteBtn = document.getElementById('ipcMute')
-  const fsBtn = document.getElementById('ipcFs')
-  if (!modal || !video || !dl) return
-  function fmt(t){ if(isNaN(t)) return '00:00'; const m=Math.floor(t/60).toString().padStart(2,'0'); const s=Math.floor(t%60).toString().padStart(2,'0'); return m+':'+s }
-  function syncPlay(){
-    const playing = !video.paused
-    if(playBtn) playBtn.innerHTML = playing ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>'
-    if(centerBtn){ centerBtn.innerHTML = playing ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>'; centerBtn.classList.toggle('hidden', playing) }
-    wrap?.classList.toggle('is-playing', playing)
-  }
-  function syncTime(){
-    if(timeEl) timeEl.textContent = fmt(video.currentTime)+' / '+fmt(video.duration||0)
-    const pct = video.duration ? (video.currentTime/video.duration)*100 : 0
-    if(fill) fill.style.width = pct+'%'
-    if(seek) seek.value = pct
-  }
-  function open(src, title, sub) {
-    video.src = src
-    video.load()
-    dl.href = src
-    dl.setAttribute('download', src.split('/').pop())
-    if (titleEl) titleEl.textContent = title || 'Intro SGF'
-    if (subEl) subEl.textContent = sub || 'SGF Revolution • MP4'
-    modal.classList.add('open')
-    modal.setAttribute('aria-hidden', 'false')
-    document.body.style.overflow = 'hidden'
-    syncPlay(); syncTime()
-    video.play().catch(() => {})
-  }
-  function close() {
-    modal.classList.remove('open')
-    modal.setAttribute('aria-hidden', 'true')
-    try { video.pause(); } catch(e){}
-    if (document.fullscreenElement) { try{ document.exitFullscreen() }catch(e){} }
-    if (
-      !document.getElementById('memberModal')?.classList.contains('open') &&
-      !document.getElementById('bottomSheet')?.classList.contains('open') &&
-      !document.getElementById('logoPreview')?.classList.contains('open')
-    ) {
-      document.body.style.overflow = ''
+  // Intro video preview — custom controls (play, progress, time, mute, fullscreen) + download icon-only
+  ; (function () {
+    const modal = document.getElementById('introPreview')
+    const wrap = document.getElementById('introPreviewWrap')
+    const video = document.getElementById('introPreviewVideo')
+    const dl = document.getElementById('introPreviewDl')
+    const overlay = document.getElementById('introPreviewOverlay')
+    const closeBtn = document.getElementById('introPreviewClose')
+    const titleEl = document.getElementById('introPreviewTitle')
+    const subEl = document.getElementById('introPreviewSub')
+    const centerBtn = document.getElementById('introPreviewCenter')
+    const playBtn = document.getElementById('ipcPlay')
+    const seek = document.getElementById('ipcSeek')
+    const fill = document.getElementById('ipcFill')
+    const timeEl = document.getElementById('ipcTime')
+    const muteBtn = document.getElementById('ipcMute')
+    const fsBtn = document.getElementById('ipcFs')
+    if (!modal || !video || !dl) return
+    function fmt(t) { if (isNaN(t)) return '00:00'; const m = Math.floor(t / 60).toString().padStart(2, '0'); const s = Math.floor(t % 60).toString().padStart(2, '0'); return m + ':' + s }
+    function syncPlay() {
+      const playing = !video.paused
+      if (playBtn) playBtn.innerHTML = playing ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>'
+      if (centerBtn) { centerBtn.innerHTML = playing ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>'; centerBtn.classList.toggle('hidden', playing) }
+      wrap?.classList.toggle('is-playing', playing)
     }
-  }
-  function togglePlay(){
-    if(video.paused){ video.play().catch(()=>{}) } else { video.pause() }
-  }
-  centerBtn?.addEventListener('click', e=>{ e.stopPropagation(); togglePlay() })
-  playBtn?.addEventListener('click', e=>{ e.stopPropagation(); togglePlay() })
-  video.addEventListener('click', togglePlay)
-  video.addEventListener('play', syncPlay)
-  video.addEventListener('pause', syncPlay)
-  video.addEventListener('timeupdate', syncTime)
-  video.addEventListener('loadedmetadata', syncTime)
-  video.addEventListener('ended', ()=>{ syncPlay(); syncTime() })
-  seek?.addEventListener('input', ()=>{ if(video.duration) video.currentTime = (seek.value/100)*video.duration })
-  muteBtn?.addEventListener('click', e=>{
-    e.stopPropagation()
-    video.muted = !video.muted
-    muteBtn.innerHTML = video.muted ? '<i class="ri-volume-mute-line"></i>' : '<i class="ri-volume-up-line"></i>'
-  })
-  fsBtn?.addEventListener('click', e=>{
-    e.stopPropagation()
-    if(document.fullscreenElement) document.exitFullscreen()
-    else (wrap?.requestFullscreen?.() || video.requestFullscreen?.()).catch(()=>{})
-  })
-  // delegated — work untuk template yang di-clone ke dalam bottomSheet
-  document.addEventListener('click', e => {
-    const btn = e.target.closest('.intro-video-btn')
-    if (!btn) return
-    e.preventDefault()
-    const src = btn.dataset.video
-    const title = btn.dataset.title || btn.querySelector('.intro-main b')?.textContent?.trim()
-    const sub = btn.dataset.sub || btn.querySelector('.intro-main span')?.textContent?.trim()
-    if (src) open(src, title, sub)
-  })
-  overlay?.addEventListener('click', close)
-  closeBtn?.addEventListener('click', close)
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) close()
-    if (e.key === ' ' && modal.classList.contains('open')) { e.preventDefault(); togglePlay() }
-  })
-  document.addEventListener('fullscreenchange', ()=>{ if(fsBtn) fsBtn.innerHTML = document.fullscreenElement ? '<i class="ri-fullscreen-exit-line"></i>' : '<i class="ri-fullscreen-line"></i>' })
-})()
+    function syncTime() {
+      if (timeEl) timeEl.textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration || 0)
+      const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0
+      if (fill) fill.style.width = pct + '%'
+      if (seek) seek.value = pct
+    }
+    function open(src, title, sub) {
+      video.src = src
+      video.load()
+      dl.href = src
+      dl.setAttribute('download', src.split('/').pop())
+      if (titleEl) titleEl.textContent = title || 'Intro SGF'
+      if (subEl) subEl.textContent = sub || 'SGF Revolution • MP4'
+      modal.classList.add('open')
+      modal.setAttribute('aria-hidden', 'false')
+      document.body.style.overflow = 'hidden'
+      syncPlay(); syncTime()
+      video.play().catch(() => { })
+    }
+    function close() {
+      modal.classList.remove('open')
+      modal.setAttribute('aria-hidden', 'true')
+      try { video.pause(); } catch (e) { }
+      if (document.fullscreenElement) { try { document.exitFullscreen() } catch (e) { } }
+      if (
+        !document.getElementById('memberModal')?.classList.contains('open') &&
+        !document.getElementById('bottomSheet')?.classList.contains('open') &&
+        !document.getElementById('logoPreview')?.classList.contains('open')
+      ) {
+        document.body.style.overflow = ''
+      }
+    }
+    function togglePlay() {
+      if (video.paused) { video.play().catch(() => { }) } else { video.pause() }
+    }
+    centerBtn?.addEventListener('click', e => { e.stopPropagation(); togglePlay() })
+    playBtn?.addEventListener('click', e => { e.stopPropagation(); togglePlay() })
+    video.addEventListener('click', togglePlay)
+    video.addEventListener('play', syncPlay)
+    video.addEventListener('pause', syncPlay)
+    video.addEventListener('timeupdate', syncTime)
+    video.addEventListener('loadedmetadata', syncTime)
+    video.addEventListener('ended', () => { syncPlay(); syncTime() })
+    seek?.addEventListener('input', () => { if (video.duration) video.currentTime = (seek.value / 100) * video.duration })
+    muteBtn?.addEventListener('click', e => {
+      e.stopPropagation()
+      video.muted = !video.muted
+      muteBtn.innerHTML = video.muted ? '<i class="ri-volume-mute-line"></i>' : '<i class="ri-volume-up-line"></i>'
+    })
+    fsBtn?.addEventListener('click', e => {
+      e.stopPropagation()
+      if (document.fullscreenElement) document.exitFullscreen()
+      else (wrap?.requestFullscreen?.() || video.requestFullscreen?.()).catch(() => { })
+    })
+    // delegated — work untuk template yang di-clone ke dalam bottomSheet
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('.intro-video-btn')
+      if (!btn) return
+      e.preventDefault()
+      const src = btn.dataset.video
+      const title = btn.dataset.title || btn.querySelector('.intro-main b')?.textContent?.trim()
+      const sub = btn.dataset.sub || btn.querySelector('.intro-main span')?.textContent?.trim()
+      if (src) open(src, title, sub)
+    })
+    overlay?.addEventListener('click', close)
+    closeBtn?.addEventListener('click', close)
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) close()
+      if (e.key === ' ' && modal.classList.contains('open')) { e.preventDefault(); togglePlay() }
+    })
+    document.addEventListener('fullscreenchange', () => { if (fsBtn) fsBtn.innerHTML = document.fullscreenElement ? '<i class="ri-fullscreen-exit-line"></i>' : '<i class="ri-fullscreen-line"></i>' })
+  })()
 
 try {
   console.log(
@@ -2024,4 +2013,4 @@ try {
     '%c Heh ketahuan buka console - karya dijaga ya. Chat Marchell kalau butuh source. ',
     'color:#9aa0b2;'
   )
-} catch (e) {}
+} catch (e) { }
