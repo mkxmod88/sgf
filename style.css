@@ -5986,7 +5986,7 @@ button.intro-cover.intro-play.playing {
 
 .m-name i {
   color: var(--primary);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .m-handle {
@@ -7708,7 +7708,7 @@ button.intro-cover.intro-play.playing {
 
 .member-modal-dots {
   position: absolute;
-  bottom: 10px;
+  bottom: 5px;
   right: -10%;
   transform: translateX(-50%);
   display: flex;
@@ -7774,7 +7774,7 @@ button.intro-cover.intro-play.playing {
 
 .member-modal-name i {
   color: #23c3e7;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .member-modal-role {
