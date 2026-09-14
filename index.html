@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0B0B0F">
+    <meta name="author" content="Marchell Kevandra">
+    <meta name="creator" content="SGF Revolution">
+    <meta name="description" content="SGF Revolution since 2020, LirikMaker Community.">
+    <meta name="keywords" content="SGF Revolution, LirikMaker, Lirik Maker Community.">
+    <meta name="robots" content="index, follow">
+    <meta name="format-detection" content="telephone=no">
+    <title>SGF Revolution — LirikMaker Community</title>
+    <link rel="canonical" href="https://sgf-revolution.netlify.app/">
+    <link rel="icon" type="image/webp" href="assets/img/sgf_logo.webp">
+    <link rel="apple-touch-icon" href="assets/img/sgf_logo.webp">
+    <link rel="shortcut icon" href="assets/img/sgf_logo.webp">
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:site_name" content="SGF Revolution">
+    <meta property="og:title" content="SGF Revolution - LirikMaker Community">
+    <meta property="og:description" content="SGF Revolution since 2020 - Squad LirikMaker.">
+    <meta property="og:url" content="https://sgf-revolution.netlify.app/">
+    <meta property="og:image" content="assets/img/SGFFFF.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SGF Revolution - LirikMaker Community">
+    <meta name="twitter:description" content="SGF Revolution since 2020 - LirikMaker Community.">
+    <meta name="twitter:image" content="assets/img/SGFFFF.jpg">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Splashscreen Premium SGF -->
+    <div id="splash" class="splash" aria-hidden="false" aria-label="Loading SGF Revolution">
+        <div class="splash-bg" aria-hidden="true">
+            <div class="splash-gradient"></div>
+            <div class="splash-glow-1"></div>
+            <div class="splash-glow-2"></div>
+            <div class="splash-noise"></div>
+        </div>
+        <div class="splash-inner">
+            <div class="splash-logo-wrap" aria-hidden="true">
+                <div class="splash-ring-outer"></div>
+                <div class="splash-orbit s-o1"></div>
+                <div class="splash-orbit s-o2"></div>
+                <div class="splash-orbit s-o3"></div>
+                <div class="splash-core">
+                    <div class="splash-core-glow"></div>
+                    <div class="splash-core-ring"></div>
+                    <img src="assets/img/sgf_logo.webp" alt="SGF Logo" class="splash-logo-img">
+                    <div class="splash-shine"></div>
+                </div>
+                <span class="splash-dot-particle d1"></span>
+                <span class="splash-dot-particle d2"></span>
+                <span class="splash-dot-particle d3"></span>
+                <span class="splash-orbit-dot sd1"></span>
+                <span class="splash-orbit-dot sd2"></span>
+                <span class="splash-orbit-dot sd3"></span>
+            </div>
+            <div class="splash-loader" aria-hidden="true">
+                <div class="splash-bar-track">
+                    <div class="splash-bar-fill" id="splashBar"></div>
+                    <div class="splash-bar-glow" id="splashBarGlow"></div>
+                </div>
+                <div class="splash-loader-meta">
+                    <span class="splash-loading-label"><i class="ri-loader-4-line splash-spin"></i> Loading ...</span>
+                    <span class="splash-percent" id="splashPercent">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="desktop-blocker" aria-hidden="true">
+        <div class="blocker-card">
+            <div class="blocker-icon"><i class="ri-smartphone-line"></i></div>
+            <h2>Hanya Mode Mobile yang bisa akses</h2>
+            <p>Buka di HP untuk pengalaman SGF-OS terbaik.<br>Silakan kecilkan jendela atau buka di perangkat mobile.</p>
+            <span class="blocker-badge"><i class="ri-information-line"></i> 761px ke bawah</span>
+        </div>
+    </div>
+    
+
+    
+    <nav class="side-rail" id="sideRail" aria-label="Navigasi utama">
+        <a href="#home" class="rail-logo" aria-label="SGF Home">
+            <div class="rail-logo-icon"><img src="assets/img/sgf_logo.webp" alt="SGF Logo"></div>
+            <span>SGF</span>
+        </a>
+        <ul class="rail-links" id="navLinks">
+            <li><a href="#home" class="active"><i class="ri-home-5-line"></i><span>Home</span></a></li>
+            <li><a href="#about"><i class="ri-quill-pen-line"></i><span>Manifesto</span></a></li>
+            <li><a href="#members"><i class="ri-team-line"></i><span>Squad</span></a></li>
+            <li><a href="#karya"><i class="ri-music-2-line"></i><span>Karya</span></a></li>
+            <li><a href="#unduh"><i class="ri-download-2-line"></i><span>Unduh</span></a></li>
+            <li><a href="#setting"><i class="ri-settings-3-line"></i><span>Setting</span></a></li>
+        </ul>
+        <div class="rail-bottom">
+            <a href="#members" class="rail-cta" aria-label="Join Squad"><i class="ri-arrow-right-up-line"></i></a>
+            <button class="hamburger" id="hamburger" aria-label="Menu" style="display:none"><i
+                    class="ri-menu-3-line"></i></button>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar" id="navbar" aria-hidden="true" style="display:none"></nav>
+
+    
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-card">
+                <div class="hero-bg" aria-hidden="true">
+                    <div class="hero-gradient"></div>
+                    <div class="hero-glow glow-1"></div>
+                    <div class="hero-glow glow-2"></div>
+                </div>
+                <div class="hero-card-inner">
+                    <div class="hero-right" id="heroRight">
+                        <div class="device-frame" id="logoFloat">
+                            <div class="logo-scene" id="logoScene">
+                                <div class="logo-float-glow"></div>
+                                <div class="logo-orbit orbit1"></div>
+                                <div class="logo-orbit orbit2"></div>
+                                <div class="logo-orbit orbit3"></div>
+                                <div class="logo-core">
+                                    <div class="logo-core-ring"></div>
+                                    <div class="logo-core-depth"></div>
+                                    <div class="logo-core-inner" id="logoCoreInner">
+                                        <img src="assets/img/sgf_logo.webp" alt="SGF Logo" class="logo-img active">
+                                        <img src="assets/img/SGF_LOGO_XXX.jpeg" alt="SGF Logo 2" class="logo-img">
+                                        <img src="assets/img/SGF_LOGO_XSX.png" alt="SGF Logo 3" class="logo-img">
+                                    </div>
+                                    <div class="logo-shine"></div>
+                                </div>
+                                <div class="orbit-dot d1"></div>
+                                <div class="orbit-dot d2"></div>
+                                <div class="orbit-dot d3"></div>
+                                <span class="logo-particle p1" aria-hidden="true"></span>
+                                <span class="logo-particle p2" aria-hidden="true"></span>
+                                <span class="logo-particle p3" aria-hidden="true"></span>
+                                <span class="logo-particle p4" aria-hidden="true"></span>
+                                <span class="logo-particle p5" aria-hidden="true"></span>
+                                <span class="logo-particle p6" aria-hidden="true"></span>
+                                <span class="logo-particle p7" aria-hidden="true"></span>
+                                <span class="logo-particle p8" aria-hidden="true"></span>
+                            </div>
+                            <div class="device-caption">
+                                <b id="deviceType"></b>
+                                <em>Since 2020</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="logo-pack">
+                <div class="logo-pack-head">
+                    <div>
+                        <h3>Gallery</h3>
+                        <p>Koleksi logo & banner SGF.</p>
+                    </div>
+                </div>
+                <div class="bento-grid">
+                    <button type="button" class="bento-item bento-main" data-preview="assets/img/sgf_logo.webp" aria-label="Preview SGF Logo Main">
+                        <img src="assets/img/sgf_logo.webp" alt="SGF Logo Main" loading="lazy">
+                        <span class="bento-dl"><i class="ri-eye-line"></i></span>
+                    </button>
+                    <button type="button" class="bento-item bento-wide" data-preview="assets/img/SGF_BANNER.png" aria-label="Preview SGF Banner">
+                        <img src="assets/img/SGF_BANNER.png" alt="SGF Banner" loading="lazy">
+                        <span class="bento-dl"><i class="ri-eye-line"></i></span>
+                    </button>
+                    <button type="button" class="bento-item" data-preview="assets/img/SGF_LOGO_XXX.jpeg" aria-label="Preview SGF Logo XXX">
+                        <img src="assets/img/SGF_LOGO_XXX.jpeg" alt="SGF Logo XXX" loading="lazy">
+                        <span class="bento-dl"><i class="ri-eye-line"></i></span>
+                    </button>
+                    <button type="button" class="bento-item" data-preview="assets/img/SGF_LOGO_XSX.png" aria-label="Preview SGF Logo XSX">
+                        <img src="assets/img/SGF_LOGO_XSX.png" alt="SGF Logo XSX" loading="lazy">
+                        <span class="bento-dl"><i class="ri-eye-line"></i></span>
+                    </button>
+                    <button type="button" class="bento-item bento-wide" data-preview="assets/img/SGFFFF.jpg" aria-label="Preview SGF Banner 2">
+                        <img src="assets/img/SGFFFF.jpg" alt="SGF Banner" loading="lazy">
+                        <span class="bento-dl"><i class="ri-eye-line"></i></span>
+                    </button>
+                </div>
+                <!-- Preview modal dengan tombol download di atas image -->
+                <div class="logo-preview" id="logoPreview" aria-hidden="true">
+                    <div class="logo-preview-overlay" id="logoPreviewOverlay"></div>
+                    <div class="logo-preview-card" role="dialog" aria-modal="true" aria-label="Image preview">
+                        <button class="logo-preview-close" id="logoPreviewClose" aria-label="Tutup"><i class="ri-close-line"></i></button>
+                        <div class="logo-preview-imgwrap">
+                            <img id="logoPreviewImg" src="" alt="Preview">
+                            <a id="logoPreviewDl" href="" download class="logo-preview-dl"><i class="ri-download-2-line"></i> Download</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="marquee">
+                <div class="marquee-inner">
+                    <div class="marquee-track">
+                        <span>EMS REVOLUTION</span><span class="dot">•</span>
+                        <span>RYM</span><span class="dot">•</span>
+                        <span>CMR</span><span class="dot">•</span>
+                        <span>JLS</span><span class="dot">•</span>
+                        <span>ESP</span><span class="dot">•</span>
+                    </div>
+                    <div class="marquee-track" aria-hidden="true">
+                        <span>EMS REVOLUTION</span><span class="dot">•</span>
+                        <span>RYM</span><span class="dot">•</span>
+                        <span>CMR</span><span class="dot">•</span>
+                        <span>JLS</span><span class="dot">•</span>
+                        <span>ESP</span><span class="dot">•</span>
+                    </div>
+                </div>
+                <span class="marquee-fade left"></span>
+                <span class="marquee-fade right"></span>
+            </div>
+            <div class="hero-footer">
+                <div class="hero-footer-inner">
+                    <div class="footer-left">
+                        <img src="assets/img/sgf_logo.webp" alt="SGF">
+                        <div><b>SGF Revolution</b><span>Since 2020 • LirikMaker Community</span></div>
+                    </div>
+                    <p class="footer-desc">© 2026 <span class="footer-shine" id="footerNameLink" role="button" tabindex="0">Marchell Kevandra</span>. All rights reserved.</p>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/squad.geser.font" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="ri-youtube-line"></i></a>
+                        <a href="https://www.tiktok.com/@sgf.revolution" aria-label="TikTok"><i class="ri-tiktok-line"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <nav class="bottom-nav" aria-label="Bottom navigation">
+        <a href="#home" class="active"><i class="ri-home-5-fill"></i><span>Home</span></a>
+        <a href="#about"><i class="ri-user-line"></i><span>About</span></a>
+        <a href="#members"><i class="ri-team-line"></i><span>Squad</span></a>
+        <a href="#karya"><i class="ri-video-on-line"></i><span>Video</span></a>
+        <a href="#unduh"><i class="ri-download-line"></i><span>Unduh</span></a>
+        <!-- <a href="#setting"><i class="ri-settings-3-line"></i><span>Setting</span></a> -->
+    </nav>
+
+    
+    <div class="sheet-overlay" id="sheetOverlay" aria-hidden="true"></div>
+    <div class="bottom-sheet" id="bottomSheet" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="sheet-handle" aria-hidden="true"></div>
+        <div class="sheet-header">
+            <button class="sheet-back" id="sheetBack" aria-label="Kembali" style="display:none"><i class="ri-arrow-left-s-line"></i></button>
+            <div class="sheet-title">
+                <span class="sheet-icon" id="sheetIcon"><i class="ri-home-5-line"></i></span>
+                <div>
+                    <b id="sheetTitle">Home</b>
+                    <span id="sheetSub">SGF Revolution</span>
+                </div>
+            </div>
+            <button class="sheet-close" id="sheetClose" aria-label="Tutup"><i class="ri-close-line"></i></button>
+        </div>
+        <div class="sheet-body" id="sheetBody">
+            <div class="sheet-views" id="sheetViews"></div>
+        </div>
+
+    </div>
+    <template id="tpl-about">
+        <div class="sheet-section">
+            <div class="about-banner reveal" id="aboutBanner">
+                <img src="assets/img/SGF_BANNER.png" class="ab-img active" alt="SGF Banner 1">
+                <img src="assets/img/SGFFFF.jpg" class="ab-img" alt="SGF Banner 2">
+                <div class="about-shine"></div>
+                <div class="about-banner-overlay">
+                    <span>Family SGF</span>
+                    <b>SGF Revolution - Since 2020</b>
+                </div>
+            </div>
+            <div class="about-grid reveal">
+                <div class="about-cards">
+                    <div class="a-card rules-card reveal">
+                        <div class="rules-head">
+                            <span class="card-eyebrow">TEAM RULES</span>
+                            <span class="rules-count">08 Peraturan</span>
+                        </div>
+                        <div class="rules-list">
+                            <div class="rule-item">
+                                <span class="rule-num">01</span>
+                                <span class="rule-text">Dilarang memancing / memperbesar konflik yang ada.</span>
+                            </div>
+                            <div class="rule-item">
+                                <span class="rule-num">02</span>
+                                <span class="rule-text">Dilarang membawa candaan Team SGF ke team lain.</span>
+                            </div>
+                            <div class="rule-item">
+                                <span class="rule-num">03</span>
+                                <span class="rule-text">Dilarang mengirim yang mengandung 18+.</span>
+                            </div>
+                            <div class="rule-item">
+                                <span class="rule-num">04</span>
+                                <span class="rule-text">Dilarang membuat drama ke team sendiri atau yang lain.</span>
+                            </div>
+                            <div class="rule-item">
+                                <span class="rule-num">05</span>
+                                <span class="rule-text">Jaga solidaritas, jangan adu domba antar member.</span>
+                            </div>
+                            <div class="rule-item">
+                                <span class="rule-num">06</span>
+                                <span class="rule-text">Jangan harap bisa masuk lagi ketika sudah keluar team.</span>
+                            </div>
+                            <div class="rule-item">
+                                <span class="rule-num">07</span>
+                                <span class="rule-text">Kalau tidak suka dengan aturan ini mending out saja.</span>
+                            </div>
+                            <div class="rule-item rule-item--soft">
+                                <span class="rule-num">08</span>
+                                <span class="rule-text">Dilarang Baper — tetap profesional & saling support.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </template>
+    <template id="tpl-members">
+        <div class="sheet-section">
+            <div class="member-list" id="sheetMemberGrid"></div>
+            <div class="member-note"><i class="ri-information-line"></i><span>Jika tidak ada foto atau link social media yang ada disini maka contact Rohby / Andreas, nanti saya akan tambahkan - Marchell Kevandra</span></div>
+        </div>
+    </template>
+    <template id="tpl-karya">
+        <div class="sheet-section">
+            <div class="karya-grid">
+                <article class="karya-card reveal" data-video>
+                    <div class="karya-thumb karya-thumb--video karya-thumb--mc">
+                        <video src="assets/vid/MC_SGF.mp4" preload="metadata" playsinline
+                            poster="assets/img/sgf_logo.webp"></video>
+                        <button class="vid-center" aria-label="Play"><i class="ri-play-fill"></i></button>
+                    </div>
+                    <div class="vid-controls vid-controls--below">
+                        <button class="vid-play" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <div class="vid-progress-wrap">
+                            <div class="vid-progress">
+                                <div class="vid-progress-fill"></div>
+                            </div><input type="range" class="vid-seek" min="0" max="100" value="0" step="0.1"
+                                aria-label="Seek">
+                        </div>
+                        <span class="vid-time">00:00 / 00:00</span>
+                        <button class="vid-mute" aria-label="Mute"><i class="ri-volume-up-line"></i></button>
+                        <button class="vid-fs" aria-label="Fullscreen"><i class="ri-fullscreen-line"></i></button>
+                    </div>
+                    <div class="k-body">
+                        <h4>Mega Collab SGF</h4>
+                        <p>SGF Revolution</p>
+                        <div class="k-meta"><span><i class="ri-eye-line"></i> 24K</span><span><i
+                                    class="ri-heart-3-line"></i> 1.8K</span></div>
+                    </div>
+                </article>
+                <article class="karya-card reveal" data-video>
+                    <div class="karya-thumb karya-thumb--video karya-thumb--jj">
+                        <video src="assets/vid/JJ_SGF.mp4" preload="metadata" playsinline
+                            poster="assets/img/sgf_logo.webp"></video>
+                        <button class="vid-center" aria-label="Play"><i class="ri-play-fill"></i></button>
+                    </div>
+                    <div class="vid-controls vid-controls--below">
+                        <button class="vid-play" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <div class="vid-progress-wrap">
+                            <div class="vid-progress">
+                                <div class="vid-progress-fill"></div>
+                            </div><input type="range" class="vid-seek" min="0" max="100" value="0" step="0.1"
+                                aria-label="Seek">
+                        </div>
+                        <span class="vid-time">00:00 / 00:00</span>
+                        <button class="vid-mute" aria-label="Mute"><i class="ri-volume-up-line"></i></button>
+                        <button class="vid-fs" aria-label="Fullscreen"><i class="ri-fullscreen-line"></i></button>
+                    </div>
+                    <div class="k-body">
+                        <h4>JJ SGF</h4>
+                        <p>SGF Revolution</p>
+                        <div class="k-meta"><span><i class="ri-eye-line"></i> 18K</span><span><i
+                                    class="ri-heart-3-line"></i> 2.4K</span></div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </template>
+    <template id="tpl-contact">
+        <div class="sheet-section">
+            <div class="contact-box" style="border-radius:18px">
+                <div class="contact-left">
+                    <span class="eyebrow"><i class="ri-customer-service-2-line"></i> HUBUNGI KAMI • 04</span>
+                    <h2>Siap Menulis<br>Revolusi Baru?</h2>
+                    <p>DM atau join grup — admin fast respon 24 jam, bukan bot.</p>
+                    <div class="contact-links">
+                        <a href="#"><i class="ri-whatsapp-line"></i><span><b>WhatsApp Group</b><em>48+ writers • daily
+                                    drop</em></span><i class="ri-arrow-right-up-line go"></i></a>
+                        <a href="#"><i class="ri-instagram-line"></i><span><b>@sgf.revolution</b><em>Daily lirik &
+                                    behind scene</em></span><i class="ri-arrow-right-up-line go"></i></a>
+                        <a href="#"><i class="ri-discord-line"></i><span><b>Discord Server</b><em>Workshop & battle
+                                    live</em></span><i class="ri-arrow-right-up-line go"></i></a>
+                        <a href="#"><i class="ri-youtube-line"></i><span><b>SGF Official</b><em>Lyric video &
+                                    anthem</em></span><i class="ri-arrow-right-up-line go"></i></a>
+                    </div>
+                    <div class="contact-foot"><span><i class="ri-time-line"></i> &lt; 2 jam respon</span><span><i
+                                class="ri-map-pin-line"></i> ID • Worldwide</span></div>
+                </div>
+                <form class="contact-form"
+                    onsubmit="event.preventDefault(); alert('Pesan terkirim! Admin akan hubungi kamu segera — SGF Revolution'); closeSheet();">
+                    <div class="form-head"><span><i class="ri-article-line"></i> FORM PENDAFTARAN</span><b>SGF-R /
+                            2026</b></div>
+                    <div class="row">
+                        <div class="field"><label>Nama LirikMaker</label><input type="text" placeholder="Nama kamu"
+                                required></div>
+                        <div class="field"><label>WhatsApp</label><input type="text" placeholder="08xx xxxx xxxx"
+                                required></div>
+                    </div>
+                    <div class="field"><label>Role yang diminati</label><select>
+                            <option>Anggota — LirikMaker</option>
+                            <option>Editor Video Lirik</option>
+                            <option>Admin / Moderator</option>
+                        </select></div>
+                    <div class="field"><label>Link / Contoh Lirik</label><input type="url" placeholder="https://...">
+                    </div>
+                    <div class="field"><label>Pesan — Kenapa ingin join?</label><textarea rows="3"
+                            placeholder="Ceritain jujur aja…"></textarea></div>
+                    <button type="submit" class="btn-primary full"><i class="ri-send-plane-line"></i> Kirim
+                        Pendaftaran</button>
+                    <span class="form-note"><i class="ri-shield-check-line"></i> Data aman, hanya untuk seleksi internal
+                        SGF.</span>
+                </form>
+            </div>
+        </div>
+    </template>
+    <template id="tpl-unduh">
+        <div class="sheet-section dl-v2">
+            <div class="dl-v2-grid">
+                <div class="dl-v2-card reveal">
+                    <div class="dl-v2-media">
+                        <img src="assets/img/SGFFFF.jpg" alt="SGF Intro Banner" loading="lazy">
+                        <div class="dl-v2-media-overlay"></div>
+                        <div class="dl-v2-media-title"><b>Intro Video</b><span>SGF Revolution</span></div>
+                    </div>
+                    <div class="dl-v2-body">
+                        <div class="intro-list dl-v2-list">
+                            <button type="button" class="intro-item dl-v2-item intro-video-btn" data-video="assets/vid/INTRO_I.mp4" data-title="Intro SGF — 01" data-sub="SGF Revolution">
+                                <span class="intro-cover"><i class="ri-file-video-line"></i></span>
+                                <span class="intro-main"><b>Intro SGF - 01</b><span>SGF Revolution</span></span>
+                                <span class="intro-dl dl-v2-dl is-icon" aria-hidden="true"><i class="ri-eye-line"></i></span>
+                            </button>
+                            <button type="button" class="intro-item dl-v2-item intro-video-btn" data-video="assets/vid/INTRO_II.mp4" data-title="Intro SGF — 02" data-sub="SGF Revolution">
+                                <span class="intro-cover"><i class="ri-file-video-line"></i></span>
+                                <span class="intro-main"><b>Intro SGF - 02</b><span>SGF Revolution</span></span>
+                                <span class="intro-dl dl-v2-dl is-icon" aria-hidden="true"><i class="ri-eye-line"></i></span>
+                            </button>
+                            <button type="button" class="intro-item dl-v2-item intro-video-btn" data-video="assets/vid/INTRO_III.mp4" data-title="Intro SGF — 03" data-sub="SGF Revolution">
+                                <span class="intro-cover"><i class="ri-file-video-line"></i></span>
+                                <span class="intro-main"><b>Intro SGF - 03</b><span>SGF Revolution</span></span>
+                                <span class="intro-dl dl-v2-dl is-icon" aria-hidden="true"><i class="ri-eye-line"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AUDIO CARD -->
+                <div class="dl-v2-card reveal">
+                    <div class="dl-v2-media">
+                        <img src="assets/img/SGF_BANNER.png" alt="SGF Audio Banner" loading="lazy">
+                        <div class="dl-v2-media-overlay"></div>
+                        <div class="dl-v2-media-title"><b>Lagu </b><span>SGF Revolution</span></div>
+                    </div>
+                    <div class="dl-v2-body">
+                        <div class="intro-list dl-v2-list">
+                            <div class="intro-item dl-v2-item" data-lagu="01">
+                                <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_X.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                                <span class="intro-main"><b>SGF FT Asep Fvnky</b><span>SGF Revolution • Track 01</span></span>
+                                <a href="assets/song/SGF_SONG_X.mp4" download class="intro-dl dl-v2-dl is-icon" aria-label="Download"><i class="ri-download-2-line"></i></a>
+                            </div>
+                            <div class="intro-item dl-v2-item" data-lagu="02">
+                                <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_XX.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                                <span class="intro-main"><b>SGF FT Santo</b><span>SGF Revolution • Track 02</span></span>
+                                <a href="assets/song/SGF_SONG_XX.mp4" download class="intro-dl dl-v2-dl is-icon" aria-label="Download"><i class="ri-download-2-line"></i></a>
+                            </div>
+                            <div class="intro-item dl-v2-item" data-lagu="03">
+                                <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_XXXXXXX.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                                <span class="intro-main"><b>SGF FT Eman 33</b><span>SGF Revolution • Track 03</span></span>
+                                <a href="assets/song/SGF_SONG_XXXXXXX.mp4" download class="intro-dl dl-v2-dl is-icon" aria-label="Download"><i class="ri-download-2-line"></i></a>
+                            </div>
+                            <div class="intro-item dl-v2-item" data-lagu="04">
+                                <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_I.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                                <span class="intro-main"><b>SGF FT Sweet Scar</b><span>SGF Revolution • Track 04</span></span>
+                                <a href="assets/song/SGF_SONG_I.mp4" download class="intro-dl dl-v2-dl is-icon" aria-label="Download"><i class="ri-download-2-line"></i></a>
+                            </div>
+                            <div class="intro-item dl-v2-item" data-lagu="05">
+                                <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_II.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                                <span class="intro-main"><b>SGF FT Santo</b><span>SGF Revolution • Track 05</span></span>
+                                <a href="assets/song/SGF_SONG_II.mp4" download class="intro-dl dl-v2-dl is-icon" aria-label="Download"><i class="ri-download-2-line"></i></a>
+                            </div>
+                        </div>
+                        <audio id="laguPreview" preload="none" style="display:none; background: rgba(34, 34, 34, 0.472); border-radius: 30px;"></audio>
+                        <div class="playing-wave" id="playingWave" style="display:none;">
+                            <div class="stickman-dance" aria-hidden="true">
+                                <div class="stickman">
+                                    <div class="stick-head"></div>
+                                    <div class="stick-body"></div>
+                                    <div class="stick-arm left"></div>
+                                    <div class="stick-arm right"></div>
+                                    <div class="stick-leg left"></div>
+                                    <div class="stick-leg right"></div>
+                                </div>
+                                <div class="stick-shadow"></div>
+                            </div>
+                            <div class="pw-info">
+                                <span class="pw-kicker">NOW PLAYING</span>
+                                <div class="wave-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                                <span class="wave-text" id="waveText">SGF FT Asep Fvnky</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="tpl-unduhIntro">
+        <div class="sheet-section download-center">
+            <div class="dl-section">
+                <div class="dl-banner reveal">
+                    <img src="assets/img/SGFFFF.jpg" alt="SGF Intro Banner" loading="lazy">
+                    <span class="dl-banner-badge"><i class="ri-movie-2-line"></i> VIDEO</span>
+                    <div class="dl-banner-label"><b>Intro Video</b><span>SGF Revolution • Official Intro</span></div>
+                </div>
+                <div class="dl-head reveal">
+                    <span class="dl-icon"><i class="ri-movie-2-line"></i></span>
+                    <div><b>Intro Video</b><span>15-30 detik • 2 file • MP4</span></div>
+                    <span class="dl-count">02</span>
+                </div>
+                <div class="intro-list reveal">
+                    <a href="assets/vid/MC_SGF.mp4" download class="intro-item">
+                        <span class="intro-cover"><i class="ri-file-video-line"></i></span>
+                        <span class="intro-main"><b>Intro SGF - 01</b><span>SGF Revolution</span></span>
+                        <span class="intro-dl"><i class="ri-download-line"></i></span>
+                    </a>
+                    <a href="assets/vid/JJ_SGF.mp4" download class="intro-item">
+                        <span class="intro-cover"><i class="ri-file-video-line"></i></span>
+                        <span class="intro-main"><b>Intro SGF - 02</b><span>SGF Revolution</span></span>
+                        <span class="intro-dl"><i class="ri-download-line"></i></span>
+                    </a>
+                </div>
+            </div>
+            <div class="dl-divider"><span></span></div>
+            <div class="dl-section">
+                <div class="dl-banner reveal">
+                    <img src="assets/img/SGF_BANNER.png" alt="SGF Lagu Banner" loading="lazy">
+                    <span class="dl-banner-badge"><i class="ri-music-2-line"></i> AUDIO • 4 TRACKS</span>
+                    <div class="dl-banner-label"><b>Lagu Full + Lirik</b><span>SGF Revolution • Original Tracks</span></div>
+                </div>
+                <div class="dl-head reveal">
+                    <span class="dl-icon gold"><i class="ri-music-2-line"></i></span>
+                    <div><b>Lagu Full + Lirik</b><span>Tap play untuk preview • 4 file</span></div>
+                    <span class="dl-count">04</span>
+                </div>
+                <div class="intro-list reveal">
+                    <div class="intro-item" data-lagu="01">
+                        <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_X.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <span class="intro-main"><b>SGF FT Asep Fvnky</b><span>SGF Revolution</span></span>
+                        <a href="assets/song/SGF_SONG_X.mp4" download class="intro-dl"><i class="ri-download-line"></i></a>
+                    </div>
+                    <div class="intro-item" data-lagu="02">
+                        <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_XX.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <span class="intro-main"><b>SGF FT Santo</b><span>SGF Revolution</span></span>
+                        <a href="assets/song/SGF_SONG_XX.mp4" download class="intro-dl"><i class="ri-download-line"></i></a>
+                    </div>
+                    <div class="intro-item" data-lagu="03">
+                        <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_XXX.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <span class="intro-main"><b>SGF Song</b><span>SGF Revolution</span></span>
+                        <a href="assets/song/SGF_SONG_XXX.mp4" download class="intro-dl"><i class="ri-download-line"></i></a>
+                    </div>
+                    <div class="intro-item" data-lagu="04">
+                        <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_XXXXXXX.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <span class="intro-main"><b>SGF FT Eman 33</b><span>SGF Revolution</span></span>
+                        <a href="assets/song/SGF_SONG_XXXXXXX.mp4" download class="intro-dl"><i class="ri-download-line"></i></a>
+                    </div>
+                </div>
+                <audio id="laguPreview" preload="none" style="display:none"></audio>
+                <div class="playing-wave" id="playingWave" style="display:none">
+                    <div class="stickman-dance" aria-hidden="true">
+                        <div class="stickman">
+                            <div class="stick-head"></div>
+                            <div class="stick-body"></div>
+                            <div class="stick-arm left"></div>
+                            <div class="stick-arm right"></div>
+                            <div class="stick-leg left"></div>
+                            <div class="stick-leg right"></div>
+                        </div>
+                        <div class="stick-shadow"></div>
+                    </div>
+                    <div class="pw-info">
+                        <span class="pw-kicker"><i class="ri-equalizer-line"></i> NOW PLAYING</span>
+                        <div class="wave-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <span class="wave-text" id="waveText">SGF FT Asep Fvnky</span>
+                    </div>
+                    <span class="pw-live"><span class="pw-live-dot"></span> LIVE</span>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="tpl-unduhLagu">
+        <div class="sheet-section download-center">
+            <div class="dl-section">
+                <div class="dl-banner reveal">
+                    <img src="assets/img/SGFFFF.jpg" alt="SGF Intro Banner" loading="lazy">
+                    <span class="dl-banner-badge"><i class="ri-movie-2-line"></i> VIDEO</span>
+                    <div class="dl-banner-label"><b>Intro Video</b><span>SGF Revolution • Official Intro</span></div>
+                </div>
+                <div class="dl-head reveal">
+                    <span class="dl-icon"><i class="ri-movie-2-line"></i></span>
+                    <div><b>Intro Video</b><span>15-30 detik • 2 file • MP4</span></div>
+                    <span class="dl-count">02</span>
+                </div>
+                <div class="intro-list reveal">
+                    <a href="assets/vid/MC_SGF.mp4" download class="intro-item">
+                        <span class="intro-cover"><i class="ri-file-video-line"></i></span>
+                        <span class="intro-main"><b>Intro SGF - 01</b><span>SGF Revolution</span></span>
+                        <span class="intro-dl"><i class="ri-download-line"></i></span>
+                    </a>
+                    <a href="assets/vid/JJ_SGF.mp4" download class="intro-item">
+                        <span class="intro-cover"><i class="ri-file-video-line"></i></span>
+                        <span class="intro-main"><b>Intro SGF - 02</b><span>SGF Revolution</span></span>
+                        <span class="intro-dl"><i class="ri-download-line"></i></span>
+                    </a>
+                </div>
+            </div>
+            <div class="dl-divider"><span></span></div>
+            <div class="dl-section">
+                <div class="dl-banner reveal">
+                    <img src="assets/img/SGF_BANNER.png" alt="SGF Lagu Banner" loading="lazy">
+                    <span class="dl-banner-badge"><i class="ri-music-2-line"></i> AUDIO • 4 TRACKS</span>
+                    <div class="dl-banner-label"><b>Lagu Full + Lirik</b><span>SGF Revolution • Original Tracks</span></div>
+                </div>
+                <div class="dl-head reveal">
+                    <span class="dl-icon gold"><i class="ri-music-2-line"></i></span>
+                    <div><b>Lagu Full + Lirik</b><span>Tap play untuk preview • 4 file</span></div>
+                    <span class="dl-count">04</span>
+                </div>
+                <div class="intro-list reveal">
+                    <div class="intro-item" data-lagu="01">
+                        <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_X.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <span class="intro-main"><b>SGF FT Asep Fvnky</b><span>SGF Revolution</span></span>
+                        <a href="assets/song/SGF_SONG_X.mp4" download class="intro-dl"><i class="ri-download-line"></i></a>
+                    </div>
+                    <div class="intro-item" data-lagu="02">
+                        <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_XX.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <span class="intro-main"><b>SGF FT Santo</b><span>SGF Revolution</span></span>
+                        <a href="assets/song/SGF_SONG_XX.mp4" download class="intro-dl"><i class="ri-download-line"></i></a>
+                    </div>
+                    <div class="intro-item" data-lagu="03">
+                        <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_XXX.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <span class="intro-main"><b>SGF Song</b><span>SGF Revolution</span></span>
+                        <a href="assets/song/SGF_SONG_XXX.mp4" download class="intro-dl"><i class="ri-download-line"></i></a>
+                    </div>
+                    <div class="intro-item" data-lagu="04">
+                        <button class="intro-cover intro-play" data-src="assets/song/SGF_SONG_XXXXXXX.mp4" aria-label="Play"><i class="ri-play-fill"></i></button>
+                        <span class="intro-main"><b>SGF FT Eman 33</b><span>SGF Revolution</span></span>
+                        <a href="assets/song/SGF_SONG_XXXXXXX.mp4" download class="intro-dl"><i class="ri-download-line"></i></a>
+                    </div>
+                </div>
+                <audio id="laguPreview" preload="none" style="display:none"></audio>
+                <div class="playing-wave" id="playingWave" style="display:none">
+                    <div class="stickman-dance" aria-hidden="true">
+                        <div class="stickman">
+                            <div class="stick-head"></div>
+                            <div class="stick-body"></div>
+                            <div class="stick-arm left"></div>
+                            <div class="stick-arm right"></div>
+                            <div class="stick-leg left"></div>
+                            <div class="stick-leg right"></div>
+                        </div>
+                        <div class="stick-shadow"></div>
+                    </div>
+                    <div class="pw-info">
+                        <span class="pw-kicker"><i class="ri-equalizer-line"></i> NOW PLAYING</span>
+                        <div class="wave-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <span class="wave-text" id="waveText">SGF FT Asep Fvnky</span>
+                    </div>
+                    <span class="pw-live"><span class="pw-live-dot"></span> LIVE</span>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="tpl-setting">
+        <div class="sheet-section setting-v2">
+            <div class="setting-block reveal">
+                <div class="setting-label">Pilih Tema</div>
+                <div class="theme-grid" id="themeGrid">
+                    <button type="button" class="theme-card active" data-theme="default" aria-label="Tema Default">
+                        <span class="theme-preview" style="--t-bg:#08080b;--t-surface:#14141c;--t-p1:#e93dff;--t-p2:#8b5cf6;--t-gold:#d4b483"><i class="theme-check"><i class="ri-check-line"></i></i></span>
+                        <span class="theme-info"><b>SGF Default</b><em>#08080b • Neon Pink</em></span>
+                    </button>
+                    <button type="button" class="theme-card" data-theme="midnight" aria-label="Tema Midnight">
+                        <span class="theme-preview" style="--t-bg:#070A14;--t-surface:#111827;--t-p1:#3b82f6;--t-p2:#6366f1;--t-gold:#93c5fd"><i class="theme-check"><i class="ri-check-line"></i></i></span>
+                        <span class="theme-info"><b>Midnight Blue</b><em>#070A14 • Electric Blue</em></span>
+                    </button>
+                    <button type="button" class="theme-card" data-theme="crimson" aria-label="Tema Crimson">
+                        <span class="theme-preview" style="--t-bg:#120709;--t-surface:#1c0f12;--t-p1:#ef4444;--t-p2:#f97316;--t-gold:#fca5a5"><i class="theme-check"><i class="ri-check-line"></i></i></span>
+                        <span class="theme-info"><b>Crimson</b><em>#120709 • Fire Red</em></span>
+                    </button>
+                    <button type="button" class="theme-card" data-theme="emerald" aria-label="Tema Emerald">
+                        <span class="theme-preview" style="--t-bg:#071412;--t-surface:#0f1f1c;--t-p1:#10b981;--t-p2:#06b6d4;--t-gold:#6ee7b7"><i class="theme-check"><i class="ri-check-line"></i></i></span>
+                        <span class="theme-info"><b>Emerald</b><em>#071412 • Aqua Green</em></span>
+                    </button>
+                    <button type="button" class="theme-card" data-theme="goldlux" aria-label="Tema Gold Lux">
+                        <span class="theme-preview" style="--t-bg:#0f0e0a;--t-surface:#1c1a12;--t-p1:#d4b483;--t-p2:#f59e0b;--t-gold:#fde68a"><i class="theme-check"><i class="ri-check-line"></i></i></span>
+                        <span class="theme-info"><b>Gold Lux</b><em>#0f0e0a • Luxury Gold</em></span>
+                    </button>
+                    <button type="button" class="theme-card" data-theme="neon" aria-label="Tema Neon">
+                        <span class="theme-preview" style="--t-bg:#0a0a0f;--t-surface:#1a1a24;--t-p1:#00ffcc;--t-p2:#e93dff;--t-gold:#00ffcc"><i class="theme-check"><i class="ri-check-line"></i></i></span>
+                        <span class="theme-info"><b>Neon Cyber</b><em>#0a0a0f • Cyan Pink</em></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="setting-block reveal">
+                <div class="setting-label">Custom Warna</div>
+                <p class="setting-sub">Pilih warna sendiri, langsung terlihat hanya di HP kamu. Tidak mengubah untuk orang lain.</p>
+                <div class="custom-color-grid">
+                    <label class="color-field"><span>Primary 1</span><input type="color" id="customPrimary" value="#e93dff"><em id="customPrimaryHex">#e93dff</em></label>
+                    <label class="color-field"><span>Primary 2</span><input type="color" id="customSecondary" value="#8b5cf6"><em id="customSecondaryHex">#8b5cf6</em></label>
+                    <label class="color-field"><span>Gold</span><input type="color" id="customGold" value="#d4b483"><em id="customGoldHex">#d4b483</em></label>
+                    <label class="color-field"><span>Background</span><input type="color" id="customBg" value="#08080b"><em id="customBgHex">#08080b</em></label>
+                </div>
+                <div class="setting-actions">
+                    <button type="button" class="btn-primary setting-apply" id="applyCustom"><i class="ri-check-line"></i> Terapkan</button>
+                    <button type="button" class="btn-ghost setting-reset" id="resetTheme"><i class="ri-refresh-line"></i> Reset Default</button>
+                </div>
+                <div class="setting-note"><i class="ri-information-line"></i><span>Warna disimpan di <b>localStorage</b> kamu. Buka di browser lain akan tetap default. Tap <b>Reset</b> untuk kembali.</span></div>
+            </div>
+
+            <div class="setting-preview-card reveal" id="settingPreviewCard" aria-hidden="true">
+                <div class="setting-preview-top">
+                    <span class="preview-dot" style="background: var(--primary)"></span>
+                    <span class="preview-dot" style="background: var(--gold)"></span>
+                    <span class="preview-dot" style="background: var(--primary-2)"></span>
+                    <span>Live Preview — Local</span>
+                </div>
+                <div class="setting-preview-body">
+                    <div class="preview-chip" style="background: var(--primary-grad)"><i class="ri-palette-line"></i> Primary Gradient</div>
+                    <div class="preview-row">
+                        <span class="preview-swatch" style="background: var(--surface)"></span>
+                        <span class="preview-swatch" style="background: var(--surface-2)"></span>
+                        <span class="preview-swatch" style="background: var(--gold)"></span>
+                        <span class="preview-swatch" style="background: var(--primary)"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <div class="member-modal" id="memberModal" aria-hidden="true">
+        <div class="member-modal-overlay" id="memberModalOverlay"></div>
+        <div class="member-modal-card" id="memberModalCard" role="dialog" aria-modal="true" aria-labelledby="memberModalName">
+            <div class="member-modal-top">
+                <button class="member-modal-close" id="memberModalClose" aria-label="Tutup"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="member-modal-img" id="memberModalAvatar"><img src="" alt=""></div>
+            <div class="member-modal-body">
+                <span class="member-modal-badge" id="memberModalBadge">FOUNDER</span>
+                <h3 class="member-modal-name" id="memberModalName"></h3>
+                <p class="member-modal-role" id="memberModalRole"></p>
+                <div class="member-modal-location" id="memberModalLocation"><i class="ri-map-pin-line"></i><span></span></div>
+                <p class="member-modal-bio" id="memberModalBio"></p>
+                <div class="member-modal-follow">
+                    <b>Follow</b>
+                    <div class="member-modal-socials" id="memberModalSocials"></div>
+                </div>
+            </div>
+            <div class="member-modal-stats" id="memberModalStats" style="display:none"></div>
+            <span id="memberModalHandle" style="display:none"></span>
+        </div>
+    </div>
+    <div class="inspect-lock" id="inspectLock" aria-hidden="true"><div class="inspect-lock-card"><i class="ri-shield-keyhole-line"></i><b>Karya Dilindungi</b><span>Matikan DevTools untuk lanjut</span></div></div>
+    <div class="custom-menu" id="customMenu" role="menu"><button data-action="copy-link"><i class="ri-links-line"></i> Copy Link</button><a href="https://instagram.com/chellgnzxz" target="_blank" rel="noopener"><i class="ri-instagram-line"></i> Hubungi Marchell</a><a href="https://wa.me/6281234567890" target="_blank" rel="noopener"><i class="ri-whatsapp-line"></i> Laporkan</a></div>
+    <div class="inspect-toast" id="inspectToast" role="alert" aria-live="polite">
+        <div class="inspect-toast-icon"><i class="ri-shield-keyhole-line"></i></div>
+        <div class="inspect-toast-body"><b>Heh, ketahuan</b><span>Inspect & klik kanan dimatikan buat jaga karya SGF. Mau lihat source? Chat Marchell aja.</span></div>
+        <button class="inspect-toast-close" id="inspectToastClose" aria-label="Tutup"><i class="ri-close-line"></i></button>
+    </div>
+    <div class="dl-toast" id="dlToast" role="status" aria-live="polite" aria-hidden="true">
+        <div class="dl-toast-icon"><i class="ri-download-2-line"></i></div>
+        <div class="dl-toast-body"><b>Download dimulai</b><span id="dlToastMsg">SGF_Logo.webp • menyiapkan file...</span></div>
+        <button class="dl-toast-close" id="dlToastClose" aria-label="Tutup"><i class="ri-close-line"></i></button>
+    </div>
+    <!-- Intro Video Preview Modal — preview dulu, download icon-only di dalam -->
+    <div class="intro-preview" id="introPreview" aria-hidden="true">
+        <div class="intro-preview-overlay" id="introPreviewOverlay"></div>
+        <div class="intro-preview-card" role="dialog" aria-modal="true" aria-label="Video preview">
+            <button class="intro-preview-close" id="introPreviewClose" aria-label="Tutup"><i class="ri-close-line"></i></button>
+            <div class="intro-preview-videowrap" id="introPreviewWrap">
+                <video id="introPreviewVideo" playsinline preload="metadata"></video>
+                <button class="intro-preview-center" id="introPreviewCenter" aria-label="Play"><i class="ri-play-fill"></i></button>
+                <a id="introPreviewDl" href="" download class="intro-preview-dl" aria-label="Download"><i class="ri-download-2-line"></i></a>
+                <div class="intro-preview-controls" id="introPreviewControls">
+                    <button class="ipc-btn ipc-play" id="ipcPlay" aria-label="Play"><i class="ri-play-fill"></i></button>
+                    <div class="ipc-progress-wrap">
+                        <div class="ipc-progress"><div class="ipc-fill" id="ipcFill"></div></div>
+                        <input type="range" class="ipc-seek" id="ipcSeek" min="0" max="100" value="0" step="0.1" aria-label="Seek">
+                    </div>
+                    <span class="ipc-time" id="ipcTime">00:00 / 00:00</span>
+                    <button class="ipc-btn ipc-mute" id="ipcMute" aria-label="Mute"><i class="ri-volume-up-line"></i></button>
+                    <button class="ipc-btn ipc-fs" id="ipcFs" aria-label="Fullscreen"><i class="ri-fullscreen-line"></i></button>
+                </div>
+            </div>
+            <div class="intro-preview-meta">
+                <b id="introPreviewTitle">Intro SGF</b>
+                <span id="introPreviewSub">SGF Revolution • MP4</span>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
