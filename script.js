@@ -207,7 +207,7 @@ const members = [
     avatar: 'assets/img/SGF_PROFILE_IV.jpeg',
     bio: 'Berusaha jadi versi terbaik dari diri sendiri, bukan saingan orang lain. Pelan-pelan tapi pasti terus melangkah.',
     roleDesc: 'Co Leader',
-    location: 'Bandung, Indonesia',
+    location: 'Jawa Barat, Indonesia',
     stats: { lirik: 38, project: 22 },
     verified: false,
     socials: { instagram: 'https:/instagram.com/irgistwn._' }
