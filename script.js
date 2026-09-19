@@ -243,9 +243,10 @@ const members = [
     handle: '@Chell',
     role: 'dev',
     label: 'DEVELOPER',
-    avatar: 'assets/img/avatarx.png',
+    avatar: 'assets/img/SGC.jpeg',
     slides: [
       'assets/img/avatarx.png',
+      'assets/img/SGC.jpeg',
       'assets/img/SGF_PROFILE_V.jpg',
       'assets/img/SGF_PROFILE_VI.jpeg',
       'assets/img/SGF_PROFILE_VIIi.jpeg'
