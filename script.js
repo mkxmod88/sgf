@@ -172,6 +172,31 @@ const members = [
     }
   },
   {
+    name: 'Marchell Kevandra',
+    handle: '@Chell',
+    role: 'dev',
+    label: 'DEVELOPER',
+    avatar: 'about/assets/img/chl-xsx.jpeg',
+    slides: [
+      'about/assets/img/cover_music.png',
+      'about/assets/img/chl-xsx.jpeg',
+      'assets/img/SGF_PROFILE_V.jpg',
+      'assets/img/SGF_PROFILE_VI.jpeg',
+      'about/assets/img/chl-xs.jpeg'
+    ],
+    bio: 'Hidup sederhana saja, banyak belajar, banyak bersyukur, dan berusaha berguna. Tidak mengejar sempurna, cukup jadi versi yang lebih baik dari kemarin.',
+    roleDesc: 'Developer',
+    location: 'Jakarta, Indonesia',
+    stats: { lirik: 38, project: 22 },
+    verified: true,
+    socials: {
+      instagram: 'https://instagram.com/chellgnzxz',
+      github: 'https://github.com/mkxchl',
+      website: 'about/'
+    },
+    stack: ['Next.js', 'Web Developer', 'Mobile App', 'UI/UX Designer']
+  },
+  {
     name: 'Syahrul Buriq',
     handle: '@Syahrul',
     role: 'leader',
@@ -196,7 +221,7 @@ const members = [
     roleDesc: 'Leader',
     location: 'Jakarta, Indonesia',
     stats: { lirik: 71, project: 29 },
-    verified: false,
+    verified: true,
     socials: { instagram: 'https://instagram.com/driannoor' }
   },
   {
@@ -237,51 +262,26 @@ const members = [
     stats: { lirik: 38, project: 22 },
     verified: false,
     socials: { instagram: 'https://instagram.com/mr_londd26' }
-  },
-  {
-    name: 'Marchell Kevandra',
-    handle: '@Chell',
-    role: 'dev',
-    label: 'DEVELOPER',
-    avatar: 'assets/img/SGC.jpeg',
-    slides: [
-      'assets/img/avatarx.png',
-      'assets/img/SGC.jpeg',
-      'assets/img/SGF_PROFILE_V.jpg',
-      'assets/img/SGF_PROFILE_VI.jpeg',
-      'assets/img/SGF_PROFILE_VIIi.jpeg'
-    ],
-    bio: 'Hidup sederhana saja, banyak belajar, banyak bersyukur, dan berusaha berguna. Tidak mengejar sempurna, cukup jadi versi yang lebih baik dari kemarin.',
-    roleDesc: 'Developer',
-    location: 'Jakarta, Indonesia',
-    stats: { lirik: 38, project: 22 },
-    verified: true,
-    socials: {
-      instagram: 'https://instagram.com/chellgnzxz',
-      github: 'https://github.com/mkxchl',
-      youtube: '#',
-      tiktok: '#',
-      whatsapp: '#'
-    },
-    stack: ['Next.js', 'Web Developer', 'Mobile App', 'UI/UX Designer']
   }
 ]
 
 function cardHTML(m) {
   const idx = members.indexOf(m)
   const isDev = m.role === 'dev'
+  const verifiedIcon = m.verified
+    ? '<i class="ri-verified-badge-fill verified-icon" title="Verified" aria-label="Verified"></i>'
+    : ''
+  const statusInner = isDev
+    ? '<i class="ri-code-s-slash-line" aria-hidden="true"></i><span>DEVELOPER</span>'
+    : m.label
   return `
-    <div class="m-list-item ${m.role}${isDev ? ' dev-premium' : ''
-    }" data-member-idx="${idx}" role="button" tabindex="0" aria-label="Lihat profil ${m.name
-    }">
-      <div class="m-list-avatar"><img src="${m.avatar}" alt="${m.name
-    }" loading="lazy"></div>
+    <div class="m-list-item ${m.role}${isDev ? ' dev-premium' : ''}" data-member-idx="${idx}" role="button" tabindex="0" aria-label="Lihat profil ${m.name}">
+      <div class="m-list-avatar"><img src="${m.avatar}" alt="${m.name}" loading="lazy"></div>
       <div class="m-list-info">
-        <b class="m-list-name">${m.name} ${m.verified ? '<i class="ri-verified-badge-fill" title="Verified"></i>' : ''
-    }</b>
-        <span class="m-list-handle">${m.handle}</span>
+        <b class="m-list-name"><span class="m-list-name-text">${m.name}</span>${verifiedIcon}</b>
+        <span class="m-list-handle">${m.handle}${isDev ? ' · Developer' : ''}</span>
       </div>
-      <span class="m-list-status ${m.role}">${m.label}</span>
+      <span class="m-list-status ${m.role}">${statusInner}</span>
     </div>`
 }
 function skeletonMembersHTML(n = 4) {
@@ -309,7 +309,9 @@ function renderTo(gridEl, list) {
   // skeleton dulu biar tidak blank
   gridEl.innerHTML = skeletonMembersHTML(Math.min(4, list.length || 4))
   setTimeout(() => {
-    gridEl.innerHTML = list.map(cardHTML).join('')
+    // verified (centang biru) di atas, sisanya di bawah — urutan asli tiap grup tetap
+    const sorted = [...list].sort((a, b) => Number(Boolean(b.verified)) - Number(Boolean(a.verified)))
+    gridEl.innerHTML = sorted.map(cardHTML).join('')
     const items = gridEl.querySelectorAll('.m-list-item')
     items.forEach((el, i) => {
       el.style.transitionDelay = i * 0.045 + 's'
@@ -1313,11 +1315,15 @@ function openMemberModal(m) {
   }
   const followCfg = isDev
     ? [
-      { key: 'instagram', icon: 'ri-instagram-line' },
-      { key: 'github', icon: 'ri-github-line' }
+      { key: 'instagram', icon: 'ri-instagram-line', title: 'Instagram' },
+      { key: 'github', icon: 'ri-github-line', title: 'GitHub' },
+      { key: 'website', icon: 'ri-links-line', title: 'Website' },
+      { key: 'youtube', icon: 'ri-youtube-line', title: 'YouTube' },
+      { key: 'tiktok', icon: 'ri-tiktok-line', title: 'TikTok' },
+      { key: 'whatsapp', icon: 'ri-whatsapp-line', title: 'WhatsApp' }
     ]
     : [
-      { key: 'instagram', icon: 'ri-instagram-line' }
+      { key: 'instagram', icon: 'ri-instagram-line', title: 'Instagram' }
     ]
 
   let followList = followCfg.filter(
@@ -1384,11 +1390,10 @@ function openMemberModal(m) {
     mmBadge.className =
       'member-modal-badge ' + m.role + (isDev ? ' is-dev-badge' : '')
   }
-  if (mmName)
-    mmName.innerHTML = `${m.name} ${m.verified
-      ? '<i class="ri-verified-badge-fill" title="Verified"></i>'
-      : ''
-      }`
+  if (mmName) {
+    mmName.classList.toggle('with-verified', Boolean(m.verified))
+    mmName.innerHTML = `<span class="member-modal-name-text">${m.name}</span>${m.verified ? '<i class="ri-verified-badge-fill verified-icon" title="Verified" aria-label="Verified"></i>' : ''}`
+  }
   if (mmRole) mmRole.textContent = m.roleDesc || m.bio || ''
   if (mmBio) {
     if (m.bio && m.bio !== m.roleDesc) {
@@ -1410,16 +1415,16 @@ function openMemberModal(m) {
       .map(c => {
         const url = socials[c.key]
         const has = url && url !== '#'
+        const title = c.title || c.key
         const user = handleText(c.key)
-        const display = user
-          ? user.startsWith('@')
-            ? user
-            : user
-          : m.handle.replace('@', '') || c.key
-        return `<a href="${has ? url : '#'
-          }" target="_blank" rel="noopener" class="${has ? '' : 'disabled'
-          }" aria-label="${c.key} ${m.name}"><i class="${c.icon
-          }"></i><span>${display}</span></a>`
+        const display = c.key === 'website'
+          ? title
+          : user
+            ? user.startsWith('@')
+              ? user
+              : user
+            : m.handle.replace('@', '') || title
+        return `<a href="${has ? url : '#'}" rel="noopener" class="${has ? '' : 'disabled'}" title="${title} ${m.name}" aria-label="${title} ${m.name}"><i class="${c.icon}"></i><span>${display}</span></a>`
       })
       .join('')
   }
