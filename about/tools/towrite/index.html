@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <script src="../gate.js"></script>
+  <script>
+    (function () {
+      var p = location.pathname;
+      if (/index\.html$/i.test(p)) {
+        history.replaceState(null, "", p.replace(/index\.html$/i, ""));
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var key = 'towrite-theme';
+      var v = null;
+      try { v = localStorage.getItem(key); } catch (e) {}
+      if (v !== 'light' && v !== 'dark') {
+        v = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', v);
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VanzWrite — Editor Teks Seperti Word | Marchell Kevandra</title>
+  <meta name="description"
+    content="Tulis dan format dokumen seperti di Word: kertas A4, tabel, gambar, catatan kaki, cari & ganti, penggaris indent, riwayat versi, dan ekspor ke TXT, HTML, DOC, MD, dan PDF." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/Lgs.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/img/Lgs.png" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "VanzWrite — Editor Teks",
+      "url": "https://v2-link-chl.netlify.app/tools/towrite/",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Editor teks seperti Word dengan kertas A4, pengaturan lengkap, dan ekspor TXT/HTML/DOC/MD/PDF."
+    }
+  </script>
+</head>
+
+<body>
+  <!-- bilah aplikasi -->
+  <header class="appbar">
+    <div class="brand">
+      <span class="logo"><i class="bx bx-edit-alt"></i></span>
+      <div class="brand-text">
+        <h1>VanzWrite</h1>
+        <small>Editor Teks Seperti Word</small>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="icon-btn" id="btnNew" title="Dokumen Baru" aria-label="Dokumen baru">
+        <i class="bx bx-file"></i>
+      </button>
+      <button type="button" class="icon-btn" id="btnImport" title="Impor file (.txt/.html/.md)" aria-label="Impor file">
+        <i class="bx bx-folder-open"></i>
+      </button>
+      <button type="button" class="icon-btn" id="btnUndo" title="Undo (Ctrl+Z)" aria-label="Undo">
+        <i class="bx bx-undo"></i>
+      </button>
+      <button type="button" class="icon-btn" id="btnRedo" title="Redo (Ctrl+Y)" aria-label="Redo">
+        <i class="bx bx-redo"></i>
+      </button>
+
+      <div class="menu-wrap">
+        <button type="button" class="icon-btn text-btn" id="btnExport" aria-label="Unduh dokumen">
+          <i class="bx bx-download"></i><span>Unduh</span>
+        </button>
+        <div class="dropdown" id="exportMenu">
+          <button type="button" data-fmt="txt"><i class="bx bxs-file-txt"></i>Unduh .TXT<span>teks polos</span></button>
+          <button type="button" data-fmt="html"><i class="bx bxs-file-html"></i>Unduh .HTML<span>dengan format</span></button>
+          <button type="button" data-fmt="doc"><i class="bx bxs-file-doc"></i>Unduh .DOC<span>untuk Word</span></button>
+          <button type="button" data-fmt="md"><i class="bx bxl-markdown"></i>Unduh .MD<span>markdown</span></button>
+          <button type="button" data-fmt="pdf"><i class="bx bxs-file-pdf"></i>Unduh .PDF<span>langsung</span></button>
+          <button type="button" data-fmt="pdfprint"><i class="bx bx-printer"></i>Cetak / PDF<span>via dialog cetak</span></button>
+        </div>
+      </div>
+
+      <button type="button" class="icon-btn" id="btnPrint" title="Cetak / PDF" aria-label="Cetak">
+        <i class="bx bx-printer"></i>
+      </button>
+      <button type="button" class="icon-btn" id="btnHistory" title="Riwayat versi" aria-label="Riwayat versi">
+        <i class="bx bx-history"></i>
+      </button>
+      <button type="button" class="icon-btn" id="btnFocus" title="Mode fokus" aria-label="Mode fokus">
+        <i class="bx bx-show"></i>
+      </button>
+      <button type="button" class="icon-btn accent" id="btnSettings" title="Pengaturan" aria-label="Pengaturan">
+        <i class="bx bx-cog"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- bilah format -->
+  <div class="toolbar" id="formatBar">
+    <div class="toolbar-row">
+      <select class="ctl" id="ctlFont" aria-label="Jenis huruf">
+        <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+        <option value="Inter">Inter</option>
+        <option value="Poppins">Poppins</option>
+        <option value="Playfair Display">Playfair Display</option>
+        <option value="JetBrains Mono">JetBrains Mono</option>
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Trebuchet MS">Trebuchet MS</option>
+        <option value="Comic Sans MS">Comic Sans MS</option>
+      </select>
+
+      <select class="ctl" id="ctlSize" aria-label="Ukuran huruf">
+        <option value="8">8</option><option value="9">9</option><option value="10">10</option>
+        <option value="11">11</option><option value="12">12</option><option value="13">13</option>
+        <option value="14">14</option><option value="16">16</option><option value="18">18</option>
+        <option value="20">20</option><option value="22">22</option><option value="24">24</option>
+        <option value="28">28</option><option value="32">32</option><option value="36">36</option>
+        <option value="48">48</option><option value="64">64</option>
+      </select>
+
+      <select class="ctl" id="ctlBlock" aria-label="Paragraf">
+        <option value="p">Paragraf</option>
+        <option value="h1">Judul 1</option>
+        <option value="h2">Judul 2</option>
+        <option value="h3">Judul 3</option>
+        <option value="blockquote">Kutipan</option>
+        <option value="pre">Kode</option>
+      </select>
+
+      <span class="divider" aria-hidden="true"></span>
+
+      <button type="button" class="tbtn" data-cmd="bold" id="btnBold" title="Tebal (Ctrl+B)" aria-label="Tebal"><i class="bx bx-bold"></i></button>
+      <button type="button" class="tbtn" data-cmd="italic" id="btnItalic" title="Miring (Ctrl+I)" aria-label="Miring"><i class="bx bx-italic"></i></button>
+      <button type="button" class="tbtn" data-cmd="underline" id="btnUnderline" title="Garis bawah (Ctrl+U)" aria-label="Garis bawah"><i class="bx bx-underline"></i></button>
+      <button type="button" class="tbtn" data-cmd="strikeThrough" id="btnStrike" title="Coret" aria-label="Coret"><i class="bx bx-strikethrough"></i></button>
+
+      <span class="divider" aria-hidden="true"></span>
+
+      <button type="button" class="tbtn" id="btnHighlight" title="Warna stabilo" aria-label="Warna stabilo"><i class="bx bx-highlight"></i></button>
+      <button type="button" class="tbtn" id="btnColor" title="Warna teks" aria-label="Warna teks"><i class="bx bx-palette"></i></button>
+      <input type="color" id="colorText" value="#7c3aed" hidden />
+      <input type="color" id="colorHighlight" value="#fde047" hidden />
+
+      <span class="divider" aria-hidden="true"></span>
+
+      <button type="button" class="tbtn" data-cmd="justifyLeft" title="Rata kiri" aria-label="Rata kiri"><i class="bx bx-align-left"></i></button>
+      <button type="button" class="tbtn" data-cmd="justifyCenter" title="Tengah" aria-label="Tengah"><i class="bx bx-align-middle"></i></button>
+      <button type="button" class="tbtn" data-cmd="justifyRight" title="Rata kanan" aria-label="Rata kanan"><i class="bx bx-align-right"></i></button>
+      <button type="button" class="tbtn" data-cmd="justifyFull" title="Rata kiri-kanan" aria-label="Rata kiri-kanan"><i class="bx bx-align-justify"></i></button>
+
+      <span class="divider" aria-hidden="true"></span>
+
+      <button type="button" class="tbtn" data-cmd="insertUnorderedList" title="Daftar titik" aria-label="Daftar titik"><i class="bx bx-list-ul"></i></button>
+      <button type="button" class="tbtn" data-cmd="insertOrderedList" title="Daftar nomor" aria-label="Daftar nomor"><i class="bx bx-list-ol"></i></button>
+      <button type="button" class="tbtn" data-cmd="indent" title="Indent" aria-label="Indent"><i class='bx bx-left-indent'></i></button>
+      <button type="button" class="tbtn" data-cmd="outdent" title="Keluar indent" aria-label="Keluar indent"><i class='bx bx-right-indent' ></i></button>
+
+      <span class="divider" aria-hidden="true"></span>
+
+      <button type="button" class="tbtn" data-cmd="removeFormat" id="btnClear" title="Hapus format" aria-label="Hapus format"><i class="bx bx-eraser"></i></button>
+
+      <span class="divider" aria-hidden="true"></span>
+
+      <button type="button" class="tbtn" id="btnLink" title="Sisipkan tautan (Ctrl+K)" aria-label="Sisipkan tautan"><i class="bx bx-link"></i></button>
+      <button type="button" class="tbtn" id="btnImage" title="Sisipkan gambar" aria-label="Sisipkan gambar"><i class="bx bx-image-alt"></i></button>
+      <input type="file" id="fileImage" accept="image/*" hidden />
+      <input type="file" id="fileImport" accept=".txt,.html,.htm,.md,text/plain" hidden />
+
+      <div class="menu-wrap tbl-wrap">
+        <button type="button" class="tbtn" id="btnTable" title="Tabel" aria-label="Tabel"><i class="bx bx-table"></i></button>
+        <div class="dropdown plain" id="tableMenu">
+          <button type="button" data-tbl="insert"><i class="bx bx-table"></i>Sisipkan tabel<span>atur baris &amp; kolom</span></button>
+          <button type="button" data-tbl="row-above"><i class="bx bxs-chevrons-up"></i>Baris di atas</button>
+          <button type="button" data-tbl="row-below"><i class="bx bxs-chevrons-down"></i>Baris di bawah</button>
+          <button type="button" data-tbl="col-left"><i class="bx bx-chevrons-left"></i>Kolom kiri</button>
+          <button type="button" data-tbl="col-right"><i class="bx bx-chevrons-right"></i>Kolom kanan</button>
+          <button type="button" data-tbl="row-del"><i class="bx bxs-eraser"></i>Hapus baris</button>
+          <button type="button" data-tbl="col-del"><i class="bx bxs-eraser"></i>Hapus kolom</button>
+          <button type="button" data-tbl="table-del"><i class="bx bxs-trash"></i>Hapus tabel</button>
+        </div>
+      </div>
+
+      <button type="button" class="tbtn" id="btnFootnote" title="Catatan kaki" aria-label="Catatan kaki"><i class="bx bx-notepad"></i></button>
+
+      <div class="menu-wrap sym-wrap">
+        <button type="button" class="tbtn" id="btnSymbol" title="Sisipkan simbol" aria-label="Sisipkan simbol"><i class="bx bx-omega"></i></button>
+        <div class="dropdown" id="symbolPop">
+          <div class="symbol-grid" id="symbolGrid"></div>
+        </div>
+      </div>
+
+      <span class="divider" aria-hidden="true"></span>
+
+      <button type="button" class="tbtn accent-soft" id="btnSearch" title="Cari &amp; Ganti (Ctrl+F)" aria-label="Cari dan ganti"><i class="bx bx-search"></i></button>
+    </div>
+  </div>
+
+  <!-- panel cari & ganti -->
+  <div class="search-bar" id="searchBar" hidden>
+    <div class="search-field">
+      <i class="bx bx-search"></i>
+      <input type="text" id="searchInput" placeholder="Cari kata..." autocomplete="off" />
+    </div>
+    <span class="search-count" id="searchCount">0 hasil</span>
+    <button type="button" class="sbtn" id="searchPrev" title="Sebelumnya" aria-label="Sebelumnya"><i class="bx bx-chevron-up"></i></button>
+    <button type="button" class="sbtn" id="searchNext" title="Berikutnya" aria-label="Berikutnya"><i class="bx bx-chevron-down"></i></button>
+    <label class="case-toggle" title="Sama besar/kecil huruf"><input type="checkbox" id="searchCase" /> Aa</label>
+
+    <div class="search-replace">
+      <input type="text" id="searchReplace" placeholder="Ganti dengan..." autocomplete="off" />
+      <button type="button" class="sbtn" id="searchReplaceOne" title="Ganti satu">Ganti</button>
+      <button type="button" class="sbtn" id="searchReplaceAll" title="Ganti semua">Semua</button>
+    </div>
+
+    <button type="button" class="sbtn close" id="searchClose" aria-label="Tutup cari"><i class="bx bx-x"></i></button>
+  </div>
+
+  <!-- kanvas kertas -->
+  <main class="canvas" id="canvas">
+    <div class="paper-wrap" id="paperWrap">
+      <div class="sheet" id="sheet">
+        <div class="ruler" id="ruler"></div>
+        <div class="page-sep" id="pageSep"></div>
+        <div class="paper" id="paper" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true"
+          data-placeholder="Mulai menulis di sini..."></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- bilah status -->
+  <footer class="statusbar">
+    <div class="stats">
+      <span class="stat">Kata: <b id="statWords">0</b></span>
+      <span class="stat">Karakter: <b id="statChars">0</b></span>
+      <span class="stat">Tanpa spasi: <b id="statNoSpaces">0</b></span>
+      <span class="stat">Paragraf: <b id="statParas">0</b></span>
+      <span class="stat">Baca: <b id="statRead">0 mnt</b></span>
+    </div>
+    <div class="save-state" id="saveState"><i class="bx bxs-check-circle"></i><span id="saveText">Tersimpan</span></div>
+    <div class="zoom-ctl">
+      <i class="bx bx-zoom-out"></i>
+      <input type="range" id="zoomRange" min="50" max="150" value="100" step="5" aria-label="Perbesar halaman" />
+      <i class="bx bx-zoom-in"></i>
+      <b id="zoomLabel">100%</b>
+    </div>
+  </footer>
+
+  <!-- panel pengaturan -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="settings" id="settingsPanel" role="dialog" aria-label="Pengaturan editor">
+    <div class="settings-head">
+      <h2><i class="bx bx-cog"></i> Pengaturan</h2>
+      <button type="button" class="icon-btn" id="closeSettings" aria-label="Tutup pengaturan"><i class="bx bx-x"></i></button>
+    </div>
+
+    <div class="set-group">
+      <div class="set-title">Tampilan</div>
+      <div class="set-row">
+        <label>Tema aplikasi</label>
+      </div>
+      <div class="seg" id="segTheme">
+        <button type="button" data-val="dark"><i class="bx bx-moon"></i> Gelap</button>
+        <button type="button" data-val="light"><i class="bx bx-sun"></i> Terang</button>
+      </div>
+      <div class="set-row">
+        <label>Warna kertas</label>
+      </div>
+      <div class="seg four" id="segPaperColor">
+        <button type="button" data-val="putih" title="Putih"><i class="bx bxs-rectangle" style="color:#fff"></i></button>
+        <button type="button" data-val="krem" title="Krem"><i class="bx bxs-rectangle" style="color:#fdf6e3"></i></button>
+        <button type="button" data-val="pastel" title="Pastel"><i class="bx bxs-rectangle" style="color:#fdf0f6"></i></button>
+        <button type="button" data-val="gelap" title="Gelap"><i class="bx bxs-rectangle" style="color:#111827"></i></button>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <div class="set-title">Kertas</div>
+      <div class="set-row">
+        <label for="setPaperMode">Mode</label>
+        <select id="setPaperMode">
+          <option value="sheet">Kertas (A4)</option>
+          <option value="web">Web (lebar penuh)</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <label for="setPaperSize">Ukuran kertas</label>
+        <select id="setPaperSize">
+          <option value="a5">A5</option>
+          <option value="a4">A4</option>
+          <option value="letter">Letter</option>
+          <option value="a3">A3</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <label>Gaya kertas</label>
+      </div>
+      <div class="seg" id="segPaper">
+        <button type="button" data-val="polos"><i class="bx bx-rectangle"></i> Polos</button>
+        <button type="button" data-val="garis"><i class="bx bx-line-chart"></i> Garis</button>
+        <button type="button" data-val="kotak"><i class="bx bx-grid"></i> Kotak</button>
+      </div>
+      <div class="set-row">
+        <label for="setMargin">Margin</label>
+        <select id="setMargin">
+          <option value="28">Kecil</option>
+          <option value="64">Normal</option>
+          <option value="100">Besar</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <label for="setPages">Pisahkan halaman</label>
+        <label class="switch">
+          <input type="checkbox" id="setPages" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <div class="set-title">Teks</div>
+      <div class="set-row">
+        <label for="setLineHeight">Spasi baris</label>
+        <select id="setLineHeight">
+          <option value="1">1</option>
+          <option value="1.15">1.15</option>
+          <option value="1.35">1.35</option>
+          <option value="1.5">1.5</option>
+          <option value="1.8">1.8</option>
+          <option value="2">2</option>
+          <option value="2.5">2.5</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <label for="setFontSize">Ukuran huruf dasar</label>
+        <select id="setFontSize">
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+      <div class="set-row">
+        <label for="setSpell">Pemeriksa ejaan</label>
+        <label class="switch">
+          <input type="checkbox" id="setSpell" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <div class="set-title">Penyimpanan</div>
+      <div class="set-row">
+        <label for="setAutosave">Simpan otomatis</label>
+        <label class="switch">
+          <input type="checkbox" id="setAutosave" />
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="set-actions">
+        <button type="button" class="btn-action" id="btnSaveNow"><i class="bx bxs-save"></i> Simpan Sekarang</button>
+        <button type="button" class="btn-action" id="btnNewDoc"><i class="bx bx-file"></i> Dokumen Baru</button>
+        <button type="button" class="btn-action danger" id="btnReset"><i class="bx bx-reset"></i> Reset Pengaturan</button>
+      </div>
+    </div>
+
+    <p class="settings-foot">Data disimpan aman di perangkatmu (localStorage).<br />Dibuat oleh Marchell Kevandra.</p>
+  </aside>
+
+  <!-- panel riwayat -->
+  <aside class="settings" id="historyPanel" role="dialog" aria-label="Riwayat versi">
+    <div class="settings-head">
+      <h2><i class="bx bx-history"></i> Riwayat Versi</h2>
+      <button type="button" class="icon-btn" id="closeHistory" aria-label="Tutup riwayat"><i class="bx bx-x"></i></button>
+    </div>
+    <p class="history-hint">Snapshot otomatis tiap 5 menit &amp; saat menyimpan. Klik "Buka" untuk kembali ke versi itu.</p>
+    <div class="history-list" id="historyList"></div>
+    <div class="set-actions">
+      <button type="button" class="btn-action danger" id="btnClearHistory"><i class="bx bxs-trash"></i> Hapus Semua Riwayat</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

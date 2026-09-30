@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <script src="../gate.js"></script>
+  <script>
+    (function () {
+      var p = location.pathname;
+      if (/index\.html$/i.test(p)) {
+        history.replaceState(null, "", p.replace(/index\.html$/i, ""));
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var key = 'lovevanz-theme';
+      var v = null;
+      try { v = localStorage.getItem(key); } catch (e) {}
+      if (v !== 'light' && v !== 'dark') v = 'dark';
+      document.documentElement.setAttribute('data-theme', v);
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ruang Cinta — Tools Romantis untuk Pasangan | Marchell Kevandra</title>
+  <meta name="description"
+    content="Ruang Cinta: timer seberapa lama kalian bersama secara real-time, alasan sayang, surat cinta, surat terkunci yang baru terbuka di tanggal spesial, kontrak cinta, dan sinyal cinta acak." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/Lgs.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../../assets/img/Lgs.png" />
+</head>
+
+<body>
+  <!-- hati melayang -->
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <!-- ornamen cahaya -->
+  <div class="glow glow-a" aria-hidden="true"></div>
+  <div class="glow glow-b" aria-hidden="true"></div>
+
+  <!-- ===== kartu pengaturan awal ===== -->
+  <div class="setup-wrap" id="setupWrap">
+    <div class="card setup-card">
+      <div class="setup-heart">❤</div>
+      <h1 class="script-title">Mulai Cerita Kita</h1>
+      <p class="setup-sub">Isi nama kalian dan tanggal pertama kali kalian jadian. Semua tersimpan rahasia di perangkat ini.</p>
+
+      <label class="field">
+        <span>Namamu</span>
+        <input type="text" id="inMe" placeholder="Contoh: Marchell" maxlength="24" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Nama dia</span>
+        <input type="text" id="inThem" placeholder="Contoh: Kevandra" maxlength="24" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Tanggal jadian</span>
+        <input type="date" id="inDate" />
+      </label>
+
+      <button type="button" class="btn-love" id="btnSetup"><i class="bx bx-heart"></i> Mulai Cerita Kita</button>
+      <p class="field-note">Kamu bisa ubah kapan saja dari menu pengaturan di bawah.</p>
+    </div>
+  </div>
+
+  <!-- ===== aplikasi ===== -->
+  <div class="app" id="app" hidden>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-heart">❤</span>
+        <div>
+          <h1>Ruang Cinta</h1>
+          <small>buat kamu &amp; dia</small>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="icon-rose" id="musicBtn" title="Musik pelan" aria-label="Musik pelan"><i class="bx bx-music"></i></button>
+        <button type="button" class="icon-rose" id="editBtn" title="Ubah nama & tanggal" aria-label="Ubah profil"><i class="bx bx-edit"></i></button>
+      </div>
+    </header>
+
+    <!-- hero -->
+    <section class="hero">
+      <h2 class="hero-names"><span id="heroMe"></span> <i class="bx bx-heart heart-beat"></i> <span id="heroThem"></span></h2>
+      <p class="hero-date" id="heroDate"></p>
+    </section>
+
+    <main class="stack">
+
+      <!-- timer -->
+      <section class="card">
+        <div class="card-head">
+          <i class="bx bx-time-five"></i>
+          <h3>Sejak Cinta</h3>
+        </div>
+        <div class="timer-big">
+          <span class="t-years" id="tYears">0</span><span class="t-unit">tahun</span>
+          <span class="t-years" id="tMonths">0</span><span class="t-unit">bulan</span>
+          <span class="t-years" id="tDays">0</span><span class="t-unit">hari</span>
+        </div>
+        <div class="timer-clock" id="timerClock">00 : 00 : 00</div>
+        <p class="timer-total" id="timerTotal"></p>
+        <div class="heart-meter">
+          <span class="meter-heart">❤</span>
+          <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+          <span class="meter-heart">❤</span>
+        </div>
+      </section>
+
+      <!-- alasan sayang -->
+      <section class="card">
+        <div class="card-head">
+          <i class="bx bxs-heart"></i>
+          <h3>Alasan Kenapa Aku Sayang Kamu</h3>
+        </div>
+        <div class="reason-banner" id="randomReason">
+          <i class="bx bx-sparkles"></i>
+          <span id="randomReasonText">Klik tombol untuk mengambil alasan hari ini.</span>
+        </div>
+        <button type="button" class="btn-soft" id="btnReason"><i class="bx bx-dice-6"></i> Alasan Hari Ini</button>
+        <div class="reasons" id="reasonsList"></div>
+        <div class="add-reason">
+          <input type="text" id="reasonInput" placeholder="Tambah alasanmu sendiri..." maxlength="120" autocomplete="off" />
+          <button type="button" class="btn-love small" id="btnAddReason"><i class="bx bx-plus"></i></button>
+        </div>
+      </section>
+
+      <!-- surat cinta -->
+      <section class="card">
+        <div class="card-head">
+          <i class="bx bx-envelope"></i>
+          <h3>Surat Cinta</h3>
+        </div>
+        <p class="hint">Tulis dari hati, dengan tinta jari dan kata-katamu sendiri. Tersimpan otomatis.</p>
+        <textarea id="letterText" class="letter-box" placeholder="Kepada kamu yang paling ku sayang...&#10;&#10;Tulis suratmu di sini."></textarea>
+        <div class="btn-row">
+          <button type="button" class="btn-soft" id="btnLetterTxt"><i class="bx bx-download"></i> Unduh .txt</button>
+          <button type="button" class="btn-soft" id="btnLetterCopy"><i class="bx bx-copy"></i> Salin</button>
+        </div>
+      </section>
+
+      <!-- surat terkunci -->
+      <section class="card">
+        <div class="card-head">
+          <i class="bx bx-lock-alt"></i>
+          <h3>Surat Terkunci</h3>
+        </div>
+        <p class="hint">Tulis surat, kunci sampai tanggal spesial. Baru bisa dibaca di hari itu — atau kalau kamu tidak sabar.</p>
+
+        <div id="sealedView"></div>
+      </section>
+
+      <!-- kontrak cinta -->
+      <section class="card contract-card">
+        <div class="card-head">
+          <i class="bx bxs-file-blank"></i>
+          <h3>Kontrak Cinta</h3>
+        </div>
+        <p class="hint">Kontrak resmi antara dua hati. Cetak, bingkai, atau simpan sebagai kenang-kenangan.</p>
+        <div class="grid-2">
+          <label class="field">
+            <span>Nama kamu</span>
+            <input type="text" id="ctMe" maxlength="24" autocomplete="off" />
+          </label>
+          <label class="field">
+            <span>Nama dia</span>
+            <input type="text" id="ctThem" maxlength="24" autocomplete="off" />
+          </label>
+        </div>
+        <div class="grid-2">
+          <label class="field">
+            <span>Tanggal mulai</span>
+            <input type="date" id="ctDate" />
+          </label>
+          <label class="field">
+            <span>Ditandatangani</span>
+            <input type="date" id="ctSign" />
+          </label>
+        </div>
+        <button type="button" class="btn-love" id="btnContract"><i class="bx bx-file"></i> Buat Kontrak Cinta</button>
+
+        <div class="contract" id="contractPreview" hidden>
+          <div class="contract-paper" id="contractPaper">
+            <div class="c-crown">❤</div>
+            <h4>Kontrak Cinta</h4>
+            <p class="c-preamble">Antara dua hati yang telah bersepakat untuk saling memiliki, menjaga, dan mencintai selamanya.</p>
+            <div class="c-parties">
+              <div><b id="cMe"></b><span>Pihak Pertama</span></div>
+              <i class="bx bx-heart"></i>
+              <div><b id="cThem"></b><span>Pihak Kedua</span></div>
+            </div>
+            <ol class="c-clauses" id="cClauses"></ol>
+            <div class="c-sign">
+              <div><span id="cDate"></span><b id="cMeSign"></b></div>
+              <div><span id="cSignDate"></span><b id="cThemSign"></b></div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn-love" id="btnContractPng"><i class="bx bxs-image-add"></i> Unduh PNG</button>
+            <button type="button" class="btn-soft" id="btnContractPrint"><i class="bx bx-printer"></i> Cetak / PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- sinyal cinta -->
+      <section class="card">
+        <div class="card-head">
+          <i class="bx bx-send"></i>
+          <h3>Sinyal Cinta</h3>
+        </div>
+        <p class="hint">Pencet tombolnya — biar semesta memilihkan kata buatmu.</p>
+        <div class="btn-row">
+          <button type="button" class="btn-love" id="btnSignal"><i class="bx bxs-heart"></i> Kirim Sinyal</button>
+          <button type="button" class="btn-soft" id="btnDate"><i class="bx bx-calendar-heart"></i> Ide Kencan</button>
+        </div>
+        <div class="signal-out" id="signalOut"><span>Semesta menunggu sentuhanmu...</span></div>
+      </section>
+
+    </main>
+
+    <footer class="foot">Dibuat dengan <i class="bx bxs-heart"></i> oleh Marchell Kevandra<br />untuk dua hati yang saling mencinta</footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

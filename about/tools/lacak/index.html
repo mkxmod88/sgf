@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../gate.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VanzTrace — Phone Intelligence</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
+    
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .font-display { font-family: 'Playfair Display', Georgia, serif; }
+        .font-mono-lux { font-family: 'JetBrains Mono', monospace; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 15% 10%, rgba(139, 92, 246, 0.18), transparent 55%),
+                radial-gradient(ellipse at 88% 25%, rgba(217, 70, 239, 0.12), transparent 55%),
+                radial-gradient(ellipse at 50% 110%, rgba(99, 102, 241, 0.14), transparent 60%);
+        }
+
+        .text-vio {
+            background: linear-gradient(120deg, #ede9fe, #c4b5fd 35%, #a78bfa 60%, #e879f9 85%, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .lux-card {
+            background: linear-gradient(165deg, rgba(22, 16, 43, 0.92), rgba(12, 8, 28, 0.94));
+            border: 1px solid rgba(196, 181, 253, 0.10);
+            box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.10), 0 35px 70px -20px rgba(0, 0, 0, 0.8);
+        }
+
+        .lux-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.40), transparent); }
+
+        #map {
+            height: 280px;
+            width: 100%;
+            border-radius: 20px;
+            background: #0b0616;
+            z-index: 0;
+        }
+
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: rgba(22, 16, 43, 0.97) !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(167, 139, 250, 0.45);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        .leaflet-container a.leaflet-popup-close-button { color: #94a3b8 !important; }
+        .leaflet-bar a {
+            background: rgba(16, 11, 34, 0.92) !important;
+            color: #a78bfa !important;
+            border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+        }
+        .leaflet-control-scale-line {
+            background: rgba(16, 11, 34, 0.85) !important;
+            color: #c4b5fd !important;
+            border-color: rgba(167, 139, 250, 0.4) !important;
+        }
+
+        @keyframes ring {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(2.4); opacity: 0; }
+        }
+        .ring-pulse { animation: ring 1.8s ease-out infinite; }
+
+        @keyframes fade-in-up {
+            from { transform: translateY(24px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .fade-in-up { animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+        .shimmer { position: relative; overflow: hidden; }
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            width: 50%;
+            background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.09), transparent);
+            transform: translateX(-150%);
+            animation: shimmer 2.8s ease-in-out infinite;
+        }
+        @keyframes shimmer { 100% { transform: translateX(300%); } }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(30, 20, 55, 0.3); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #a78bfa, #e879f9); border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#0a0514] text-slate-100 min-h-screen">
+
+    <div class="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-fuchsia-500/30 shimmer">
+                    <span class="font-display font-bold text-white text-lg leading-none">T</span>
+                </div>
+                <div>
+                    <h1 class="font-display text-2xl font-bold text-vio tracking-tight leading-none">Vanz<span class="text-slate-200">Trace</span></h1>
+                    <p class="text-[10px] text-slate-400 mt-1 tracking-[0.22em] uppercase font-medium">Phone Intelligence &amp; Anti-Penipuan</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 px-2.5 py-1.5 bg-fuchsia-500/10 border border-fuchsia-500/30 rounded-full">
+                <span class="w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse"></span>
+                <span class="text-[10px] font-bold text-fuchsia-400 tracking-wider">INTEL</span>
+            </div>
+        </div>
+
+        <!-- Input Card -->
+        <div class="lux-card rounded-3xl p-5">
+            <div class="flex items-center justify-between mb-3">
+                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Masukkan Nomor HP</label>
+                <span id="stat-checks" class="text-[10px] text-violet-300/80 font-medium flex items-center gap-1"><i class="bx bx-bolt"></i> —</span>
+            </div>
+            <div class="relative group">
+                <i class="bx bx-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 text-lg transition-colors"></i>
+                <input type="tel" id="phone-input" placeholder="cth: 08123456789 atau +628123456789"
+                    class="w-full bg-slate-950/60 text-sm text-slate-200 placeholder-slate-500 pl-12 pr-16 py-3.5 rounded-2xl border border-slate-700/50 focus:outline-none focus:border-fuchsia-400/60 focus:ring-4 focus:ring-fuchsia-400/10 transition-all font-mono-lux">
+                <button onclick="runTrace()" id="btn-trace"
+                    class="absolute right-1.5 top-1.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white text-xs px-4 py-2.5 rounded-xl font-bold shadow-lg shadow-fuchsia-500/25 transition-all active:scale-95">
+                    Lacak
+                </button>
+            </div>
+            <p id="live-hint" class="text-[10px] text-slate-500 mt-2 pl-1 flex items-center gap-1"><i class="bx bx-bolt"></i> Ketik nomor untuk melihat deteksi langsung</p>
+            <div class="flex flex-wrap gap-1.5 mt-3">
+                <button onclick="useSample('081234567890')" class="text-[10px] bg-slate-800/50 hover:bg-fuchsia-500/10 border border-slate-700/40 hover:border-fuchsia-400/40 px-2.5 py-1.5 rounded-lg transition-all text-slate-400 hover:text-fuchsia-200 font-mono-lux">081234567890</button>
+                <button onclick="useSample('085712345678')" class="text-[10px] bg-slate-800/50 hover:bg-fuchsia-500/10 border border-slate-700/40 hover:border-fuchsia-400/40 px-2.5 py-1.5 rounded-lg transition-all text-slate-400 hover:text-fuchsia-200 font-mono-lux">085712345678</button>
+                <button onclick="useSample('+62899 1234 5678')" class="text-[10px] bg-slate-800/50 hover:bg-fuchsia-500/10 border border-slate-700/40 hover:border-fuchsia-400/40 px-2.5 py-1.5 rounded-lg transition-all text-slate-400 hover:text-fuchsia-200 font-mono-lux">+62899 1234 5678</button>
+                <button onclick="useSample('+601112345678')" class="text-[10px] bg-slate-800/50 hover:bg-fuchsia-500/10 border border-slate-700/40 hover:border-fuchsia-400/40 px-2.5 py-1.5 rounded-lg transition-all text-slate-400 hover:text-fuchsia-200 font-mono-lux">+6011 1234 5678</button>
+                <button onclick="useSample('+6587654321')" class="text-[10px] bg-slate-800/50 hover:bg-fuchsia-500/10 border border-slate-700/40 hover:border-fuchsia-400/40 px-2.5 py-1.5 rounded-lg transition-all text-slate-400 hover:text-fuchsia-200 font-mono-lux">+6587654321</button>
+            </div>
+            <details class="mt-4 group">
+                <summary class="text-[10px] text-slate-500 hover:text-fuchsia-300 transition cursor-pointer flex items-center gap-1.5 select-none">
+                    <i class="bx bx-message-rounded-dots text-fuchsia-400"></i> Atau tempel seluruh teks pesan penipuan — nomor diekstrak otomatis
+                </summary>
+                <div class="mt-2 flex gap-2">
+                    <textarea id="scam-text" rows="3" placeholder="Tempel SMS/WhatsApp penipuan di sini..."
+                        class="flex-1 bg-slate-950/60 text-xs text-slate-200 placeholder-slate-500 rounded-2xl border border-slate-700/50 p-3 focus:outline-none focus:border-fuchsia-400/60 transition-all resize-none"></textarea>
+                    <button onclick="extractFromText()" class="self-end bg-slate-950/60 hover:bg-fuchsia-500/15 border border-slate-700/50 hover:border-fuchsia-400/50 text-xs px-4 py-2.5 rounded-xl transition-all text-slate-300 hover:text-fuchsia-300 font-semibold flex items-center gap-1.5">
+                        <i class="bx bx-scan"></i> Ekstrak
+                    </button>
+                </div>
+            </details>
+        </div>
+
+        <!-- Result -->
+        <div id="result" class="hidden flex flex-col gap-5">
+
+            <!-- Info Card -->
+            <div class="lux-card rounded-3xl p-5 fade-in-up shimmer">
+                <div class="flex items-start justify-between gap-3 mb-4">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Hasil Analisis</p>
+                        <h3 class="font-mono-lux text-lg font-bold text-fuchsia-300 break-all" id="res-number">—</h3>
+                    </div>
+                    <span id="res-badge" class="text-[10px] font-bold px-2.5 py-1 rounded-full text-white"></span>
+                </div>
+                <div class="lux-divider mb-4"></div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div class="bg-slate-950/50 border border-slate-800/60 rounded-2xl p-3">
+                        <div class="text-[9px] text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><i class="bx bx-world text-violet-400"></i> Negara Asal</div>
+                        <div class="text-sm font-semibold text-slate-100" id="res-country">—</div>
+                        <div class="text-[10px] text-slate-500 font-mono-lux" id="res-dial">—</div>
+                    </div>
+                    <div class="bg-slate-950/50 border border-slate-800/60 rounded-2xl p-3">
+                        <div class="text-[9px] text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><i class="bx bx-signal-5 text-fuchsia-400"></i> Operator / Provider</div>
+                        <div class="text-sm font-semibold text-slate-100" id="res-operator">—</div>
+                        <div class="text-[10px] text-slate-500" id="res-operator-note">—</div>
+                    </div>
+                    <div class="bg-slate-950/50 border border-slate-800/60 rounded-2xl p-3">
+                        <div class="text-[9px] text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><i class="bx bx-map-pin text-emerald-400"></i> Kota / Wilayah</div>
+                        <div class="text-sm font-semibold text-emerald-300" id="res-city">—</div>
+                        <div class="text-[10px] text-slate-500" id="res-city-note">—</div>
+                    </div>
+                    <div class="bg-slate-950/50 border border-slate-800/60 rounded-2xl p-3">
+                        <div class="text-[9px] text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><i class="bx bx-device-mobile text-indigo-400"></i> Tipe Nomor</div>
+                        <div class="text-sm font-semibold text-slate-100" id="res-type">—</div>
+                        <div class="text-[10px] text-slate-500" id="res-len">—</div>
+                    </div>
+                    <div class="bg-slate-950/50 border border-slate-800/60 rounded-2xl p-3">
+                        <div class="text-[9px] text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><i class="bx bx-time text-amber-400"></i> Zona Waktu</div>
+                        <div class="text-sm font-semibold text-amber-300 font-mono-lux" id="res-tz">—</div>
+                        <div class="text-[10px] text-slate-500">Perkiraan dari kode negara</div>
+                    </div>
+                    <div class="bg-slate-950/50 border border-slate-800/60 rounded-2xl p-3">
+                        <div class="text-[9px] text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><i class="bx bx-at text-emerald-400"></i> Format Internasional</div>
+                        <div class="text-sm font-semibold text-emerald-400 font-mono-lux break-all" id="res-intl">—</div>
+                    </div>
+                </div>
+                <div id="res-confidence" class="hidden mt-3 flex items-center gap-2 text-[10px] rounded-2xl px-3.5 py-2.5 border"></div>
+                <div class="grid grid-cols-2 gap-2 mt-3">
+                    <button onclick="openWhatsApp()" id="btn-wa" class="bg-slate-950/50 hover:bg-emerald-500/10 border border-slate-700/50 hover:border-emerald-400/40 text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-emerald-300 font-medium">
+                        <i class="bx bxl-whatsapp text-lg"></i> Cek di WhatsApp
+                    </button>
+                    <button onclick="copyReport()" class="bg-slate-950/50 hover:bg-violet-500/10 border border-slate-700/50 hover:border-violet-400/40 text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-violet-300 font-medium">
+                        <i class="bx bx-copy text-lg"></i> Salin Laporan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Map Card -->
+            <div class="lux-card rounded-3xl p-5 fade-in-up">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Perkiraan Wilayah</p>
+                        <p class="text-[10px] text-fuchsia-400/70 mt-0.5 flex items-center gap-1"><i class="bx bx-info-circle"></i> Kota = akurat (kode area). Seluler = hanya negara, bukan GPS pasti</p>
+                    </div>
+                    <i class="bx bx-target-lock text-fuchsia-400 text-xl"></i>
+                </div>
+                <div id="map"></div>
+            </div>
+
+            <!-- Risk & Tips Card -->
+            <div class="lux-card rounded-3xl p-5 fade-in-up">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"><i class="bx bx-shield-quarter text-violet-400"></i> Waspada &amp; Yang Perlu Dilakukan</p>
+                <ul class="space-y-2.5">
+                    <li class="flex gap-2.5 text-xs text-slate-300 leading-relaxed">
+                        <i class="bx bx-shield-alt-2 text-emerald-400 text-base flex-shrink-0 mt-0.5"></i>
+                        Lokasi persis tidak bisa dilacak hanya dari nomor. Hasil ini membantu mengidentifikasi asal &amp; operator untuk pelaporan.
+                    </li>
+                    <li class="flex gap-2.5 text-xs text-slate-300 leading-relaxed">
+                        <i class="bx bx-check-shield text-fuchsia-400 text-base flex-shrink-0 mt-0.5"></i>
+                        Jangan pernah transfer, sebutkan OTP, atau berikan data pribadi sebelum verifikasi ke pihak resmi.
+                    </li>
+                    <li class="flex gap-2.5 text-xs text-slate-300 leading-relaxed">
+                        <i class="bx bx-block text-rose-400 text-base flex-shrink-0 mt-0.5"></i>
+                        Blokir nomor di aplikasi pesan/WhatsApp dan aktifkan laporan spam di ponsel Anda.
+                    </li>
+                    <li class="flex gap-2.5 text-xs text-slate-300 leading-relaxed">
+                        <i class="bx bx-report text-indigo-400 text-base flex-shrink-0 mt-0.5"></i>
+                        Simpan bukti (tanggal, pesan, rekening tujuan) sebelum melapor ke pihak berwenang.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Report Card -->
+            <div class="lux-card rounded-3xl p-5 fade-in-up">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Saluran Pelaporan Resmi</p>
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <button onclick="openLink('https://aduannomor.id')" class="lux-card rounded-2xl py-3 px-2 text-center hover:border-fuchsia-400/40 transition group">
+                        <i class="bx bx-globe text-fuchsia-400 text-xl"></i>
+                        <div class="text-[10px] text-slate-300 font-medium mt-1.5 group-hover:text-fuchsia-200">aduan nomor</div>
+                    </button>
+                    <button onclick="openLink('https://cekrekening.id')" class="lux-card rounded-2xl py-3 px-2 text-center hover:border-fuchsia-400/40 transition group">
+                        <i class="bx bx-credit-card text-violet-400 text-xl"></i>
+                        <div class="text-[10px] text-slate-300 font-medium mt-1.5 group-hover:text-fuchsia-200">cek rekening</div>
+                    </button>
+                    <button onclick="openLink('https://lapor.go.id')" class="lux-card rounded-2xl py-3 px-2 text-center hover:border-fuchsia-400/40 transition group">
+                        <i class="bx bx-landmark text-emerald-400 text-xl"></i>
+                        <div class="text-[10px] text-slate-300 font-medium mt-1.5 group-hover:text-fuchsia-200">lapor.go.id</div>
+                    </button>
+                </div>
+                <button onclick="copyReport()" class="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-xs py-3 rounded-xl font-bold shadow-lg shadow-fuchsia-500/25 transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <i class="bx bx-copy"></i> Salin Ringkasan Laporan
+                </button>
+            </div>
+
+            <!-- History Card -->
+            <div id="history-card" class="lux-card rounded-3xl p-5 hidden">
+                <div class="flex items-center justify-between mb-3">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] flex items-center gap-1.5"><i class="bx bx-history text-violet-400"></i> Riwayat Penelusuran</p>
+                    <button onclick="clearHistory()" class="text-[10px] text-slate-500 hover:text-rose-400 transition flex items-center gap-1"><i class="bx bx-trash"></i> Hapus</button>
+                </div>
+                <div id="history-list" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center text-[10px] text-slate-600 tracking-wide leading-relaxed">
+            Analisis didukung Google libphonenumber &amp; pola penomoran resmi. Untuk verifikasi resmi hubungi operator atau Kominfo.
+            <span class="block mt-1 text-slate-700">Crafted by <span class="text-fuchsia-400/70 font-semibold">VanzCore</span></span>
+        </p>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/google-libphonenumber@3.2.33/dist/libphonenumber.js"></script>
+    <script>
+        const COUNTRIES = [
+            { name: 'Indonesia', iso: 'ID', dial: '62', lat: -2.5, lng: 118.0 },
+            { name: 'Malaysia', iso: 'MY', dial: '60', lat: 4.0, lng: 109.0 },
+            { name: 'Singapura', iso: 'SG', dial: '65', lat: 1.35, lng: 103.8 },
+            { name: 'Thailand', iso: 'TH', dial: '66', lat: 15.8, lng: 100.9 },
+            { name: 'Filipina', iso: 'PH', dial: '63', lat: 12.9, lng: 121.8 },
+            { name: 'Vietnam', iso: 'VN', dial: '84', lat: 16.0, lng: 106.0 },
+            { name: 'Brunei', iso: 'BN', dial: '673', lat: 4.5, lng: 114.7 },
+            { name: 'Kamboja', iso: 'KH', dial: '855', lat: 12.5, lng: 105.0 },
+            { name: 'Laos', iso: 'LA', dial: '856', lat: 18.0, lng: 103.0 },
+            { name: 'Myanmar', iso: 'MM', dial: '95', lat: 20.0, lng: 96.0 },
+            { name: 'Amerika Serikat', iso: 'US', dial: '1', lat: 38, lng: -97 },
+            { name: 'China', iso: 'CN', dial: '86', lat: 35, lng: 105 },
+            { name: 'India', iso: 'IN', dial: '91', lat: 22, lng: 79 },
+            { name: 'Jepang', iso: 'JP', dial: '81', lat: 36, lng: 138 },
+            { name: 'Korea Selatan', iso: 'KR', dial: '82', lat: 36.5, lng: 127.8 },
+            { name: 'Taiwan', iso: 'TW', dial: '886', lat: 23.7, lng: 121.0 },
+            { name: 'Hong Kong', iso: 'HK', dial: '852', lat: 22.3, lng: 114.2 },
+            { name: 'Australia', iso: 'AU', dial: '61', lat: -25, lng: 134 },
+            { name: 'Inggris', iso: 'GB', dial: '44', lat: 54, lng: -2 },
+            { name: 'Belanda', iso: 'NL', dial: '31', lat: 52.2, lng: 5.3 },
+            { name: 'Prancis', iso: 'FR', dial: '33', lat: 46.6, lng: 2.6 },
+            { name: 'Jerman', iso: 'DE', dial: '49', lat: 51, lng: 10 },
+            { name: 'Arab Saudi', iso: 'SA', dial: '966', lat: 24, lng: 45 },
+            { name: 'Uni Emirat Arab', iso: 'AE', dial: '971', lat: 24, lng: 54 },
+            { name: 'Nigeria', iso: 'NG', dial: '234', lat: 9, lng: 8 },
+            { name: 'Pakistan', iso: 'PK', dial: '92', lat: 30, lng: 70 },
+            { name: 'Bangladesh', iso: 'BD', dial: '880', lat: 23.7, lng: 90.4 },
+            { name: 'Rusia', iso: 'RU', dial: '7', lat: 60, lng: 90 }
+        ];
+
+        const COUNTRY_BY_ISO = {};
+        COUNTRIES.forEach(c => { COUNTRY_BY_ISO[c.iso] = c; });
+
+        const CITY_COORDS = {
+            'jakarta': [-6.2088, 106.8456], 'bandung': [-6.9175, 107.6191], 'surabaya': [-7.2575, 112.7521],
+            'semarang': [-6.9667, 110.4167], 'medan': [3.5833, 98.6667], 'bekasi': [-6.2383, 106.9756],
+            'tangerang': [-6.1783, 106.63], 'depok': [-6.4, 106.8186], 'bogor': [-6.5963, 106.7972],
+            'malang': [-7.9666, 112.6326], 'yogyakarta': [-7.7972, 110.3688], 'solo': [-7.5667, 110.8167],
+            'surakarta': [-7.5667, 110.8167], 'denpasar': [-8.65, 115.2167], 'bali': [-8.65, 115.2167],
+            'makassar': [-5.1477, 119.4327], 'palembang': [-2.9909, 104.7565], 'pekanbaru': [0.5071, 101.4478],
+            'balikpapan': [-1.2423, 116.894], 'pontianak': [-0.0333, 109.3333], 'padang': [-0.9471, 100.4172],
+            'manado': [1.4748, 124.8421], 'cirebon': [-6.7067, 108.557], 'lampung': [-5.45, 105.2667],
+            'bandar lampung': [-5.45, 105.2667], 'aceh': [5.5417, 95.3333], 'banda aceh': [5.5417, 95.3333],
+            'jambi': [-1.5899, 103.6107], 'banjarmasin': [-3.3244, 114.5946], 'samarinda': [-0.4944, 117.1468],
+            'kupang': [-10.1833, 123.5833], 'ambon': [-3.6954, 128.1814], 'batam': [1.0456, 104.0305],
+            'mataram': [-8.5833, 116.1167], 'palu': [-0.9, 119.8333], 'kendari': [-3.9678, 122.515],
+            'bengkulu': [-3.8004, 102.2655], 'gorontalo': [0.5333, 123.0667], 'ternate': [0.7907, 127.3842],
+            'sorong': [-0.878, 131.253], 'jayapura': [-2.5333, 140.7], 'bandar lampung': [-5.45, 105.2667],
+            'purwokerto': [-7.4167, 109.2333], 'kediri': [-7.8167, 112.0167], 'probolinggo': [-7.75, 113.2167]
+        };
+
+        const OPERATORS = {
+            '0811': 'Telkomsel', '0812': 'Telkomsel', '0813': 'Telkomsel',
+            '0820': 'Telkomsel', '0821': 'Telkomsel', '0822': 'Telkomsel', '0823': 'Telkomsel',
+            '0851': 'Telkomsel', '0852': 'Telkomsel', '0853': 'Telkomsel', '0858': 'Telkomsel',
+            '0814': 'Indosat', '0815': 'Indosat', '0816': 'Indosat',
+            '0855': 'Indosat', '0856': 'Indosat', '0857': 'Indosat', '0859': 'Indosat',
+            '0810': 'XL Axiata', '0817': 'XL Axiata', '0818': 'XL Axiata', '0819': 'XL Axiata',
+            '0877': 'XL Axiata', '0878': 'XL Axiata', '0879': 'XL Axiata',
+            '0895': 'Tri', '0896': 'Tri', '0897': 'Tri', '0898': 'Tri', '0899': 'Tri',
+            '0881': 'Smartfren', '0882': 'Smartfren', '0883': 'Smartfren', '0884': 'Smartfren',
+            '0885': 'Smartfren', '0886': 'Smartfren', '0887': 'Smartfren', '0888': 'Smartfren', '0889': 'Smartfren'
+        };
+
+        const AREA_CODES = {
+            '21': 'Jakarta', '22': 'Bandung', '231': 'Cirebon', '24': 'Semarang', '251': 'Bogor',
+            '271': 'Surakarta', '274': 'Yogyakarta', '31': 'Surabaya', '335': 'Probolinggo',
+            '341': 'Malang', '354': 'Kediri', '361': 'Denpasar', '370': 'Mataram', '380': 'Kupang',
+            '401': 'Kendari', '411': 'Makassar', '431': 'Manado', '451': 'Palu', '511': 'Banjarmasin',
+            '541': 'Samarinda', '542': 'Balikpapan', '561': 'Pontianak', '61': 'Medan', '651': 'Banda Aceh',
+            '711': 'Palembang', '721': 'Bandar Lampung', '741': 'Jambi', '751': 'Padang', '761': 'Pekanbaru',
+            '778': 'Batam', '921': 'Ternate', '951': 'Sorong', '967': 'Jayapura'
+        };
+        const AREA_ORDER = Object.keys(AREA_CODES).sort((a, b) => b.length - a.length);
+
+        const CITY_TZ = {
+            'Jakarta': 'WIB (UTC+7)', 'Bandung': 'WIB (UTC+7)', 'Cirebon': 'WIB (UTC+7)', 'Semarang': 'WIB (UTC+7)',
+            'Bogor': 'WIB (UTC+7)', 'Surakarta': 'WIB (UTC+7)', 'Yogyakarta': 'WIB (UTC+7)', 'Surabaya': 'WIB (UTC+7)',
+            'Probolinggo': 'WIB (UTC+7)', 'Malang': 'WIB (UTC+7)', 'Kediri': 'WIB (UTC+7)', 'Medan': 'WIB (UTC+7)',
+            'Banda Aceh': 'WIB (UTC+7)', 'Palembang': 'WIB (UTC+7)', 'Bandar Lampung': 'WIB (UTC+7)', 'Jambi': 'WIB (UTC+7)',
+            'Padang': 'WIB (UTC+7)', 'Pekanbaru': 'WIB (UTC+7)', 'Pontianak': 'WIB (UTC+7)', 'Batam': 'WIB (UTC+7)',
+            'Denpasar': 'WITA (UTC+8)', 'Mataram': 'WITA (UTC+8)', 'Kupang': 'WITA (UTC+8)', 'Makassar': 'WITA (UTC+8)',
+            'Manado': 'WITA (UTC+8)', 'Palu': 'WITA (UTC+8)', 'Kendari': 'WITA (UTC+8)', 'Banjarmasin': 'WITA (UTC+8)',
+            'Samarinda': 'WITA (UTC+8)', 'Balikpapan': 'WITA (UTC+8)', 'Ambon': 'WIT (UTC+9)', 'Ternate': 'WIT (UTC+9)',
+            'Sorong': 'WIT (UTC+9)', 'Jayapura': 'WIT (UTC+9)'
+        };
+
+        let map = null;
+        let traceMarker = null;
+        let currentIntl = '';
+        let currentCity = '';
+
+        function initMap() {
+            if (map) return;
+            map = L.map('map', { zoomControl: false, attributionControl: false }).setView([-2, 118], 4);
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+        }
+
+        function useSample(n) {
+            document.getElementById('phone-input').value = n;
+            runTrace();
+        }
+
+        function parseNumber(raw) {
+            let s = String(raw || '').replace(/[\s\-()]/g, '');
+            if (!s) return null;
+            if (s.startsWith('00')) s = '+' + s.slice(2);
+
+            let dial = '', rest = '', country = null;
+            if (s.startsWith('+')) {
+                const codes = COUNTRIES.map(c => c.dial).sort((a, b) => b.length - a.length);
+                for (const cd of codes) {
+                    if (s.startsWith('+' + cd)) { dial = cd; rest = s.slice(1 + cd.length); break; }
+                }
+                country = COUNTRIES.find(c => c.dial === dial) || null;
+            } else if (s.startsWith('62')) {
+                dial = '62'; rest = s.slice(2);
+                country = COUNTRIES.find(c => c.dial === '62');
+            } else if (s.startsWith('0')) {
+                dial = '62'; rest = s;
+                country = COUNTRIES.find(c => c.dial === '62');
+            }
+            return { raw, dial, rest, country };
+        }
+
+        function analyzeID(rest) {
+            let digits = rest.replace(/\D/g, '');
+            if (digits.startsWith('62')) digits = digits.slice(2);
+            if (digits.startsWith('0')) digits = digits.slice(1);
+            const isMobile = digits.startsWith('8');
+            const isFixed = digits.startsWith('2');
+            const coreLen = digits.length;
+            const valid = (isMobile && coreLen >= 9 && coreLen <= 12) || (isFixed && coreLen >= 7 && coreLen <= 11);
+            const full0 = '0' + digits;
+            const prefix4 = full0.slice(0, 4);
+            const operator = OPERATORS[prefix4] || 'Tidak teridentifikasi';
+            return { digits, isMobile, isFixed, coreLen, valid, operator, full0 };
+        }
+
+        function analyzeLib(rawInput) {
+            if (typeof libphonenumber === 'undefined') return { ok: false };
+            try {
+                const pn = libphonenumber.PhoneNumberUtil.getInstance();
+                const number = pn.parse(rawInput, 'ID');
+                const region = pn.getRegionCodeForNumber(number);
+                const isValid = pn.isValidNumber(number);
+                const typeNum = pn.getNumberType(number);
+                const country = COUNTRY_BY_ISO[region] || null;
+
+                let carrier = '';
+                try { carrier = libphonenumber.PhoneNumberToCarrierMapper.getInstance().getNameForNumber(number, 'id') || ''; } catch (e) {}
+                if (!carrier) { try { carrier = libphonenumber.PhoneNumberToCarrierMapper.getInstance().getNameForNumber(number, 'en') || ''; } catch (e) {} }
+                carrier = String(carrier || '');
+
+                let city = '';
+                try { city = libphonenumber.PhoneNumberOfflineGeocoder.getInstance().getDescriptionForNumber(number, 'id') || ''; } catch (e) {}
+                if (!city) { try { city = libphonenumber.PhoneNumberOfflineGeocoder.getInstance().getDescriptionForNumber(number, 'en') || ''; } catch (e) {} }
+                city = String(city || '');
+
+                if (country && city) {
+                    const c = city.toLowerCase();
+                    const n = country.name.toLowerCase();
+                    if (c === n || c === region.toLowerCase()) city = '';
+                }
+
+                let timezones = [];
+                try { timezones = libphonenumber.PhoneNumberToTimeZonesMapper.getInstance().getTimeZonesForNumber(number) || []; } catch (e) {}
+
+                const intl = pn.format(number, libphonenumber.PhoneNumberFormat.E164);
+                const national = pn.format(number, libphonenumber.PhoneNumberFormat.NATIONAL);
+
+                const TYPE_LABELS = {
+                    0: 'Telepon Tetap', 1: 'Seluler', 2: 'Seluler/Tetap', 3: 'Toll Free', 4: 'Premium',
+                    5: 'Shared Cost', 6: 'VoIP', 7: 'Personal', 8: 'Pager', 9: 'UAN', 10: 'Voicemail', '-1': 'Umum'
+                };
+
+                return { ok: true, region, country, isValid, carrier, city, timezones, intl, national, typeLabel: TYPE_LABELS[typeNum] || 'Umum' };
+            } catch (e) {
+                return { ok: false };
+            }
+        }
+
+        function findCityCoords(city) {
+            if (!city) return null;
+            const c = city.toLowerCase();
+            for (const [name, coord] of Object.entries(CITY_COORDS)) {
+                if (c === name || c.includes(name) || name.includes(c)) return coord;
+            }
+            return null;
+        }
+
+        function fullAnalyze(input) {
+            const base = parseNumber(input);
+            if (!base) return null;
+
+            const lib = analyzeLib(input);
+            const libOk = lib && lib.ok;
+
+            let country = base.country;
+            if (libOk && lib.country) country = lib.country;
+            if (!country) country = { name: 'Tidak diketahui', dial: base.dial, lat: 0, lng: 0 };
+
+            let operator = libOk ? lib.carrier : '';
+            let city = libOk ? lib.city : '';
+            let tz = libOk && lib.timezones.length ? lib.timezones[0] : '';
+            let type = libOk ? lib.typeLabel : 'Umum';
+            let valid = libOk ? lib.isValid : false;
+            let intl = libOk ? lib.intl : '';
+            let national = libOk ? lib.national : input;
+            let digitsCount = '—';
+
+            if (libOk) {
+                digitsCount = intl.replace(/[^\d]/g, '').length + ' digit';
+                if (!operator && base.dial === '62') {
+                    const info = analyzeID(base.rest);
+                    operator = info.operator !== 'Tidak teridentifikasi' ? info.operator : '';
+                }
+            } else {
+                if (base.dial === '62') {
+                    const info = analyzeID(base.rest);
+                    valid = info.valid;
+                    digitsCount = info.coreLen + ' digit';
+                    operator = info.operator !== 'Tidak teridentifikasi' ? info.operator : '';
+                    national = info.full0;
+                } else {
+                    const d = base.rest.replace(/\D/g, '');
+                    valid = d.length >= 6;
+                    digitsCount = d.length + ' digit';
+                }
+                intl = '+' + base.dial + base.rest.replace(/\D/g, '');
+            }
+
+            if (!city && base.dial === '62') {
+                const info = analyzeID(base.rest);
+                const code = AREA_ORDER.find(p => info.digits.startsWith(p));
+                if (code) {
+                    city = AREA_CODES[code];
+                    if (!tz) tz = CITY_TZ[city] || '';
+                }
+            }
+
+            let confidence = 'Rendah';
+            if (!valid) confidence = 'Rendah';
+            else if (city) confidence = 'Tinggi';
+            else if (operator) confidence = 'Sedang';
+
+            return { country, operator, city, tz, type, valid, intl, national, confidence, dial: base.dial, digitsCount };
+        }
+
+        function updateLiveHint() {
+            const el = document.getElementById('live-hint');
+            const v = document.getElementById('phone-input').value;
+            if (v.trim().length < 3) {
+                el.innerHTML = '<i class="bx bx-bolt"></i> Ketik nomor untuk melihat deteksi langsung';
+                return;
+            }
+            const a = fullAnalyze(v);
+            if (!a || a.country.name === 'Tidak diketahui') {
+                el.innerHTML = '<i class="bx bx-bolt"></i> Mendeteksi kode negara...';
+                return;
+            }
+            let parts = `<span class="text-fuchsia-300 font-semibold">${a.country.name}</span> <span class="text-slate-400 font-mono-lux">+${a.dial}</span>`;
+            if (a.operator) parts += ` <span class="text-violet-300">· ${a.operator}</span>`;
+            if (a.city) parts += ` <span class="text-emerald-300">· ${a.city}</span>`;
+            el.innerHTML = `<i class="bx bx-bolt"></i> Terdeteksi: ${parts}`;
+        }
+
+        function runTrace() {
+            const input = document.getElementById('phone-input').value;
+            const a = fullAnalyze(input);
+            if (!a) { alert('Masukkan nomor terlebih dahulu.'); return; }
+
+            const btn = document.getElementById('btn-trace');
+            btn.innerHTML = '<i class="bx bx-loader-alt animate-spin"></i>';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = 'Lacak';
+                btn.disabled = false;
+                render(a);
+            }, 500);
+        }
+
+        function render(a) {
+            const country = a.country;
+            currentIntl = a.intl;
+            currentCity = a.city;
+
+            document.getElementById('result').classList.remove('hidden');
+
+            document.getElementById('res-number').textContent = a.national || a.intl;
+            document.getElementById('res-country').textContent = country.name;
+            document.getElementById('res-dial').textContent = 'Kode +' + a.dial;
+            document.getElementById('res-operator').textContent = a.operator || 'Tidak teridentifikasi';
+            document.getElementById('res-operator-note').textContent = a.operator ? 'Dari database prefix operator' : 'Tidak cocok dengan prefix operator nasional';
+            document.getElementById('res-city').textContent = a.city || '—';
+            document.getElementById('res-city-note').textContent = a.city ? 'Dari kode area (akurat untuk telepon tetap)' : 'Seluler = tanpa wilayah pasti';
+            document.getElementById('res-type').textContent = a.type;
+            document.getElementById('res-len').textContent = a.digitsCount;
+            document.getElementById('res-tz').textContent = a.tz || '—';
+            document.getElementById('res-intl').textContent = a.intl;
+
+            const badge = document.getElementById('res-badge');
+            if (a.valid) {
+                badge.textContent = 'FORMAT VALID';
+                badge.className = 'text-[10px] font-bold px-2.5 py-1 rounded-full text-white bg-gradient-to-br from-emerald-500 to-emerald-700 shadow-lg shadow-emerald-500/30';
+            } else {
+                badge.textContent = 'FORMAT MENYIMPANG';
+                badge.className = 'text-[10px] font-bold px-2.5 py-1 rounded-full text-white bg-gradient-to-br from-rose-500 to-rose-700 shadow-lg shadow-rose-500/30';
+            }
+
+            const conf = document.getElementById('res-confidence');
+            conf.classList.remove('hidden');
+            if (a.confidence === 'Tinggi') {
+                conf.className = 'mt-3 flex items-center gap-2 text-[10px] rounded-2xl px-3.5 py-2.5 border bg-emerald-500/10 border-emerald-500/30 text-emerald-300';
+                conf.innerHTML = '<i class="bx bxs-badge-check text-base"></i> Kepercayaan data: Tinggi — nomor valid, kota teridentifikasi dari kode area.';
+            } else if (a.confidence === 'Sedang') {
+                conf.className = 'mt-3 flex items-center gap-2 text-[10px] rounded-2xl px-3.5 py-2.5 border bg-violet-500/10 border-violet-500/30 text-violet-300';
+                conf.innerHTML = '<i class="bx bx-info-circle text-base"></i> Kepercayaan data: Sedang — nomor valid, operator diketahui, tapi tanpa lokasi spesifik.';
+            } else {
+                conf.className = 'mt-3 flex items-center gap-2 text-[10px] rounded-2xl px-3.5 py-2.5 border bg-rose-500/10 border-rose-500/30 text-rose-300';
+                conf.innerHTML = '<i class="bx bx-error-circle text-base"></i> Kepercayaan data: Rendah — format tidak valid atau tidak dikenali, verifikasi ulang.';
+            }
+
+            initMap();
+            let target = null;
+            let popupTitle = country.name;
+            let popupSub = 'Kode +' + a.dial + ' — perkiraan wilayah, bukan lokasi pasti.';
+
+            const cityCoord = findCityCoords(a.city);
+            if (cityCoord) {
+                target = L.latLng(cityCoord[0], cityCoord[1]);
+                popupTitle = a.city + ', ' + country.name;
+                popupSub = 'Akurat tingkat kota (kode area). Bukan alamat/GPS pasti.';
+            } else {
+                target = L.latLng(country.lat, country.lng);
+            }
+
+            map.flyTo(target, cityCoord ? 9 : 5, { duration: 1.2 });
+
+            if (traceMarker) map.removeLayer(traceMarker);
+            traceMarker = L.marker(target, {
+                icon: L.divIcon({
+                    className: '',
+                    html: `<div style="position:relative;width:22px;height:22px">
+                        <span style="position:absolute;inset:0;border-radius:50%;background:rgba(217,70,239,0.45);animation:ring 1.8s ease-out infinite"></span>
+                        <span style="position:absolute;inset:4px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#d946ef);border:3px solid white;box-shadow:0 0 14px rgba(217,70,239,0.8)"></span>
+                    </div>`,
+                    iconSize: [22, 22],
+                    iconAnchor: [11, 11]
+                })
+            }).addTo(map).bindPopup(
+                `<b style="font-family:Georgia,serif">${popupTitle}</b><br>
+                 <span style="font-size:11px;color:#94a3b8">${popupSub}</span>`
+            ).openPopup();
+
+            saveHistory(a);
+            bumpTraceStats();
+
+            setTimeout(() => {
+                document.querySelectorAll('#result > div').forEach(el => {
+                    el.classList.remove('fade-in-up');
+                    void el.offsetWidth;
+                    el.classList.add('fade-in-up');
+                });
+            }, 50);
+        }
+
+        function extractFromText() {
+            const text = document.getElementById('scam-text').value;
+            if (!text.trim()) { alert('Tempel teks pesan terlebih dahulu.'); return; }
+            const matches = text.match(/\+?\d[\d\s\-]{7,16}/g);
+            if (!matches || !matches.length) { alert('Tidak ada nomor yang ditemukan di teks.'); return; }
+            const candidates = matches.map(m => m.trim()).sort((a, b) => b.length - a.length);
+            document.getElementById('phone-input').value = candidates[0];
+            runTrace();
+        }
+
+        function openWhatsApp() {
+            if (currentIntl) {
+                window.open('https://wa.me/' + currentIntl.replace('+', ''), '_blank');
+            }
+        }
+
+        function openLink(url) {
+            window.open(url, '_blank');
+        }
+
+        function copyReport() {
+            const txt = [
+                'LAPORAN PHONE INTELLIGENCE - VanzTrace',
+                'Nomor: ' + document.getElementById('res-number').textContent,
+                'Format internasional: ' + currentIntl,
+                'Negara asal: ' + document.getElementById('res-country').textContent,
+                'Kota/Wilayah: ' + document.getElementById('res-city').textContent,
+                'Operator: ' + document.getElementById('res-operator').textContent,
+                'Tipe: ' + document.getElementById('res-type').textContent,
+                'Zona waktu: ' + document.getElementById('res-tz').textContent,
+                '',
+                'Catatan: lokasi persis tidak dapat dilacak dari nomor. Verifikasi ke operator/Kominfo.'
+            ].join('\n');
+            navigator.clipboard.writeText(txt).then(() => {
+                alert('Ringkasan laporan disalin ke clipboard.');
+            }).catch(() => {
+                alert(txt);
+            });
+        }
+
+        function todayKey() {
+            const d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        }
+
+        function bumpTraceStats() {
+            const raw = JSON.parse(localStorage.getItem('vanztrace_stats') || '{}');
+            raw[todayKey()] = (raw[todayKey()] || 0) + 1;
+            localStorage.setItem('vanztrace_stats', JSON.stringify(raw));
+            renderTraceStats();
+        }
+
+        function renderTraceStats() {
+            const raw = JSON.parse(localStorage.getItem('vanztrace_stats') || '{}');
+            const n = raw[todayKey()] || 0;
+            document.getElementById('stat-checks').innerHTML = '<i class="bx bx-bolt"></i> ' + n + ' pengecekan hari ini';
+        }
+
+        function saveHistory(a) {
+            let h = JSON.parse(localStorage.getItem('vanztrace_history') || '[]');
+            const entry = {
+                raw: a.national || a.intl,
+                intl: a.intl,
+                country: a.country.name,
+                city: a.city || '',
+                ts: Date.now()
+            };
+            h = h.filter(x => x.intl !== entry.intl);
+            h.unshift(entry);
+            h = h.slice(0, 8);
+            localStorage.setItem('vanztrace_history', JSON.stringify(h));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const wrap = document.getElementById('history-card');
+            const el = document.getElementById('history-list');
+            const h = JSON.parse(localStorage.getItem('vanztrace_history') || '[]');
+            if (!h.length) { wrap.classList.add('hidden'); return; }
+            wrap.classList.remove('hidden');
+            el.innerHTML = h.map(x => `
+                <button onclick="retrace('${x.intl.replace(/'/g, "\\'")}')" class="w-full flex items-center gap-3 bg-slate-950/50 hover:bg-fuchsia-500/10 border border-slate-800/60 hover:border-fuchsia-400/40 rounded-xl px-3 py-2.5 transition text-left group">
+                    <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 border border-violet-500/30 flex items-center justify-center text-violet-300 flex-shrink-0"><i class="bx bx-history"></i></span>
+                    <span class="flex-1 min-w-0">
+                        <span class="block text-xs font-mono-lux text-slate-200 truncate">${x.raw}</span>
+                        <span class="block text-[10px] text-slate-500">${x.country}${x.city ? ' · ' + x.city : ''}</span>
+                    </span>
+                    <i class="bx bx-chevron-right text-slate-600 group-hover:text-fuchsia-300"></i>
+                </button>`).join('');
+        }
+
+        function retrace(intl) {
+            document.getElementById('phone-input').value = intl.replace(/^00/, '+');
+            runTrace();
+        }
+
+        function clearHistory() {
+            localStorage.setItem('vanztrace_history', '[]');
+            renderHistory();
+        }
+
+        document.getElementById('phone-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') runTrace();
+        });
+
+        document.getElementById('phone-input').addEventListener('input', updateLiveHint);
+
+        renderTraceStats();
+        renderHistory();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../gate.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VanzMap Pro — Luxury Spatial Explorer</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
+    
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; background: #eef3f8; }
+        .font-display { font-family: 'Playfair Display', Georgia, serif; }
+        .font-mono-lux { font-family: 'JetBrains Mono', monospace; }
+
+        #map { 
+            height: 100vh; 
+            width: 100vw; 
+            z-index: 0;
+            background: #e8edf2;
+        }
+
+        /* ===== Amap-style Popup ===== */
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(12px);
+            color: #1f2937 !important;
+            border: 1px solid rgba(46, 127, 242, 0.25);
+            border-radius: 18px;
+            box-shadow: 0 20px 45px -12px rgba(30, 64, 175, 0.35);
+        }
+        .leaflet-popup-content { margin: 13px 17px; }
+        .leaflet-container a.leaflet-popup-close-button {
+            color: #9ca3af !important;
+            font-size: 20px;
+            padding: 8px;
+            transition: color .2s;
+        }
+        .leaflet-container a.leaflet-popup-close-button:hover { color: #2563eb !important; }
+
+        /* ===== Primary Button ===== */
+        .lux-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.5);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .lux-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 26px -6px rgba(37, 99, 235, 0.6); }
+        .lux-btn:active { transform: scale(0.97); }
+
+        /* ===== Floating circular control button ===== */
+        .ctrl-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 8px 20px -6px rgba(30, 64, 175, 0.25);
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all .25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .ctrl-btn:hover { color: #2563eb; transform: translateY(-2px); box-shadow: 0 12px 26px -8px rgba(37, 99, 235, 0.45); }
+        .ctrl-btn:active { transform: scale(0.94); }
+        .ctrl-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+        /* ===== Bottom tab bar ===== */
+        .tab-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #94a3b8; transition: color .2s; }
+        .tab-btn i { font-size: 21px; }
+        .tab-btn span { font-size: 9px; font-weight: 600; letter-spacing: 0.04em; }
+        .tab-btn.active { color: #2563eb; }
+        .tab-btn.active span { color: #2563eb; }
+
+        /* ===== Chips ===== */
+        .chip {
+            white-space: nowrap;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid rgba(226,232,240,0.9);
+            color: #334155;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 14px -4px rgba(30,64,175,0.2);
+            transition: all .25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .chip:hover { color: #2563eb; border-color: #2563eb; transform: translateY(-1px); }
+        .chip i { color: #3b82f6; font-size: 14px; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* ===== Routing (light) ===== */
+        .leaflet-routing-container {
+            background: rgba(255, 255, 255, 0.97) !important;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(46, 127, 242, 0.25);
+            border-radius: 18px;
+            color: #334155 !important;
+            box-shadow: 0 20px 45px -12px rgba(30, 64, 175, 0.35);
+            max-height: 340px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+        .leaflet-routing-container h2 { color: #2563eb !important; }
+        .leaflet-routing-container h3 { color: #0ea5e9 !important; }
+        .leaflet-routing-container a { color: #2563eb !important; }
+        .leaflet-routing-alt { background: transparent !important; color: #334155 !important; }
+        .leaflet-routing-alt-minimized { border-color: rgba(46, 127, 242, 0.2) !important; }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(148, 163, 184, 0.15); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3b82f6, #0ea5e9); border-radius: 10px; }
+
+        /* ===== Animations ===== */
+        @keyframes slide-up {
+            from { transform: translate(-50%, 36px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .slide-up { animation: slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+
+        @keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+        .fade-in { animation: fade-in 0.8s ease-out; }
+
+        @keyframes float-glow {
+            0%, 100% { transform: translateY(0) scale(1); opacity: .85; }
+            50% { transform: translateY(-5px) scale(1.05); opacity: 1; }
+        }
+        .float-glow { animation: float-glow 3s ease-in-out infinite; }
+
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .animate-pulse-soft { animation: pulse-soft 2s infinite; }
+
+        @keyframes ring-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.45); }
+            100% { box-shadow: 0 0 0 14px rgba(37, 99, 235, 0); }
+        }
+        .ring-pulse { animation: ring-pulse 1.6s ease-out infinite; }
+
+        /* ===== Sheet base ===== */
+        .sheet-base {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 40;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(226,232,240,0.9);
+            border-radius: 26px;
+            box-shadow: 0 30px 60px -15px rgba(30, 64, 175, 0.35);
+        }
+
+        /* Traffic badges */
+        .traffic-good { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 12px -3px rgba(16,185,129,0.5); }
+        .traffic-medium { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 12px -3px rgba(245,158,11,0.5); }
+        .traffic-heavy { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 4px 12px -3px rgba(239,68,68,0.5); }
+
+        .toast-box { border: 1px solid rgba(248, 113, 113, 0.35); }
+    </style>
+</head>
+<body class="overflow-hidden fade-in">
+
+    <!-- Map -->
+    <div id="map"></div>
+
+    <!-- ========== TOP SEARCH BAR (Amap style) ========== -->
+    <div class="absolute top-4 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-xl">
+        <div class="flex items-center gap-2 bg-white/95 backdrop-blur-xl rounded-full shadow-xl shadow-blue-900/10 border border-slate-200/70 pl-5 pr-2 py-2">
+            <i class="bx bx-search text-lg text-slate-400"></i>
+            <input type="text" id="search-input" placeholder="Cari tempat, alamat, tujuan..."
+                class="flex-1 text-sm text-slate-700 placeholder-slate-400 bg-transparent focus:outline-none">
+            <button onclick="searchLocation()"
+                class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30 transition-all hover:scale-105 active:scale-95">
+                <i class="bx bx-navigation text-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== BRAND (desktop) ========== -->
+    <div class="absolute top-4 left-4 z-40 hidden md:flex items-center gap-2.5 bg-white/95 backdrop-blur-xl rounded-full px-4 py-2 shadow-lg shadow-blue-900/10 border border-slate-200/70">
+        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-[#f4c573] to-[#b8943f] flex items-center justify-center shadow">
+            <span class="font-display font-bold text-[#141004] text-xs">V</span>
+        </div>
+        <span class="font-display font-bold text-slate-800 text-sm tracking-tight">VanzMap <span class="text-blue-600">Pro</span></span>
+    </div>
+
+    <!-- ========== RIGHT FLOATING CONTROLS ========== -->
+    <div class="absolute right-4 top-1/2 -translate-y-1/2 z-40 flex flex-col items-end gap-2.5">
+        <!-- Zoom -->
+        <button onclick="map.zoomIn()" class="ctrl-btn" title="Perbesar"><i class="bx bx-plus"></i></button>
+        <button onclick="map.zoomOut()" class="ctrl-btn" title="Perkecil"><i class="bx bx-minus"></i></button>
+        
+        <!-- Layers -->
+        <div class="relative">
+            <button id="btn-layers" onclick="toggleLayers()" class="ctrl-btn" title="Mode peta"><i class="bx bx-layer"></i></button>
+            <div id="layers-pop" class="hidden absolute right-14 top-0 bg-white/97 backdrop-blur rounded-2xl shadow-2xl border border-slate-200 p-1.5 w-40 z-50">
+                <button data-tile="light" onclick="setTile('light')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition">
+                    <span class="flex items-center gap-2"><i class="bx bx-map text-base"></i> Terang</span>
+                    <i class="bx bx-check text-blue-600"></i>
+                </button>
+                <button data-tile="dark" onclick="setTile('dark')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition">
+                    <span class="flex items-center gap-2"><i class="bx bx-moon text-base"></i> Gelap</span>
+                    <i class="bx bx-check text-blue-600"></i>
+                </button>
+                <button data-tile="satellite" onclick="setTile('satellite')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition">
+                    <span class="flex items-center gap-2"><i class="bx bx-planet text-base"></i> Satelit</span>
+                    <i class="bx bx-check text-blue-600"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Live GPS -->
+        <button id="btn-live" onclick="toggleLiveTracking()" class="ctrl-btn" title="Live GPS Tracking">
+            <i class="bx bx-radar"></i>
+        </button>
+
+        <!-- Locate -->
+        <button onclick="getMyLocation()" class="ctrl-btn" title="Lokasi saya">
+            <i class="bx bx-current-location"></i>
+        </button>
+    </div>
+
+    <!-- ========== REGION CHIPS ROW ========== -->
+    <div id="chips-row" class="absolute bottom-[76px] left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-3xl">
+        <div class="flex gap-2 overflow-x-auto no-scrollbar justify-start md:justify-center pb-1">
+            <button onclick="goToPlace(-6.2383, 106.9756, 14, 'Bekasi')" class="chip"><i class="bx bx-map-pin"></i> Bekasi</button>
+            <button onclick="goToPlace(-6.2088, 106.8456, 13, 'Jakarta')" class="chip"><i class="bx bx-map-pin"></i> Jakarta</button>
+            <button onclick="goToPlace(-6.9175, 107.6191, 13, 'Bandung')" class="chip"><i class="bx bx-map-pin"></i> Bandung</button>
+            <button onclick="goToPlace(-7.2575, 112.7521, 13, 'Surabaya')" class="chip"><i class="bx bx-map-pin"></i> Surabaya</button>
+        </div>
+    </div>
+
+    <!-- ========== COORDINATE PILL ========== -->
+    <div class="absolute bottom-[76px] left-4 z-40 hidden md:block bg-white/90 backdrop-blur rounded-full px-4 py-1.5 shadow-lg border border-slate-200/70 text-[10px] font-mono-lux text-slate-600">
+        <span id="coord-status">Klik peta untuk lihat koordinat</span>
+    </div>
+
+    <!-- ========== SHEET: WEATHER ========== -->
+    <div id="sheet-weather" class="hidden sheet-base bottom-[76px] w-[92%] max-w-md p-5 slide-up">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm"><i class="bx bx-cloud text-blue-500 text-xl"></i> Cuaca Saat Ini</h3>
+            <button onclick="openSheet('')" class="text-slate-400 hover:text-slate-600 transition"><i class="bx bx-x text-xl"></i></button>
+        </div>
+        <div class="flex items-center justify-between">
+            <div id="weather-icon" class="text-6xl text-yellow-400 float-glow"><i class="bx bx-cloud"></i></div>
+            <div class="text-right">
+                <div class="text-4xl font-extrabold text-slate-800"><span id="weather-temp">—</span></div>
+                <div id="weather-desc" class="text-sm text-slate-500">Memuat...</div>
+                <div id="weather-loc" class="text-xs text-slate-400 mt-0.5">Bekasi</div>
+            </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-5">
+            <div class="bg-slate-50 rounded-2xl py-3 text-center">
+                <i class="bx bx-wind text-sky-500 text-lg"></i>
+                <div id="weather-wind" class="text-sm font-semibold text-slate-700 mt-1">—</div>
+                <div class="text-[9px] text-slate-400 mt-0.5">Angin</div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl py-3 text-center">
+                <i class="bx bx-time text-amber-500 text-lg"></i>
+                <div id="weather-time" class="text-sm font-semibold text-slate-700 mt-1">—</div>
+                <div class="text-[9px] text-slate-400 mt-0.5">Update</div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl py-3 text-center">
+                <button onclick="weather.load()" class="text-sky-500 text-lg"><i class="bx bx-refresh"></i></button>
+                <div class="text-sm font-semibold text-blue-600 mt-1">Refresh</div>
+                <div class="text-[9px] text-slate-400 mt-0.5">Cuaca</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SHEET: TRAFFIC ========== -->
+    <div id="sheet-traffic" class="hidden sheet-base bottom-[76px] w-[92%] max-w-md p-5 slide-up">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm"><i class="bx bx-traffic-cone text-orange-500 text-xl"></i> Status Lalu Lintas</h3>
+            <button onclick="openSheet('')" class="text-slate-400 hover:text-slate-600 transition"><i class="bx bx-x text-xl"></i></button>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-slate-500 font-medium">Kondisi saat ini</span>
+                <span id="traffic-badge" class="text-[10px] font-bold px-2.5 py-1 rounded-full traffic-medium text-white">Sedang</span>
+            </div>
+            <p id="traffic-message" class="text-sm text-slate-600 leading-relaxed">Memuat kondisi lalu lintas...</p>
+        </div>
+    </div>
+
+    <!-- ========== SHEET: FUEL / BBM ========== -->
+    <div id="sheet-fuel" class="hidden sheet-base bottom-[76px] w-[92%] max-w-md p-5 slide-up">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm"><i class="bx bx-gas-pump text-emerald-500 text-xl"></i> Estimasi BBM</h3>
+            <button onclick="openSheet('')" class="text-slate-400 hover:text-slate-600 transition"><i class="bx bx-x text-xl"></i></button>
+        </div>
+        <div class="grid grid-cols-2 gap-2.5">
+            <div>
+                <label class="text-[10px] text-slate-500 uppercase tracking-wider mb-1.5 block">Harga / L (Rp)</label>
+                <input id="fuel-price" type="number" min="0" value="10000"
+                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 font-mono-lux focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all">
+            </div>
+            <div>
+                <label class="text-[10px] text-slate-500 uppercase tracking-wider mb-1.5 block">Konsumsi (km/L)</label>
+                <input id="fuel-cons" type="number" min="0" step="0.1" value="12"
+                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 font-mono-lux focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all">
+            </div>
+        </div>
+        <p class="text-xs text-slate-400 mt-3 leading-relaxed">Biaya BBM otomatis dihitung pada setiap rute dan ditampilkan di panel rute.</p>
+    </div>
+
+    <!-- ========== SHEET: STATS ========== -->
+    <div id="sheet-stats" class="hidden sheet-base bottom-[76px] w-[92%] max-w-md p-5 slide-up">
+        <div class="flex items-center justify-between mb-1">
+            <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm"><i class="bx bx-stats text-blue-500 text-xl"></i> Statistik Hari Ini</h3>
+            <button onclick="openSheet('')" class="text-slate-400 hover:text-slate-600 transition"><i class="bx bx-x text-xl"></i></button>
+        </div>
+        <p id="stat-date" class="text-xs text-slate-400 font-medium mb-4"></p>
+        <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="bg-slate-50 rounded-2xl py-4">
+                <div class="text-2xl font-extrabold text-blue-600" id="stat-distance">0</div>
+                <div class="text-[9px] text-slate-400 uppercase tracking-wider mt-1">Km Ditempuh</div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl py-4">
+                <div class="text-2xl font-extrabold text-emerald-600" id="stat-time">0 mnt</div>
+                <div class="text-[9px] text-slate-400 uppercase tracking-wider mt-1">Waktu</div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl py-4">
+                <div class="text-2xl font-extrabold text-amber-500" id="stat-routes">0</div>
+                <div class="text-[9px] text-slate-400 uppercase tracking-wider mt-1">Rute</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ROUTE PANEL (bottom sheet) ========== -->
+    <div id="route-panel" class="hidden sheet-base bottom-[76px] w-[92%] max-w-xl p-5 slide-up max-h-[50vh] overflow-y-auto">
+        <div class="flex items-start justify-between gap-4">
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-0.5">
+                    <i class="bx bx-navigation text-blue-600 text-xl"></i>
+                    <h3 class="font-bold text-slate-800 text-base truncate" id="route-title">Rute Aktif</h3>
+                </div>
+                <p class="text-xs text-slate-400 truncate" id="route-subtitle">Dari lokasi Anda menuju tujuan</p>
+
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                    <div class="bg-slate-50 rounded-2xl py-2.5 px-3">
+                        <div class="flex items-center gap-1.5 text-[9px] text-slate-400 uppercase tracking-wider"><i class="bx bx-ruler text-xs"></i> Jarak</div>
+                        <div class="text-lg font-bold text-slate-800" id="route-distance">—</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl py-2.5 px-3">
+                        <div class="flex items-center gap-1.5 text-[9px] text-slate-400 uppercase tracking-wider"><i class="bx bx-time text-xs"></i> Waktu</div>
+                        <div class="text-lg font-bold text-slate-800" id="route-time">—</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl py-2.5 px-3">
+                        <div class="flex items-center gap-1.5 text-[9px] text-slate-400 uppercase tracking-wider"><i class="bx bx-gas-pump text-xs"></i> BBM</div>
+                        <div class="text-lg font-bold text-emerald-600" id="route-cost">—</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl py-2.5 px-3">
+                        <div class="flex items-center gap-1.5 text-[9px] text-slate-400 uppercase tracking-wider"><i class="bx bx-traffic-cone text-xs"></i> Kondisi</div>
+                        <div class="text-lg font-bold" id="route-traffic-status">—</div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="clearRoute()" class="text-slate-400 hover:text-rose-500 transition p-1.5 rounded-full hover:bg-rose-50"><i class="bx bx-x text-2xl"></i></button>
+        </div>
+        <!-- Legend -->
+        <div class="flex items-center gap-3 mt-4 text-[9px] text-slate-400">
+            <span class="flex items-center gap-1"><span class="w-3 h-1.5 rounded-full bg-emerald-500"></span> Lancar</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-1.5 rounded-full bg-amber-500"></span> Sedang</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-1.5 rounded-full bg-rose-500"></span> Macet</span>
+            <span class="flex-1"></span>
+            <i class="bx bx-traffic-cone text-slate-400"></i>
+        </div>
+
+        <!-- Turn-by-turn instructions -->
+        <div class="mt-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><i class="bx bx-directions text-blue-500 text-sm"></i> Petunjuk Jalan</span>
+                <span id="route-step-count" class="text-[10px] text-slate-400 font-medium"></span>
+            </div>
+            <div id="route-steps" class="max-h-36 overflow-y-auto space-y-1 pr-1"></div>
+        </div>
+
+        <button id="btn-start-nav" onclick="startRouteView()" class="lux-btn mt-4 !text-base py-3">
+            <i class="bx bx-map-alt" style="vertical-align:-2px"></i> Mulai Navigasi
+        </button>
+    </div>
+
+    <!-- ========== BOTTOM TAB BAR ========== -->
+    <div class="absolute bottom-0 inset-x-0 z-40">
+        <div class="mx-auto w-full max-w-md bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-2xl rounded-t-3xl px-6 py-2.5 grid grid-cols-5">
+            <button onclick="openSheet('')" data-tab="map" class="tab-btn active">
+                <i class="bx bx-map"></i><span>Peta</span>
+            </button>
+            <button onclick="openSheet('weather')" data-tab="weather" class="tab-btn">
+                <i class="bx bx-cloud"></i><span>Cuaca</span>
+            </button>
+            <button onclick="openSheet('traffic')" data-tab="traffic" class="tab-btn">
+                <i class="bx bx-traffic-cone"></i><span>Lalin</span>
+            </button>
+            <button onclick="openSheet('fuel')" data-tab="fuel" class="tab-btn">
+                <i class="bx bx-gas-pump"></i><span>BBM</span>
+            </button>
+            <button onclick="openSheet('stats')" data-tab="stats" class="tab-btn">
+                <i class="bx bx-stats"></i><span>Statistik</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== NOTIFICATION TOAST ========== -->
+    <div id="toast" class="hidden fixed top-24 left-1/2 -translate-x-1/2 z-50 max-w-sm bg-white/97 backdrop-blur-xl toast-box rounded-2xl shadow-2xl p-4 slide-up">
+        <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500/15 to-rose-600/10 border border-rose-500/30 flex items-center justify-center flex-shrink-0">
+                <i class="bx bxs-error-circle text-rose-500 text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-rose-500 text-sm" id="toast-title">Peringatan Macet</h4>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed" id="toast-message">Terjadi kemacetan di jalur yang Anda pilih.</p>
+            </div>
+            <button onclick="hideToast()" class="text-slate-400 hover:text-slate-600 ml-2 transition"><i class="bx bx-x text-lg"></i></button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+        // ========== INITIALIZATION ==========
+        const map = L.map('map', { 
+            zoomControl: false,
+            attributionControl: false
+        }).setView([-6.2383, 106.9756], 13);
+
+        // ========== TILE LAYERS ==========
+        const tileLayers = {
+            light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map),
+            dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }),
+            satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18 })
+        };
+
+        function setTile(mode) {
+            document.querySelectorAll('#layers-pop [data-tile]').forEach(b => {
+                const on = b.dataset.tile === mode;
+                b.querySelector('.bx-check').style.opacity = on ? 1 : 0;
+            });
+            Object.keys(tileLayers).forEach(k => {
+                const layer = tileLayers[k];
+                if (k === mode) { if (!map.hasLayer(layer)) layer.addTo(map); }
+                else { if (map.hasLayer(layer)) map.removeLayer(layer); }
+            });
+            hideLayers();
+        }
+
+        function toggleLayers() {
+            document.getElementById('layers-pop').classList.toggle('hidden');
+        }
+        function hideLayers() {
+            document.getElementById('layers-pop').classList.add('hidden');
+        }
+        document.addEventListener('click', e => {
+            if (!e.target.closest('#layers-pop') && !e.target.closest('#btn-layers')) hideLayers();
+        });
+        setTile('light');
+
+        // ========== BOTTOM SHEETS ==========
+        function openSheet(name) {
+            ['weather', 'traffic', 'fuel', 'stats'].forEach(id => {
+                document.getElementById('sheet-' + id).classList.add('hidden');
+            });
+            const chips = document.getElementById('chips-row');
+            if (name) {
+                document.getElementById('sheet-' + name).classList.remove('hidden');
+                chips.classList.add('hidden');
+            } else {
+                chips.classList.remove('hidden');
+            }
+            document.querySelectorAll('[data-tab]').forEach(b => {
+                const active = b.dataset.tab === (name || 'map');
+                b.classList.toggle('active', active);
+            });
+        }
+
+        // Main marker
+        const mainIcon = L.divIcon({
+            className: '',
+            html: `<div style="
+                width: 34px; height: 34px; border-radius: 12px;
+                background: linear-gradient(135deg, #f4c573, #d9b16a);
+                display:flex; align-items:center; justify-content:center;
+                box-shadow: 0 10px 24px -6px rgba(217,177,106,0.65), 0 0 0 3px rgba(255,255,255,0.9);
+                font-size: 18px;
+                color: #1a1206;
+            "><i class="bx bxs-crown"></i></div>`,
+            iconSize: [34, 34],
+            iconAnchor: [17, 17],
+            popupAnchor: [0, -18]
+        });
+
+        let mainMarker = L.marker([-6.2383, 106.9756], { icon: mainIcon }).addTo(map)
+            .bindPopup("<b style='font-family:Georgia,serif;font-size:15px'>VanzCore HQ</b><br><span style='font-size:11px;color:#64748b'>Titik operasional utama</span>");
+
+        // Routing control
+        let routingControl = null;
+        let userLatLng = null;
+        let currentDestination = null;
+        let lastRouteDistance = 0;
+        let lastRouteBounds = null;
+        let trafficLineGroup = null;
+        let currentRouteCoords = [];
+
+        // ========== TRAFFIC SIMULATION ==========
+        function getTrafficStatus() {
+            const hour = new Date().getHours();
+            let level, message, badgeClass, color;
+
+            if ((hour >= 7 && hour <= 9) || (hour >= 16 && hour <= 19)) {
+                level = 'heavy';
+                message = 'Jam sibuk! Kemacetan tinggi diperkirakan di jalur utama. Pertimbangkan rute alternatif.';
+                badgeClass = 'traffic-heavy';
+                color = '#f87171';
+            } else if ((hour >= 11 && hour <= 13) || (hour >= 20 && hour <= 21)) {
+                level = 'medium';
+                message = 'Lalu lintas sedang. Ada kemungkinan delay 5–15 menit di beberapa ruas jalan.';
+                badgeClass = 'traffic-medium';
+                color = '#fbbf24';
+            } else {
+                level = 'good';
+                message = 'Lalu lintas lancar. Kondisi jalan relatif sepi saat ini.';
+                badgeClass = 'traffic-good';
+                color = '#34d399';
+            }
+
+            const badge = document.getElementById('traffic-badge');
+            badge.className = `text-[10px] font-bold px-2.5 py-1 rounded-full text-white ${badgeClass}`;
+            badge.textContent = level === 'heavy' ? 'Macet' : level === 'medium' ? 'Sedang' : 'Lancar';
+            
+            document.getElementById('traffic-message').textContent = message;
+
+            return { level, message, color };
+        }
+
+        getTrafficStatus();
+        setInterval(getTrafficStatus, 60000);
+
+        // ========== COORDINATE STATUS ==========
+        map.on('click', function(e) {
+            const lat = e.latlng.lat.toFixed(5);
+            const lng = e.latlng.lng.toFixed(5);
+            document.getElementById('coord-status').innerText = `Lat: ${lat}  |  Lng: ${lng}`;
+        });
+
+        // ========== LIVE GPS TRACKING ==========
+        let trackingId = null;
+        let liveMarker = null;
+        let liveTracking = false;
+
+        function setLiveUI(active) {
+            const btn = document.getElementById('btn-live');
+            btn.classList.toggle('active', active);
+            btn.querySelector('i').className = active ? 'bx bx-radar animate-pulse-soft' : 'bx bx-radar';
+        }
+
+        function toggleLiveTracking() {
+            if (!navigator.geolocation) { alert('Geolocation tidak didukung di browser ini.'); return; }
+            if (liveTracking) { stopTracking(); return; }
+
+            liveTracking = true;
+            setLiveUI(true);
+
+            trackingId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    const ll = L.latLng(pos.coords.latitude, pos.coords.longitude);
+                    userLatLng = ll;
+                    if (!liveMarker) {
+                        liveMarker = L.circleMarker(ll, {
+                            radius: 9,
+                            color: '#2563eb',
+                            fillColor: '#2563eb',
+                            fillOpacity: 0.95,
+                            weight: 3
+                        }).addTo(map).bindPopup("<b>Live GPS</b><br><span style='font-size:11px;color:#64748b'>Posisi Anda real-time</span>");
+                    } else {
+                        liveMarker.setLatLng(ll);
+                    }
+                    map.panTo(ll, { animate: true });
+                },
+                (err) => { stopTracking(); alert('Gagal melacak lokasi. Izinkan akses lokasi di browser.'); },
+                { enableHighAccuracy: true, maximumAge: 2000, timeout: 15000 }
+            );
+        }
+
+        function stopTracking() {
+            liveTracking = false;
+            if (trackingId) { navigator.geolocation.clearWatch(trackingId); trackingId = null; }
+            if (liveMarker) { map.removeLayer(liveMarker); liveMarker = null; }
+            setLiveUI(false);
+        }
+
+        // ========== GEOLOCATION ==========
+        function getMyLocation() {
+            if (!navigator.geolocation) {
+                alert('Geolocation tidak didukung di browser ini.');
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    userLatLng = L.latLng(pos.coords.latitude, pos.coords.longitude);
+                    map.flyTo(userLatLng, 15, { duration: 1.4 });
+                    
+                    L.marker(userLatLng, {
+                        icon: L.divIcon({
+                            className: '',
+                            html: `<div style="background:linear-gradient(135deg,#3b82f6,#2563eb);width:18px;height:18px;border-radius:50%;border:3px solid white;box-shadow:0 0 14px rgba(37,99,235,0.85)"></div>`,
+                            iconSize: [18, 18],
+                            iconAnchor: [9, 9]
+                        })
+                    }).addTo(map).bindPopup("<b>Lokasi Anda Saat Ini</b>").openPopup();
+
+                    weather.setLoc(pos.coords.latitude, pos.coords.longitude);
+                },
+                () => alert('Gagal mendapatkan lokasi. Izinkan akses lokasi di browser.')
+            );
+        }
+
+        // ========== WEATHER ==========
+        const weather = {
+            lat: -6.2383,
+            lng: 106.9756,
+            setLoc(lat, lng) {
+                this.lat = lat;
+                this.lng = lng;
+                this.load();
+            },
+            load() {
+                fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.lat}&longitude=${this.lng}&current_weather=true`)
+                    .then(r => r.json())
+                    .then(data => {
+                        const cw = data.current_weather;
+                        const { icon, label } = weatherDesc(cw.weathercode);
+                        document.getElementById('weather-icon').innerHTML = icon;
+                        document.getElementById('weather-temp').textContent = `${cw.temperature}°C`;
+                        document.getElementById('weather-desc').textContent = label;
+                        document.getElementById('weather-wind').textContent = `${cw.windspeed} km/h`;
+                        document.getElementById('weather-time').textContent = new Date(cw.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    })
+                    .catch(() => {
+                        document.getElementById('weather-desc').textContent = 'Gagal memuat cuaca';
+                    });
+            }
+        };
+
+        function weatherDesc(code) {
+            if (code === 0) return { icon: '<i class="bx bxs-sun text-yellow-400"></i>', label: 'Cerah' };
+            if (code === 1) return { icon: '<i class="bx bxs-sun text-yellow-400"></i>', label: 'Sebagian cerah' };
+            if (code === 2 || code === 3) return { icon: '<i class="bx bx-cloud text-slate-400"></i>', label: code === 2 ? 'Berawan' : 'Mendung' };
+            if (code === 45 || code === 48) return { icon: '<i class="bx bx-cloud text-slate-400"></i>', label: 'Berkabut' };
+            if (code >= 51 && code <= 57) return { icon: '<i class="bx bx-cloud-light-rain text-sky-500"></i>', label: 'Gerimis' };
+            if (code >= 61 && code <= 67) return { icon: '<i class="bx bx-rain text-sky-500"></i>', label: 'Hujan' };
+            if (code >= 71 && code <= 77) return { icon: '<i class="bx bxs-snow text-slate-300"></i>', label: 'Salju' };
+            if (code >= 80 && code <= 82) return { icon: '<i class="bx bx-umbrella text-sky-500"></i>', label: 'Hujan deras' };
+            if (code >= 95 && code <= 99) return { icon: '<i class="bx bx-cloud-lightning text-yellow-400"></i>', label: 'Badai petir' };
+            return { icon: '<i class="bx bx-cloud text-slate-400"></i>', label: 'Berawan' };
+        }
+
+        weather.load();
+
+        // ========== FUEL / BBM ==========
+        document.getElementById('fuel-price').value = localStorage.getItem('vanzmap_fuel_price') || 10000;
+        document.getElementById('fuel-cons').value = localStorage.getItem('vanzmap_fuel_cons') || 12;
+
+        document.getElementById('fuel-price').addEventListener('input', saveFuel);
+        document.getElementById('fuel-cons').addEventListener('input', saveFuel);
+
+        function saveFuel() {
+            const price = document.getElementById('fuel-price').value || 0;
+            const cons = document.getElementById('fuel-cons').value || 0;
+            localStorage.setItem('vanzmap_fuel_price', price);
+            localStorage.setItem('vanzmap_fuel_cons', cons);
+            if (lastRouteDistance > 0) updateFuelCost();
+        }
+
+        function getFuel() {
+            return {
+                price: parseFloat(localStorage.getItem('vanzmap_fuel_price') || 10000),
+                cons: parseFloat(localStorage.getItem('vanzmap_fuel_cons') || 12)
+            };
+        }
+
+        function updateFuelCost() {
+            const { price, cons } = getFuel();
+            if (!cons) { document.getElementById('route-cost').textContent = '—'; return; }
+            const cost = (lastRouteDistance / cons) * price;
+            document.getElementById('route-cost').textContent = 'Rp ' + Math.round(cost).toLocaleString('id-ID');
+        }
+
+        // ========== DAILY STATS ==========
+        function todayKey() {
+            const d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        }
+
+        function loadStats() {
+            const raw = JSON.parse(localStorage.getItem('vanzmap_stats') || '{}');
+            return raw[todayKey()] || { distance: 0, time: 0, routes: 0 };
+        }
+
+        function addRouteStats(km, min) {
+            const raw = JSON.parse(localStorage.getItem('vanzmap_stats') || '{}');
+            const s = raw[todayKey()] || { distance: 0, time: 0, routes: 0 };
+            s.distance += parseFloat(km);
+            s.time += min;
+            s.routes += 1;
+            raw[todayKey()] = s;
+            localStorage.setItem('vanzmap_stats', JSON.stringify(raw));
+            renderStats();
+        }
+
+        function renderStats() {
+            const s = loadStats();
+            document.getElementById('stat-distance').textContent = s.distance.toFixed(1);
+            document.getElementById('stat-time').textContent = s.time >= 60 ? `${(s.time / 60).toFixed(1)} jam` : `${s.time} mnt`;
+            document.getElementById('stat-routes').textContent = s.routes;
+            document.getElementById('stat-date').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        }
+        renderStats();
+
+        // ========== SOUND & NOTIFICATION ==========
+        function playChime() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = ctx.currentTime;
+                [523.25, 659.25, 783.99].forEach((f, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = f;
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    const t = now + i * 0.12;
+                    gain.gain.setValueAtTime(0, t);
+                    gain.gain.linearRampToValueAtTime(0.18, t + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+                    osc.start(t);
+                    osc.stop(t + 0.55);
+                });
+            } catch (e) {}
+        }
+
+        function notifyRouteReady(title, body) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                try { new Notification(title, { body }); } catch (e) {}
+            }
+        }
+
+        // ========== SEARCH ==========
+        async function searchLocation() {
+            const query = document.getElementById('search-input').value.trim();
+            if (!query) return;
+
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`);
+                const data = await res.json();
+
+                if (data && data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+                    const name = data[0].display_name;
+
+                    currentDestination = L.latLng(lat, lon);
+
+                    map.flyTo([lat, lon], 15, { duration: 1.5 });
+
+                    const popupContent = `
+                        <div style="min-width:210px">
+                            <b style="font-size:14px;font-family:Georgia,serif">${name.split(',')[0]}</b><br>
+                            <span style="font-size:11px;color:#64748b">${name}</span>
+                            <button onclick="startNavigation(${lat}, ${lon}, '${name.replace(/'/g, "\\'")}')" class="lux-btn">
+                                <i class="bx bx-navigation" style="vertical-align:-1px"></i> Navigasi ke Sini
+                            </button>
+                        </div>
+                    `;
+
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup(popupContent)
+                        .openPopup();
+
+                    weather.setLoc(lat, lon);
+                } else {
+                    alert('Lokasi tidak ditemukan. Coba kata kunci lain.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Gagal mencari lokasi. Periksa koneksi internet.');
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchLocation();
+        });
+
+        function startNavigation(lat, lng, name) {
+            const dest = L.latLng(lat, lng);
+            const start = userLatLng || map.getCenter();
+            if (routingControl) {
+                map.removeControl(routingControl);
+            }
+
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+
+            routingControl = L.Routing.control({
+                waypoints: [start, dest],
+                routeWhileDragging: false,
+                showAlternatives: true,
+                fitSelectedRoutes: false,
+                lineOptions: {
+                    styles: [
+                        { color: '#2e7ff2', opacity: 0.95, weight: 6 },
+                        { color: '#93c5fd', opacity: 0.4, weight: 10 }
+                    ]
+                },
+                createMarker: function(i, wp, n) {
+                    const isStart = i === 0;
+                    return L.marker(wp.latLng, {
+                        icon: L.divIcon({
+                            className: '',
+                            html: `<div style="
+                                background: ${isStart ? 'linear-gradient(135deg,#10b981,#059669)' : 'linear-gradient(135deg,#3b82f6,#2563eb)'};
+                                width: 22px; height: 22px; border-radius: 50%;
+                                border: 3px solid white;
+                                box-shadow: 0 0 14px ${isStart ? 'rgba(16,185,129,0.7)' : 'rgba(37,99,235,0.7)'};
+                            "></div>`,
+                            iconSize: [22, 22],
+                            iconAnchor: [11, 11]
+                        })
+                    });
+                },
+                router: L.Routing.osrmv1({
+                    serviceUrl: 'https://router.project-osrm.org/route/v1',
+                    profile: 'driving'
+                })
+            }).addTo(map);
+
+            routingControl.hide();
+
+            routingControl.on('routesfound', function(e) {
+                const routes = e.routes;
+                const summary = routes[0].summary;
+
+                const distanceKm = (summary.totalDistance / 1000).toFixed(1);
+                const timeMin = Math.round(summary.totalTime / 60);
+
+                lastRouteDistance = parseFloat(distanceKm);
+                addRouteStats(distanceKm, timeMin);
+                updateFuelCost();
+
+                lastRouteBounds = L.latLngBounds(routes[0].coordinates);
+
+                currentRouteCoords = routes[0].coordinates;
+                const traffic = getTrafficStatus();
+                buildTrafficLines(currentRouteCoords, traffic.level);
+                renderSteps(routes[0].instructions || [], currentRouteCoords);
+
+                let adjustedTime = timeMin;
+                let trafficLabel = '';
+
+                if (traffic.level === 'heavy') {
+                    adjustedTime = Math.round(timeMin * 1.45);
+                    trafficLabel = `<span class="text-rose-500">Macet (+${adjustedTime - timeMin} mnt)</span>`;
+                    showToast('Peringatan Macet', `Rute menuju ${name.split(',')[0]} mengalami kemacetan. Estimasi waktu bertambah menjadi ±${adjustedTime} menit.`);
+                } else if (traffic.level === 'medium') {
+                    adjustedTime = Math.round(timeMin * 1.2);
+                    trafficLabel = `<span class="text-amber-500">Sedang (+${adjustedTime - timeMin} mnt)</span>`;
+                } else {
+                    trafficLabel = `<span class="text-emerald-600">Lancar</span>`;
+                }
+
+                openSheet('');
+                document.getElementById('route-panel').classList.remove('hidden');
+                document.getElementById('route-title').textContent = `Menuju ${name.split(',')[0]}`;
+                document.getElementById('route-subtitle').textContent = name;
+                document.getElementById('route-distance').textContent = `${distanceKm} km`;
+                document.getElementById('route-time').textContent = `±${adjustedTime} menit`;
+                document.getElementById('route-traffic-status').innerHTML = trafficLabel;
+
+                playChime();
+                notifyRouteReady('Rute Siap', `Rute menuju ${name.split(',')[0]} ditemukan. ${distanceKm} km · ±${adjustedTime} menit.`);
+            });
+        }
+
+        function startRouteView() {
+            if (lastRouteBounds) {
+                map.fitBounds(lastRouteBounds, { padding: [60, 60] });
+            }
+        }
+
+        // ========== TURN-BY-TURN + TRAFFIC LINES ==========
+        function dirIcon(type) {
+            const t = String(type || '').toLowerCase();
+            if (t.includes('destination') || t.includes('arrive')) return '<i class="bx bx-flag"></i>';
+            if (t.includes('depart') || t.includes('start')) return '<i class="bx bx-log-out"></i>';
+            if (t.includes('roundabout')) return '<i class="bx bx-recycle"></i>';
+            if (t.includes('uturn') || t.includes('u-turn')) {
+                return t.includes('left') ? '<i class="bx bx-arrow-back"></i>' : '<i class="bx bx-arrow-forward"></i>';
+            }
+            const left = t.includes('left');
+            let rot = 0;
+            if (t.includes('slight')) rot = left ? 25 : -25;
+            else if (t.includes('sharp')) rot = left ? 70 : -70;
+            else if (left) rot = 45;
+            else if (t.includes('right')) rot = -45;
+            return `<i class="bx bx-up-arrow-alt" style="transform:rotate(${rot}deg)"></i>`;
+        }
+
+        function renderSteps(instructions, coords) {
+            const el = document.getElementById('route-steps');
+            const countEl = document.getElementById('route-step-count');
+            if (!instructions || !instructions.length) {
+                el.innerHTML = '<p class="text-xs text-slate-400">Petunjuk sedang dimuat...</p>';
+                countEl.textContent = '';
+                return;
+            }
+            countEl.textContent = `${instructions.length} langkah`;
+            el.innerHTML = instructions.map((ins) => {
+                const m = ins.distance || 0;
+                const dist = m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`;
+                const coord = coords && coords[ins.index];
+                const inner = `
+                    <span class="w-7 h-7 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-blue-600 flex-shrink-0">${dirIcon(ins.type)}</span>
+                    <span class="flex-1 text-xs text-slate-600 leading-snug">${ins.text}</span>
+                    <span class="text-[10px] font-mono-lux text-slate-400 flex-shrink-0">${dist}</span>`;
+                if (coord) {
+                    return `<button onclick="map.flyTo([${coord[0]},${coord[1]}],16,{duration:0.8})" class="w-full flex items-center gap-3 bg-slate-50 hover:bg-blue-50 rounded-xl px-3 py-2 transition text-left">${inner}</button>`;
+                }
+                return `<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2">${inner}</div>`;
+            }).join('');
+        }
+
+        function buildTrafficLines(coords, level) {
+            if (trafficLineGroup) { map.removeLayer(trafficLineGroup); trafficLineGroup = null; }
+            trafficLineGroup = L.layerGroup().addTo(map);
+
+            L.polyline(coords, { color: '#e0e7ff', opacity: 0.9, weight: 9, lineJoin: 'round' }).addTo(trafficLineGroup);
+
+            const segments = 14;
+            const step = Math.floor(coords.length / segments);
+            if (step < 2) {
+                const c = level === 'heavy' ? '#ef4444' : level === 'medium' ? '#f59e0b' : '#10b981';
+                L.polyline(coords, { color: c, opacity: 0.95, weight: 6 }).addTo(trafficLineGroup);
+                return;
+            }
+            for (let i = 0; i < segments; i++) {
+                const a = i * step;
+                const b = Math.min(a + step + 1, coords.length);
+                const seg = coords.slice(a, b);
+                if (seg.length < 2) continue;
+                const variant = Math.abs(Math.sin(i * 7.3 + level.length));
+                let color;
+                if (level === 'heavy') color = variant > 0.88 ? '#f59e0b' : '#ef4444';
+                else if (level === 'medium') color = variant < 0.15 ? '#10b981' : variant > 0.9 ? '#ef4444' : '#f59e0b';
+                else color = variant > 0.92 ? '#f59e0b' : '#10b981';
+                L.polyline(seg, { color, opacity: 0.95, weight: 6, lineJoin: 'round' }).addTo(trafficLineGroup);
+            }
+        }
+
+        function goToPlace(lat, lng, zoom, label) {
+            map.flyTo([lat, lng], zoom, { duration: 1.4 });
+            L.popup()
+                .setLatLng([lat, lng])
+                .setContent(`
+                    <b style="font-family:Georgia,serif;font-size:14px">${label}</b>
+                    <button onclick="startNavigation(${lat}, ${lng}, '${label}')" class="lux-btn">
+                        <i class="bx bx-navigation" style="vertical-align:-1px"></i> Navigasi ke ${label}
+                    </button>
+                `)
+                .openOn(map);
+        }
+
+        function clearRoute() {
+            if (routingControl) {
+                map.removeControl(routingControl);
+                routingControl = null;
+            }
+            if (trafficLineGroup) {
+                map.removeLayer(trafficLineGroup);
+                trafficLineGroup = null;
+            }
+            document.getElementById('route-panel').classList.add('hidden');
+            document.getElementById('route-steps').innerHTML = '';
+            document.getElementById('route-step-count').textContent = '';
+            lastRouteDistance = 0;
+            lastRouteBounds = null;
+            currentRouteCoords = [];
+            document.getElementById('chips-row').classList.remove('hidden');
+            hideToast();
+        }
+
+        // ========== TOAST ==========
+        function showToast(title, message) {
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-message').textContent = message;
+            document.getElementById('toast').classList.remove('hidden');
+            setTimeout(hideToast, 8000);
+        }
+
+        function hideToast() {
+            document.getElementById('toast').classList.add('hidden');
+        }
+
+        getTrafficStatus();
+    </script>
+</body>
+</html>

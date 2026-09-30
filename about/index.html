@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=350fa7e2-782a-43e9-893f-c6314cc0f42b
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+  <meta name="hosting-provider" content="Netlify">
+  <meta name="netlify-deploy"
+    content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=350fa7e2-782a-43e9-893f-c6314cc0f42b">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:title" name="og:title" content="Marchell Kevandra" />
+  <meta property="og:description" name="og:description" content="Just an ordinary person." />
+  <meta property="og:url" content="https://mk-links.netlify.app/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://mk-links.netlify.app/assets/img/Lgs.png" />
+  <meta property="og:image:secure_url" content="https://mk-links.netlify.app/assets/img/Lgs.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="https://mk-links.netlify.app/assets/img/Lgs.png" />
+  <meta property="og:author" content="Chellxz" />
+  <meta name="description" content="About Marchell Kevandra — profile, tools, music, and contact." />
+  <link rel="preload" as="image" href="assets/img/vx1.png" fetchpriority="high" />
+  <!-- Google Search Console -->
+  <meta name="google-site-verification" content="kZrI3e531cfnW2f8wWMM78KqvZzFEQbZxXc3XfEu8wA" />
+  <!-- Fonts: Valorant UI — Oswald (display) + Rajdhani (body) + Share Tech Mono -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Caveat:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <!-- CSs Style -->
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <!-- Image URL -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/Lgs.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/Lgs.png" />
+  <title>About | Mk</title>
+</head>
+
+<body>
+  <!-- Splash Loader — premium & rapih -->
+  <div id="mk-loader" aria-hidden="true">
+    <div class="loader-sheen" aria-hidden="true"></div>
+    <div class="loader-card" role="status" aria-live="polite">
+      <div class="loader-inner">
+        <div class="loader-ring"></div>
+        <div class="loader-ring loader-ring--2" aria-hidden="true"></div>
+      </div>
+      <div class="loader-welcome">
+        <span class="loader-hello" data-i18n="loaderHello">Selamat Datang</span>
+        <span class="loader-tag" data-i18n="loaderTag">Mari berkenalan lebih dekat</span>
+      </div>
+      <div class="loader-bar" aria-hidden="true"><span></span></div>
+      <span class="loader-hint">memuat…</span>
+    </div>
+  </div>
+
+  <!-- Animated Background -->
+  <div class="bg-stars" id="bg-stars"></div>
+  <!-- <div class="bg-orbs" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="orb orb-4"></div>
+    </div> -->
+
+  <!-- Card Body -->
+  <div class="card" data-state="#home">
+    <div class="card-header">
+      <div class="card-cover">
+        <img class="cover-default" src="assets/img/Bannerx.png" alt="Banner Marchell Kevandra" fetchpriority="high" />
+        <img class="cover-more" src="assets/img/BannerXx.png" alt="" loading="lazy" decoding="async" />
+        <span class="cover-shade"></span>
+      </div>
+      <div class="menu-wrap" id="menu-wrap">
+        <i class="ri-menu-line change-theme" id="menu-button" title="Menu" role="button" tabindex="0" aria-label="Menu"></i>
+        <div class="menu-dropdown" id="menu-dropdown">
+          <button class="menu-item" id="theme-item" type="button">
+            <i class="ri-moon-line" id="theme-button"></i>
+            <span data-i18n="menuTheme">Tema</span>
+          </button>
+          <button class="menu-item" id="lang-item" type="button">
+            <i class="ri-global-line"></i>
+            <span id="lang-button">ID</span>
+          </button>
+        </div>
+      </div>
+      <div class="card-avatar-wrap">
+        <img class="card-avatar" onclick="mkImageTouch()" src="assets/img/vx1.png" alt="Marchell Kevandra avatar" loading="eager" fetchpriority="high" decoding="async" />
+        <span class="avatar-dot" aria-hidden="true"></span>
+      </div>
+      <button class="card-back" type="button" onclick="goBack()" aria-label="Back"><i class="ri-arrow-drop-left-line" aria-hidden="true"></i></button>
+      <div class="card-identity">
+        <h1 class="card-fullname"><span class="fullname-text">Marchell Kevandra</span><span class="verified-badge verified-badge--name" aria-label="Terverifikasi" title="Terverifikasi"><i class="bx bxs-badge-check" aria-hidden="true"></i></span><span class="name-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span></h1>
+        <h2 class="card-jobtitle"><span class="jobtitle-text">BE YOUR SELF</span></h2>
+      </div>
+    </div>
+
+    <div class="card-main">
+      <!-- Card Home -->
+      <div class="card-section is-active" id="home" role="tabpanel" aria-labelledby="tab-home">
+        <div class="card-content">
+          <div class="card-subtitle">
+            <p class="mk-cont" data-i18n="homeQuote">Tak perlu menjadi serba bisa, Tekuni salah satu bidang yang Kamu suka Dan menjadi hebat lah dengannya.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Profile -->
+      <div class="card-section" id="profile">
+        <div class="card-content">
+          <p class="profile-about" data-i18n="aboutText">Saya Marchell, seorang technology enthusiast yang memiliki ketertarikan pada data, pemrograman, dan pengembangan berbagai tools yang dapat memberikan manfaat nyata.</p>
+          <ul class="card-timeline">
+            <li class="card-item">
+              <span class="card-item-icon is-place"><i class="ri-map-pin-line" aria-hidden="true"></i></span>
+              <div class="card-item-body">
+                <div class="card-item-title" data-i18n="addrTitle">Address</div>
+                <div class="card-item-desc" data-i18n="addrDesc">Jakarta, Indonesia</div>
+              </div>
+            </li>
+            <li class="card-item">
+              <span class="card-item-icon is-hobby"><i class="ri-heart-3-line" aria-hidden="true"></i></span>
+              <div class="card-item-body">
+                <div class="card-item-title" data-i18n="hobbyTitle">Hobby</div>
+                <div class="card-item-desc" data-i18n="hobbyDesc">Coding</div>
+              </div>
+            </li>
+            <li class="card-item">
+              <span class="card-item-icon is-focus"><i class="ri-terminal-line" aria-hidden="true"></i></span>
+              <div class="card-item-body">
+                <div class="card-item-title" data-i18n="focusTitle">Focus On</div>
+                <div class="card-item-desc" data-i18n="focusDesc">Data Analyst &amp; Social Engineering</div>
+              </div>
+            </li>
+          </ul>
+
+          <div class="profile-skills">
+            <div class="profile-skills-title" data-i18n="skillsTitle">Skills</div>
+            <div class="profile-tags">
+              <span class="profile-tag">Coding</span>
+              <span class="profile-tag">Data Analyst</span>
+              <span class="profile-tag">Social Engineering</span>
+              <span class="profile-tag">UI/UX</span>
+              <span class="profile-tag">Music</span>
+            </div>
+          </div>
+
+          <div class="techstack">
+            <div class="techstack-title" data-i18n="techTitle">Tech Stack</div>
+            <div class="techstack-marquee">
+              <div class="techstack-track">
+                <div class="techstack-row">
+                  <span class="tech-item"><i class="fab fa-html5"></i><em>HTML</em></span>
+                  <span class="tech-item"><i class="fab fa-css3-alt"></i><em>CSS</em></span>
+                  <span class="tech-item"><i class="fab fa-js-square"></i><em>JavaScript</em></span>
+                  <span class="tech-item"><i class="fab fa-react"></i><em>React</em></span>
+                  <span class="tech-item"><i class="fab fa-node-js"></i><em>Node.js</em></span>
+                  <span class="tech-item"><i class="fab fa-python"></i><em>Python</em></span>
+                  <span class="tech-item"><i class="fab fa-bootstrap"></i><em>Bootstrap</em></span>
+                  <span class="tech-item"><i class="fab fa-git-alt"></i><em>Git</em></span>
+                  <span class="tech-item"><i class="fas fa-database"></i><em>SQL</em></span>
+                  <span class="tech-item"><i class="fab fa-figma"></i><em>Figma</em></span>
+                  <span class="tech-item"><i class="fab fa-github"></i><em>GitHub</em></span>
+                </div>
+                <div class="techstack-row" aria-hidden="true">
+                  <span class="tech-item"><i class="fab fa-html5"></i><em>HTML</em></span>
+                  <span class="tech-item"><i class="fab fa-css3-alt"></i><em>CSS</em></span>
+                  <span class="tech-item"><i class="fab fa-js-square"></i><em>JavaScript</em></span>
+                  <span class="tech-item"><i class="fab fa-react"></i><em>React</em></span>
+                  <span class="tech-item"><i class="fab fa-node-js"></i><em>Node.js</em></span>
+                  <span class="tech-item"><i class="fab fa-python"></i><em>Python</em></span>
+                  <span class="tech-item"><i class="fab fa-bootstrap"></i><em>Bootstrap</em></span>
+                  <span class="tech-item"><i class="fab fa-git-alt"></i><em>Git</em></span>
+                  <span class="tech-item"><i class="fas fa-database"></i><em>SQL</em></span>
+                  <span class="tech-item"><i class="fab fa-figma"></i><em>Figma</em></span>
+                  <span class="tech-item"><i class="fab fa-github"></i><em>GitHub</em></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Tools -->
+      <div class="card-section" id="tools">
+        <div class="card-content">
+          <div class="tools-grid">
+            <a class="tool-card tool-card--tiktok" href="tools/tiktok/" target="_blank" rel="noopener">
+              <div class="tool-icon"><i class="fab fa-tiktok"></i></div>
+              <div class="tool-info">
+                <div class="tool-name">TikTok Downloader</div>
+                <div class="tool-desc" data-i18n="toolTiktok">Unduh video tanpa watermark</div>
+              </div>
+              <i class="ri-arrow-right-s-line tool-arrow"></i>
+            </a>
+            <a class="tool-card tool-card--app" href="tools/app/" target="_blank" rel="noopener">
+              <div class="tool-icon"><i class="fas fa-download"></i></div>
+              <div class="tool-info">
+                <div class="tool-name">App Downloader</div>
+                <div class="tool-desc" data-i18n="toolApp">Cari & unduh aplikasi</div>
+              </div>
+              <i class="ri-arrow-right-s-line tool-arrow"></i>
+            </a>
+            <a class="tool-card tool-card--towrite" href="tools/towrite/" target="_blank" rel="noopener">
+              <div class="tool-icon"><i class="fas fa-file-word"></i></div>
+              <div class="tool-info">
+                <div class="tool-name">VanzWrite</div>
+                <div class="tool-desc" data-i18n="toolWrite">Editor teks seperti Word</div>
+              </div>
+              <i class="ri-arrow-right-s-line tool-arrow"></i>
+            </a>
+            <a class="tool-card tool-card--prompt" href="tools/prompt/" target="_blank" rel="noopener">
+              <div class="tool-icon"><i class="fas fa-comment-dots"></i></div>
+              <div class="tool-info">
+                <div class="tool-name">AI Couple Prompts</div>
+                <div class="tool-desc" data-i18n="toolPrompt">Kumpulan prompt AI untuk pasangan</div>
+              </div>
+              <i class="ri-arrow-right-s-line tool-arrow"></i>
+            </a>
+            <a class="tool-card tool-card--love" href="tools/love/" target="_blank" rel="noopener">
+              <div class="tool-icon"><i class="fas fa-heart"></i></div>
+              <div class="tool-info">
+                <div class="tool-name">Ruang Cinta</div>
+                <div class="tool-desc" data-i18n="toolLove">Tools romantis untuk pasangan</div>
+              </div>
+              <i class="ri-arrow-right-s-line tool-arrow"></i>
+            </a>
+            <a class="tool-card tool-card--map" href="tools/map/" target="_blank" rel="noopener">
+              <div class="tool-icon"><i class="fas fa-map-marked-alt"></i></div>
+              <div class="tool-info">
+                <div class="tool-name">VanzMap Pro</div>
+                <div class="tool-desc" data-i18n="toolMap">Peta mewah</div>
+              </div>
+              <i class="ri-arrow-right-s-line tool-arrow"></i>
+            </a>
+            <a class="tool-card tool-card--lacak" href="tools/lacak/" target="_blank" rel="noopener">
+              <div class="tool-icon"><i class="fas fa-crosshairs"></i></div>
+              <div class="tool-info">
+                <div class="tool-name">VanzTrace</div>
+                <div class="tool-desc" data-i18n="toolLacak">Phone intelligence</div>
+              </div>
+              <i class="ri-arrow-right-s-line tool-arrow"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Gallery -->
+      <div class="card-section" id="gallery">
+        <div class="card-content">
+          <div class="gallery-grid">
+            <figure class="gallery-item gallery-item--tall" onclick="mkGalleryClick(event)">
+              <img src="assets/img/vx1.png" alt="Moment" loading="lazy">
+              <figcaption class="gallery-cap"><i class="ri-camera-line"></i><span data-i18n="capMoment">Momen</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-item" onclick="mkGalleryClick(event)">
+              <img src="assets/img/vx2.png" alt="Moment" loading="lazy">
+              <figcaption class="gallery-cap"><i class="ri-heart-3-line"></i><span data-i18n="capMemory">Kenangan</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-item" onclick="mkGalleryClick(event)">
+              <img src="assets/img/vx3.png" alt="Moment" loading="lazy">
+              <figcaption class="gallery-cap"><i class="ri-star-line"></i><span data-i18n="capVibes">Vibes</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-item gallery-item--tall" onclick="mkGalleryClick(event)">
+              <img src="assets/img/vx4.png" alt="Moment" loading="lazy">
+              <figcaption class="gallery-cap"><i class="ri-sun-line"></i><span data-i18n="capChill">Santai</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-item" onclick="mkGalleryClick(event)">
+              <img src="assets/img/vx5.png" alt="Moment" loading="lazy">
+              <figcaption class="gallery-cap"><i class="ri-sparkling-line"></i><span data-i18n="capGold">Berharga</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-item gallery-item--tall" onclick="mkGalleryClick(event)">
+              <img src="assets/img/vx6.png" alt="Moment" loading="lazy">
+              <figcaption class="gallery-cap"><i class="ri-fire-line"></i><span data-i18n="capBest">Terbaik</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-item" onclick="mkGalleryClick(event)">
+              <img src="assets/img/vx7.png" alt="Moment" loading="lazy">
+              <figcaption class="gallery-cap"><i class="ri-moon-line"></i><span data-i18n="capNight">Malam</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-item" onclick="mkGalleryClick(event)">
+              <img src="assets/img/avatarx.png" alt="Avatar" loading="lazy">
+              <figcaption class="gallery-cap"><i class="ri-user-smile-line"></i><span
+                  data-i18n="capAvatar">Avatar</span></figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Contact -->
+      <div class="card-section" id="contact">
+        <div class="card-content">
+          <div class="contact-grid">
+            <div class="contact-card contact-card--instagram" onclick="mkInstagram()" tabindex="0" role="button" aria-label="Instagram @chellgnzxz_">
+              <div class="cc-icon"><i class="fab fa-instagram"></i></div>
+              <div class="cc-name">Instagram</div>
+              <div class="cc-handle">@chellgnzxz_</div>
+            </div>
+            <div class="contact-card contact-card--tiktok" onclick="mkTiktok()" tabindex="0" role="button" aria-label="Tiktok @mkxchl">
+              <div class="cc-icon"><i class="fab fa-tiktok"></i></div>
+              <div class="cc-name">Tiktok</div>
+              <div class="cc-handle">@mkxchl</div>
+            </div>
+            <div class="contact-card contact-card--facebook" onclick="mkFacebook()" tabindex="0" role="button" aria-label="Discord @Marchell_Kevandra">
+              <div class="cc-icon"><i class="fab fa-discord"></i></div>
+              <div class="cc-name">Discord</div>
+              <div class="cc-handle">@Marchell_Kevandra</div>
+            </div>
+            <div class="contact-card contact-card--soundcloud" onclick="mkSoundcloud()" tabindex="0" role="button" aria-label="Soundcloud @marchellkevandra">
+              <div class="cc-icon"><i class="fab fa-soundcloud"></i></div>
+              <div class="cc-name">Soundcloud</div>
+              <div class="cc-handle">@marchellkevandra</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Music -->
+      <div class="card-section" id="music">
+        <div class="card-content">
+          <!-- Mini player: tepat di atas tulisan "Koleksi pribadi" -->
+          <div id="mk-mini" class="mini-player" hidden>
+            <img class="mini-cover" src="" alt="" width="44" height="44" />
+            <div class="mini-info">
+              <div class="mini-title">—</div>
+              <div class="mini-artist">Marchell Kevandra</div>
+              <div class="mini-bar" aria-hidden="true"><span></span></div>
+            </div>
+            <button class="mini-play" type="button" aria-label="Putar / Jeda"><i class="ri-play-fill"></i></button>
+            <button class="mini-close" type="button" aria-label="Tutup player"><i class="ri-close-line"></i></button>
+          </div>
+          <div class="music-library"><span data-i18n="musicCollection">Koleksi pribadi</span><span data-i18n="musicCount">4 lagu</span></div>
+          <div class="music-grid" id="music-grid"></div>
+          <p class="music-feedback" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <!-- Card Download -->
+      <div class="card-section" id="download">
+        <div class="card-content">
+          <div class="dl-head"><span data-i18n="dlCollection">Koleksi file</span><span id="dl-count" data-i18n="dlCount">3 file</span></div>
+          <div class="dl-grid" id="dl-grid"></div>
+        </div>
+      </div>
+
+      <!-- Card More -->
+      <div class="card-section" id="more">
+        <div class="card-content">
+          <!-- Navigasi ke Gallery & Contact (hidden tabs) -->
+          <div class="more-list">
+            <button class="tool-card tool-card--music" type="button" onclick="switchSection('#music')">
+              <span class="tool-icon"><i class="ri-music-2-line" aria-hidden="true"></i></span>
+              <span class="tool-info">
+                <span class="tool-name" data-i18n="musicTitle">Music</span>
+                <span class="tool-desc" data-i18n="musicSub">Karya & produksi saya</span>
+              </span>
+              <i class="ri-arrow-right-s-line tool-arrow" aria-hidden="true"></i>
+            </button>
+            <button class="tool-card tool-card--download" type="button" onclick="switchSection('#download')">
+              <span class="tool-icon"><i class="ri-download-2-line" aria-hidden="true"></i></span>
+              <span class="tool-info">
+                <span class="tool-name" data-i18n="downloadTitle">Download</span>
+                <span class="tool-desc" data-i18n="downloadSub">Kumpulan file</span>
+              </span>
+              <i class="ri-arrow-right-s-line tool-arrow" aria-hidden="true"></i>
+            </button>
+            <button class="tool-card" type="button" onclick="switchSection('#gallery')">
+              <span class="tool-icon"><i class="ri-image-2-line" aria-hidden="true"></i></span>
+              <span class="tool-info">
+                <span class="tool-name" data-i18n="galleryTitle">Galeri</span>
+                <span class="tool-desc" data-i18n="gallerySub">Momen & kenangan</span>
+              </span>
+              <i class="ri-arrow-right-s-line tool-arrow" aria-hidden="true"></i>
+            </button>
+            <button class="tool-card" type="button" onclick="switchSection('#contact')">
+              <span class="tool-icon"><i class="ri-send-plane-line" aria-hidden="true"></i></span>
+              <span class="tool-info">
+                <span class="tool-name" data-i18n="contactTitle">Hubungi Saya</span>
+                <span class="tool-desc" data-i18n="contactSub">Terbuka untuk peluang baru</span>
+              </span>
+              <i class="ri-arrow-right-s-line tool-arrow" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Button -->
+      <div class="card-buttons" role="tablist" aria-label="Navigasi utama">
+        <button id="tab-home" data-section="#home" class="is-active" role="tab" aria-selected="true" aria-current="page" aria-controls="home"><i class="ri-home-5-line" aria-hidden="true"></i><span
+            data-i18n="tabHome">Home</span></button>
+        <button data-section="#profile" role="tab" aria-selected="false" aria-controls="profile"><i class="ri-user-3-line" aria-hidden="true"></i><span
+            data-i18n="tabProfile">Profile</span></button>
+        <button data-section="#tools" role="tab" aria-selected="false" aria-controls="tools"><i class="ri-tools-line" aria-hidden="true"></i><span data-i18n="tabTools">Tools</span></button>
+        <button data-section="#more" role="tab" aria-selected="false" aria-controls="more"><i class="ri-apps-2-line" aria-hidden="true"></i><span data-i18n="tabMore">More</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="mk-lightbox" onclick="closeLightbox()">
+    <img src="" alt="">
+    <i class="ri-close-line"></i>
+  </div>
+
+  <!-- Password gate -->
+  <div id="mk-gate" hidden role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <div class="gate-card">
+      <button class="gate-close" type="button" aria-label="Tutup"><i class="ri-close-line" aria-hidden="true"></i></button>
+      <div class="gate-icon"><i class="ri-lock-line" aria-hidden="true"></i></div>
+      <div class="gate-title" id="gate-title" data-i18n="gateTitle">Area Terkunci</div>
+      <p class="gate-desc" id="gate-desc">Masukkan password untuk membuka Tools.</p>
+      <input class="gate-input" id="gate-input" type="password" autocomplete="current-password" placeholder="Password" />
+      <p class="gate-error" id="gate-error" role="alert" hidden></p>
+      <button class="gate-submit" id="gate-submit" type="button"><span data-i18n="gateUnlock">Buka</span></button>
+    </div>
+  </div>
+
+  <!-- Library JS -->
+  <!-- Style JS -->
+  <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>

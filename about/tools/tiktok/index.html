@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <script src="../gate.js"></script>
+  <script>
+    (function () {
+      var p = location.pathname;
+      if (/index\.html$/i.test(p)) {
+        history.replaceState(null, "", p.replace(/index\.html$/i, ""));
+      }
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TikTok Video Downloader — No Watermark | Marchell Kevandra</title>
+  <meta name="description"
+    content="Download TikTok videos without watermark for free. Paste a TikTok link, get the HD video in seconds — no sign-up needed." />
+  <link rel="icon" href="../MxKLogo.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="TikTok Video Downloader — No Watermark" />
+  <meta property="og:description"
+    content="Paste a TikTok link, download the HD video without watermark. Free and fast." />
+  <meta property="og:url" content="https://v2-link-chl.netlify.app/" />
+  <meta property="og:image" content="../../assets/img/Lgs.png" />
+  <meta property="og:image:secure_url" content="../../assets/img/Lgs.png" />
+  <meta property="og:author" content="Marchell Kevandra" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="custom.css" />
+  <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../../assets/img/Lgs.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../../assets/img/Lgs.png"
+    />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "TikTok Video Downloader — No Watermark",
+      "url": "https://yourdomain.com/tool/tiktok-downloader.html",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Download TikTok videos without watermark for free. Paste a TikTok link, get the HD video in seconds."
+    }
+  </script>
+</head>
+
+<body>
+  <div id="loader">
+    <div class="loader-ring"></div>
+  </div>
+
+  <!-- Cinematic background -->
+  <div class="bg-layer"></div>
+  <div class="aurora"></div>
+  <div class="noise"></div>
+  <div class="spotlight"></div>
+
+  <!-- Nav -->
+  <header id="nav" class="fixed top-0 left-0 right-0 z-50 w-full p-4">
+    <nav
+      class="max-w-max mx-auto flex items-center gap-2 px-3 py-2 bg-transparent backdrop-blur-xl border border-purple-600/80 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.4)]">
+      <a href="../../link/" aria-label="Home" title="Kembali"
+        class="flex items-center justify-center p-2 rounded-full border border-purple-500/30 bg-purple-600/10 hover:bg-purple-600/25 transition-all duration-300">
+        <i class='bx bxs-chevron-left text-xl text-purple-300 leading-none'></i>
+      </a>
+      <a href="../../link/"
+        class="px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white hover:bg-purple-600/20 rounded-full transition-all duration-200">
+        Back to Home
+      </a>
+    </nav>
+  </header>
+
+  <main class="relative z-10">
+    <section class="mx-auto max-w-3xl px-6 pt-36 pb-24">
+      <div class="text-center">
+        <p class="eyebrow" data-reveal>TikTok Downloader</p>
+        <h1 class="display mt-4 text-[clamp(2.2rem,5.5vw,4rem)]" data-reveal>
+          TikTok videos, <span class="grad-text">No watermark.</span>
+        </h1>
+        <p class="muted mt-6 text-[1.05rem] leading-relaxed" data-reveal>
+          Paste a TikTok link and download the video in HD — free, no sign-up, no watermark.
+        </p>
+      </div>
+
+      <!-- Downloader card -->
+      <div class="glass grad-border mt-12 p-6 sm:p-10" data-reveal>
+        <form id="download-form">
+          <label for="videoUrl" class="eyebrow">Video URL</label>
+          <div class="mt-3 flex flex-col sm:flex-row gap-3">
+            <input type="url" id="videoUrl" required placeholder="https://www.tiktok.com/@user/video/1234567890"
+              class="field flex-1" />
+            <button type="submit" id="btnAction" class="btn btn-primary whitespace-nowrap" data-magnetic>
+              <i data-lucide="download" class="w-5 h-5"></i> Download
+            </button>
+          </div>
+
+          <div class="mt-4 flex flex-wrap items-center gap-2">
+            <span class="muted text-xs">Contoh:</span>
+            <button type="button" data-example
+              class="chip cursor-pointer hover:text-white transition-colors max-w-full break-all text-left leading-snug">https://www.tiktok.com/@example/video/7224480935964196117</button>
+          </div>
+        </form>
+
+        <!-- Fetch loader -->
+        <div id="fetchLoader" class="mt-8 hidden flex-col items-center gap-3">
+          <div class="loader-ring" style="width:44px;height:44px"></div>
+          <p class="muted text-sm">Mengambil video…</p>
+        </div>
+
+        <!-- Result -->
+        <div id="resultBox" class="mt-8 hidden">
+          <div class="divider mb-8"></div>
+          <div class="flex items-center gap-4">
+            <img id="vCover" alt="Cover" class="h-16 w-16 shrink-0 rounded-2xl object-cover border border-purple-500/20"
+              onerror="this.style.display='none'" />
+            <div class="min-w-0">
+              <p id="vAuthor" class="text-sm font-bold text-purple-300"></p>
+              <p id="vTitle" class="muted text-sm truncate mt-1"></p>
+              <div id="vStats" class="mt-2 flex flex-wrap gap-3 text-xs text-neutral-400"></div>
+            </div>
+          </div>
+          <div id="actionButtons" class="mt-6 flex flex-wrap gap-3"></div>
+
+          <!-- Share -->
+          <div class="mt-4">
+            <button id="shareBtn" type="button" class="btn btn-ghost !px-6 !py-3 !text-sm w-full sm:w-auto"
+              data-magnetic>
+              <i data-lucide="share-2" class="w-4 h-4"></i> Bagikan link ini
+            </button>
+          </div>
+
+          <!-- Pilih kualitas video -->
+          <div id="qualityToggle" class="mt-6 hidden">
+            <p class="eyebrow mb-3">Kualitas Video</p>
+            <div class="inline-flex p-1 rounded-full bg-purple-600/10 border border-purple-500/20 gap-1">
+              <button id="qHd" type="button"
+                class="quality-btn px-5 py-2 rounded-full text-sm font-bold transition">HD</button>
+              <button id="qStd" type="button"
+                class="quality-btn px-5 py-2 rounded-full text-sm font-bold transition">Standar</button>
+            </div>
+          </div>
+
+          <!-- Photo gallery (postingan foto TikTok) -->
+          <div id="photoGallery" class="mt-6 hidden">
+            <p class="eyebrow mb-4">Foto dalam postingan</p>
+            <div id="imageList" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+          </div>
+
+          <!-- Download progress -->
+          <div id="downloadProgressContainer" class="mt-8 hidden">
+            <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs muted mb-2">
+              <span id="progressPercent">0%</span>
+              <span id="progressSize" class="min-w-0 flex-1 text-right truncate">Memulai unduhan…</span>
+              <button id="cancelDownloadBtn" type="button"
+                class="hidden text-rose-400 hover:text-rose-300 transition-colors inline-flex items-center gap-1.5">
+                <i data-lucide="x-circle" class="w-3.5 h-3.5"></i> Batal
+              </button>
+            </div>
+            <div class="bar" style="height:6px">
+              <span id="progressFill" style="width:0%"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Riwayat unduhan -->
+      <div id="historySection" class="mt-10 hidden">
+        <div class="flex items-center justify-between">
+          <p class="eyebrow" data-reveal>Riwayat Unduhan</p>
+          <button id="clearHistoryBtn" type="button" data-reveal
+            class="text-xs text-neutral-500 hover:text-rose-400 transition-colors inline-flex items-center gap-1.5">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus Semua
+          </button>
+        </div>
+        <div id="historyList" class="mt-4 grid gap-3 sm:grid-cols-2"></div>
+      </div>
+
+      <!-- How it works -->
+      <div class="stagger mt-16 grid gap-5 sm:grid-cols-3">
+        <div class="glass lift grad-border p-7">
+          <div
+            class="inline-flex items-center justify-center p-3 rounded-xl bg-purple-600/10 border border-purple-500/20 text-purple-400 mb-5">
+            <i data-lucide="copy" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold tracking-tight">1. Copy the link</h3>
+          <p class="muted mt-3 text-sm leading-relaxed">Open any TikTok video and copy its link from the share menu.</p>
+        </div>
+        <div class="glass lift grad-border p-7">
+          <div
+            class="inline-flex items-center justify-center p-3 rounded-xl bg-purple-600/10 border border-purple-500/20 text-purple-400 mb-5">
+            <i data-lucide="clipboard-paste" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold tracking-tight">2. Paste it here</h3>
+          <p class="muted mt-3 text-sm leading-relaxed">Drop the link into the field above and hit Download.</p>
+        </div>
+        <div class="glass lift grad-border p-7">
+          <div
+            class="inline-flex items-center justify-center p-3 rounded-xl bg-purple-600/10 border border-purple-500/20 text-purple-400 mb-5">
+            <i data-lucide="download" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold tracking-tight">3. Save the video</h3>
+          <p class="muted mt-3 text-sm leading-relaxed">Preview the result, then save the watermark-free video to your
+            device.</p>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="mt-16">
+        <div class="text-center">
+          <p class="eyebrow" data-reveal>FAQ</p>
+          <h2 class="display mt-4 text-[clamp(1.8rem,3.4vw,2.6rem)]" data-reveal>
+            Pertanyaan <span class="grad-text">umum.</span>
+          </h2>
+        </div>
+        <div class="mx-auto mt-10 max-w-2xl grid gap-4">
+          <details class="faq glass lift grad-border p-6 rounded-2xl" data-reveal>
+            <summary class="faq-q flex items-center justify-between gap-4 font-bold text-neutral-100 cursor-pointer">
+              <span>Apakah layanan ini gratis?</span>
+              <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-purple-400 shrink-0"></i>
+            </summary>
+            <p class="muted mt-4 text-sm leading-relaxed">Ya, 100% gratis dan tanpa perlu login atau daftar akun.</p>
+          </details>
+          <details class="faq glass lift grad-border p-6 rounded-2xl" data-reveal>
+            <summary class="faq-q flex items-center justify-between gap-4 font-bold text-neutral-100 cursor-pointer">
+              <span>Kenapa videonya tidak ada watermark?</span>
+              <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-purple-400 shrink-0"></i>
+            </summary>
+            <p class="muted mt-4 text-sm leading-relaxed">Kami mengambil sumber video asli TikTok yang tidak membawa
+              overlay username pencipta video.</p>
+          </details>
+          <details class="faq glass lift grad-border p-6 rounded-2xl" data-reveal>
+            <summary class="faq-q flex items-center justify-between gap-4 font-bold text-neutral-100 cursor-pointer">
+              <span>Bisa pakai link pendek seperti vt.tiktok.com?</span>
+              <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-purple-400 shrink-0"></i>
+            </summary>
+            <p class="muted mt-4 text-sm leading-relaxed">Bisa. Link pendek maupun link lengkap sama-sama dikenali oleh
+              API secara otomatis.</p>
+          </details>
+          <details class="faq glass lift grad-border p-6 rounded-2xl" data-reveal>
+            <summary class="faq-q flex items-center justify-between gap-4 font-bold text-neutral-100 cursor-pointer">
+              <span>Bagaimana dengan postingan foto (slideshow)?</span>
+              <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-purple-400 shrink-0"></i>
+            </summary>
+            <p class="muted mt-4 text-sm leading-relaxed">Didukung. Semua foto dalam postingan bisa diunduh satu per
+              satu, plus audionya.</p>
+          </details>
+          <details class="faq glass lift grad-border p-6 rounded-2xl" data-reveal>
+            <summary class="faq-q flex items-center justify-between gap-4 font-bold text-neutral-100 cursor-pointer">
+              <span>File video tersimpan di mana?</span>
+              <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-purple-400 shrink-0"></i>
+            </summary>
+            <p class="muted mt-4 text-sm leading-relaxed">Di folder Downloads browser kamu, dengan nama file TikTok yang
+              sudah diproses.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 pt-10 pb-12 px-6">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="muted text-xs">
+        © 2026 Marchell Kevandra
+      </p>
+    </div>
+  </footer>
+
+  <!-- Custom alert modal -->
+  <div id="customAlert"
+    class="fixed inset-0 z-[100] hidden items-center justify-center p-6 opacity-0 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAlert()"></div>
+    <div id="alertBox"
+      class="relative w-full max-w-sm glass grad-border p-8 rounded-3xl scale-90 opacity-100 transition-transform duration-300">
+      <div id="alertIcon" class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg"></div>
+      <h3 id="alertTitle" class="text-xl font-bold text-center"></h3>
+      <p id="alertMessage" class="muted text-center mt-3 text-sm leading-relaxed"></p>
+      <div id="alertActions" class="mt-8 flex flex-col gap-3"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
